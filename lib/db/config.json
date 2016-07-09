@@ -3,18 +3,18 @@
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "users"
+        "database": "codepaste"
     },
     "master": {
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "users"
+        "database": "codepaste"
     },
     "test": {
         "host": "localhost",
         "user": "root",
         "password": "",
-        "database": "users"
+        "database": "codepaste"
     }
 }

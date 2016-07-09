@@ -5,11 +5,12 @@ Config = require './config'
 module.exports = class Singleton
   instance = null
 
-  class PrivateMySQL
+  class PrivateDb
 
     init: ->
-      @connection = new MySQL Config.getConfig()
-      @connection.connect()
+      # TODO: Use mongoose
+      #@connection = new MySQL Config.getConfig()
+      #@connection.connect()
 
   @get: ->
-    instance ?= new PrivateMySQL()
+    instance ?= new PrivateDb()
