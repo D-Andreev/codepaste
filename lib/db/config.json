@@ -1,0 +1,20 @@
+{
+    "development": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "codepaste"
+    },
+    "master": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "codepaste"
+    },
+    "test": {
+        "host": "localhost",
+        "user": "root",
+        "password": "",
+        "database": "codepaste"
+    }
+}
