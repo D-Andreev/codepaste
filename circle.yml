@@ -1,0 +1,14 @@
+machine:
+  node:
+    version: 6.2.2
+
+dependencies:
+  override:
+    - node -v
+    - npm install -g coffee-script
+    - npm install
+    - coffee -c .
+test:
+  override:
+    - npm run lint
+    - npm run test-feature

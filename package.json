@@ -1,0 +1,53 @@
+{
+  "name": "users-api",
+  "version": "0.0.1",
+  "scripts": {
+    "watch": "watchify -o public/scripts/bundle.js -v -d public/index.js",
+    "start-dev-win": "SET ENV=development&&SET PORT=80&&node ./node_modules/nodemon/bin/nodemon ./ localhost 80",
+    "start-test": "ENV=test PORT=1234 node ./node_modules/nodemon/bin/nodemon ./ localhost 1234",
+    "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
+    "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
+    "lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json ."
+  },
+  "dependencies": {
+    "async": "^2.0.0-rc.4",
+    "body-parser": "~1.13.2",
+    "compression": "^1.6.2",
+    "cookie-parser": "^1.4.3",
+    "crypto": "0.0.3",
+    "ejs": "^2.4.2",
+    "express": "~4.13.1",
+    "lodash": "^4.11.1",
+    "method-override": "^2.3.6",
+    "nodemailer": "^2.4.1",
+    "nodemon": "^1.9.2",
+    "url": "^0.11.0",
+    "classnames": "^2.1.3",
+    "flux": "^2.0.1",
+    "keymirror": "~0.1.0",
+    "object-assign": "^1.0.0",
+    "react": "^0.12.0"
+  },
+  "devDependencies": {
+    "browserify": "^6.2.0",
+    "envify": "^3.0.0",
+    "jest-cli": "^0.4.3",
+    "reactify": "^0.15.2",
+    "uglify-js": "~2.4.15",
+    "watchify": "^2.1.1",
+    "chai": "^3.5.0",
+    "coffeelint": "^1.15.7",
+    "cucumber": "^0.10.3",
+    "mocha": "^2.4.5",
+    "request": "^2.72.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
+  },
+  "browserify": {
+    "transform": [
+      "reactify",
+      "envify"
+    ]
+  },
+  "license": "MIT"
+}
