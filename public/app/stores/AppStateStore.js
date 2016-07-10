@@ -9,7 +9,7 @@ var CHANGE_EVENT = 'change';
 
 var _url = '';
 var _view = '';
-var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};
+var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};console.log('setting view', view);
 var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
@@ -58,7 +58,6 @@ function _setEmail(email) {
  * @private
  */
 function _setView(view) {
-    console.log('setting view', view);
     _view = view;
     if (view != 'app') _user = {};
     AppStateStore.emitChange();
@@ -115,7 +114,6 @@ function _register(username, email, password) {
         return;
     }
 
-    console.log('store register', username, email, password);
     ApiUtils.register(_url, username, email, password, function(err, response) {
         if (err) return;
         if (response.statusCode == 200) {
@@ -139,7 +137,6 @@ function _register(username, email, password) {
  * @private
  */
 function _login(username, password) {
-    console.log('store login', username, password);
     _setLoginButtonTimeout();
     if (!username || !password) {
         _toast = 'All fields are required!';
@@ -150,7 +147,6 @@ function _login(username, password) {
 
     ApiUtils.login(_url, username, password, function(err, response) {
         if (err) return;
-        console.log('the response', response);
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
             _setToastNotification('Logged in!', 'success');
@@ -169,7 +165,6 @@ function _login(username, password) {
  * @private
  */
 function _saveLoggedInUser(user) {
-    console.log('Sacing user', user, typeof user);
     _user = user;
     LocalStorage.setUser(_user);
 }

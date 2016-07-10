@@ -212,12 +212,10 @@ var UserAuth = React.createClass({
     },
     
     _login: function () {
-        console.log('login');
         this.props.login(this.props.user.username, this.props.user.password);
     },
     
     _register: function () {
-        console.log('USER AUTH register', this.props.user);
         this.props.register(this.props.user.username, this.props.user.email, this.props.user.password);
     },
 

@@ -99,12 +99,10 @@ module.exports = React.createClass({
     },
 
     _register: function(username, email, password) {
-        console.log('APP register', this.state, username, email, password);
         AppStateActions.register(username, email, password);
     },
 
     _login: function(username, password) {
-        console.log('APP login', this.state, username, password);
         AppStateActions.login(username, password);
     },
 

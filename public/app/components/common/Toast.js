@@ -20,7 +20,6 @@ var Toast = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('Toast: ', this.props);
         var $this = this;
         var color = 'mdl-color--' + $this._getColor();
         var className = 'mdl-js-snackbar mdl-snackbar ' + color;
