@@ -7,5 +7,7 @@ module.exports = keyMirror({
   SET_PASSWORD: null,
   SET_EMAIL: null,
   REGISTER: null,
-  LOGIN: null
+  LOGIN: null,
+  SET_VIEW: null,
+  SET_TOAST: null
 });

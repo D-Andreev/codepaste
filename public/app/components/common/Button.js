@@ -16,7 +16,8 @@ var Button = React.createClass({
         colored: ReactPropTypes.bool,
         primary: ReactPropTypes.bool,
         accent: ReactPropTypes.bool,
-        rippleEffect: ReactPropTypes.bool
+        rippleEffect: ReactPropTypes.bool,
+        disabled: ReactPropTypes.bool
     },
 
     /**
@@ -24,7 +25,6 @@ var Button = React.createClass({
      */
     render: function() {
         var $this = this;
-        console.log('Button props', this.props);
         var className = classnames($this.props.className, {
             'mdl-button': true,
             'mdl-js-button': true,
@@ -38,13 +38,13 @@ var Button = React.createClass({
             'mdl-js-ripple-effect': $this.props.rippleEffect
         });
         var label = this.props.label;
-        console.log('ICONS ', this.props.icon);
         if (this.props.icon) label = <i className="material-icons">{this.props.icon}</i>;
         return (
             <button
                 id={this.props.id}
                 className={className}
-                onClick={this.props.onClick}>
+                disabled={$this.props.disabled}
+                onClick={$this.props.onClick}>
                 {label}
             </button>
         );

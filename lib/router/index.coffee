@@ -1,5 +1,5 @@
 routes = require './routes'
-{healthCheck, index} = require '../../controllers'
+{healthCheck, index, register} = require '../../controllers'
 {STATUS_CODES} = require '../constants'
 
 module.exports = class Singleton
@@ -19,6 +19,9 @@ module.exports = class Singleton
         next()
       app.get routes.index, index
       app.get routes.healthCheck, healthCheck
+      console.log('reguiister', register);
+      
+      app.put routes.register, register
 
 
   @get: ->

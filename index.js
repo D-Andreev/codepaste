@@ -6,6 +6,8 @@
 
   Router = require('./lib/router');
 
+  console.log('INIT');
+
   Server.get().init();
 
   Router.get().setRoutes(Server.get().app);

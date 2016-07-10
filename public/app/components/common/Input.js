@@ -26,24 +26,22 @@ var Input = React.createClass({
      */
     render: function() {
         var $this = this;
-        console.log('Input props', this.props);
         var wrapperClassName = classnames(
             'mdl-textfield',
             'mdl-js-textfield',
-            {'mdl-textfield--floating-label': $this.props.floatingLabel,
-            'mdl-textfield__error': $this.props.error,
-            'mdl-textfield--expandable': $this.props.expandable,
-            'mdl-input__expandable-holder': $this.props.expandableHolder,
-            'is-invalid': $this.props.isInvalid
-        });
+            {
+                'mdl-textfield--floating-label': $this.props.floatingLabel,
+                'mdl-textfield__error': $this.props.error,
+                'mdl-textfield--expandable': $this.props.expandable,
+                'mdl-input__expandable-holder': $this.props.expandableHolder,
+                'is-invalid': $this.props.isInvalid
+            });
         var inputClassName = classnames(
             'mdl-textfield__input',
             this.props.className);
+        console.log("INPUT", wrapperClassName, inputClassName, this.props)
         return (
             <div className={wrapperClassName}>
-                <label className="mdl-textfield__label" for={this.props.id}>
-                    {this.props.label}
-                </label>
                 <input
                     id={this.props.id}
                     className={inputClassName}
@@ -56,6 +54,10 @@ var Input = React.createClass({
                     onChange={this.props.onChange}
                 >
                 </input>
+                <label className="mdl-textfield__label" for={this.props.id}>
+                    {this.props.label}
+                </label>
+                <span class="mdl-textfield__error">{this.props.error}</span>
             </div>
         );
     }

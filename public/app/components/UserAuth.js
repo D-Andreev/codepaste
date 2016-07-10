@@ -1,20 +1,11 @@
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var AppStateActions = require('../actions/AppState');
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 
 var UserAuth = React.createClass({
-
-    propTypes: {
-    },
-
     getInitialState: function() {
         return {
-            email: '',
-            username: '',
-            password: '',
-            view: 'login'
+            
         }
     },
 
@@ -30,11 +21,9 @@ var UserAuth = React.createClass({
                 <div className="mdl-cell mdl-cell--4-col login-form">
                     <div className="card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
                         <div className="mdl-card__title mdl-card--expand">
-                            <h2 className="mdl-card__title-text">Welcome to Code Paste</h2>
+                            <h2 className="mdl-card__title-text">{this._getTitle()}</h2>
                         </div>
-                        <form className="form" onSubmit={this._onSubmit}>
-                            {this._renderActiveView()}
-                        </form>
+                        {this._renderActiveView()}
                     </div>
                 </div>
                 <div className="mdl-cell mdl-cell--4-col"></div>
@@ -44,8 +33,8 @@ var UserAuth = React.createClass({
 
     _renderActiveView: function() {
         var view = null;
-        console.log('render active view', this.state.view);
-        if (this.state.view == 'login') {
+        console.log('render active view', this.props.view);
+        if (this.props.view == 'login') {
             view =
                 <div>
                     <div className="mdl-cell mdl-cell--12-col">
@@ -63,9 +52,9 @@ var UserAuth = React.createClass({
                         </div>
                     </div>
                 </div>
-        } else if (this.state.view == 'registration') {
+        } else if (this.props.view == 'registration') {
             view =
-                <div className="mdl-cell mdl-cell--12-col">
+                <div>
                     <div className="mdl-cell mdl-cell--12-col">
                         {this._renderUsernameField()}
                     </div>
@@ -77,7 +66,7 @@ var UserAuth = React.createClass({
                     </div>
                     <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
                         <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderRegistrationButton(true)}
+                            {this._renderRegisterButton(true)}
                         </div>
                         <div className="mdl-cell mdl-cell--6-col">
                             {this._renderLoginViewButton()}
@@ -89,14 +78,23 @@ var UserAuth = React.createClass({
         return (view);
     },
 
+    _getTitle: function() {
+        if (this.props.view == 'login') {
+            return 'Welcome to Code paste'
+        } else if (this.props.view == 'registration') {
+            return 'Register'
+        }
+    },
+
     _renderEmailField: function() {
         return (
             <Input
+                id="email"
                 className="email"
                 label="Email"
                 floatingLabel={true}
+                value={this.props.user.email}
                 pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
-                value={this.state.email}
                 type="email"
                 onChange={this._onEmailChange}
             />
@@ -106,10 +104,12 @@ var UserAuth = React.createClass({
     _renderUsernameField: function() {
         return (
             <Input
+                id="username"
                 className="username"
                 label="Username"
-                value={this.state.username}
+                value={this.props.user.username}
                 floatingLabel={true}
+                pattern="^.+$"
                 type="text"
                 onChange={this._onUsernameChange}
             />
@@ -119,11 +119,12 @@ var UserAuth = React.createClass({
     _renderPasswordField: function() {
         return (
             <Input
+                id="password"
                 className="password"
                 label="Password"
                 floatingLabel={true}
-                pattern=""
-                value={this.state.password}
+                pattern="^.+$"
+                value={this.props.user.password}
                 type="password"
                 onChange={this._onPasswordChange}
             />
@@ -136,6 +137,7 @@ var UserAuth = React.createClass({
                 className="button"
                 label="Register"
                 raised={true}
+                disabled={this.props.registerBtnDisabled}
                 primary={primary}
                 rippleEffect={true}
                 onClick={this._register}
@@ -149,6 +151,7 @@ var UserAuth = React.createClass({
                 className="button"
                 label="Login"
                 raised={true}
+                disabled={this.props.loginBtnDisabled}
                 primary={true}
                 rippleEffect={true}
                 onClick={this._login}
@@ -183,17 +186,23 @@ var UserAuth = React.createClass({
 
     _onEmailChange: function(event) {
         console.log('_onEmailChange', event.target.value);
-        this.setState({email: event.target.value});
+        var user = this.props.user;
+        user.email = event.target.value;
+        this.setState({user: user});
     },
 
     _onPasswordChange: function(event) {
         console.log('_onPasswordChange', event.target.value);
-        this.setState({password: event.target.value});
+        var user = this.props.user;
+        user.password = event.target.value;
+        this.setState({user: user});
     },
 
     _onUsernameChange: function(event) {
         console.log('_onUsernameChange', event.target.value);
-        this.setState({username: event.target.value});
+        var user = this.props.user;
+        user.username = event.target.value;
+        this.setState({user: user});
     },
     
     _login: function () {
@@ -201,17 +210,12 @@ var UserAuth = React.createClass({
     },
     
     _register: function () {
-        console.log('register');
-        AppStateActions.register();
-    },
-
-    _onSubmit: function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+        console.log('USER AUTH register', this.props.user);
+        this.props.register(this.props.user.username, this.props.user.email, this.props.user.password);
     },
 
     _changeView: function(view) {
-        this.setState({view: view});
+        this.props.changeView(view);
     }
 
 });
