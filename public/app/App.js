@@ -47,8 +47,7 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        console.log('App State', this.state);
-        console.log('App Props', this.props);
+        console.log('App', this.state, this.props);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;

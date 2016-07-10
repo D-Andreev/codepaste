@@ -9,7 +9,7 @@ var CHANGE_EVENT = 'change';
 
 var _url = '';
 var _view = '';
-var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};console.log('setting view', view);
+var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};
 var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
