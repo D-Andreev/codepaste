@@ -20,7 +20,7 @@ module.exports = class Singleton
       @_setCompression()
       @_setMethodOverride()
       
-      @app.listen process.env.PORT
+      @app.listen process.env.APP_PORT
 
 
     _setViewEngine: ->

@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "watch": "watchify -o public/scripts/bundle.js -v -d public/index.js",
-    "start-dev-win": "SET ENV=development&&SET PORT=80&&node ./node_modules/nodemon/bin/nodemon ./ localhost 80",
+    "start-dev-win": "SET APP_ENV=development&&SET APP_PORT=666&&node ./node_modules/nodemon/bin/nodemon ./ localhost 666",
     "start-test": "ENV=test PORT=1234 node ./node_modules/nodemon/bin/nodemon ./ localhost 1234",
     "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
     "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
