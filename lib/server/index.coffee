@@ -19,7 +19,7 @@ module.exports = class Singleton
       @_setCookieParser()
       @_setCompression()
       @_setMethodOverride()
-
+      
       @app.listen process.env.PORT
 
 

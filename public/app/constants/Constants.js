@@ -6,6 +6,10 @@ module.exports = keyMirror({
   SET_USERNAME: null,
   SET_PASSWORD: null,
   SET_EMAIL: null,
+  SET_FIRST_NAME: null,
+  SET_LAST_NAME: null,
   REGISTER: null,
-  LOGIN: null
+  LOGIN: null,
+  SET_VIEW: null,
+  SET_TOAST: null
 });

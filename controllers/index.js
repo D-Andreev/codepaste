@@ -2,7 +2,9 @@
 (function() {
   module.exports = {
     healthCheck: require('./health_check'),
-    index: require('./app')
+    index: require('./app'),
+    register: require('./register'),
+    login: require('./login')
   };
 
 }).call(this);

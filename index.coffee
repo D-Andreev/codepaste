@@ -2,7 +2,6 @@
 Server = require './lib/server'
 Router = require './lib/router'
 
-
 #Mongo.get().init()
 Server.get().init()
 Router.get().setRoutes Server.get().app

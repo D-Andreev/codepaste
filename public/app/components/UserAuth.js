@@ -1,28 +1,15 @@
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
-var AppStateActions = require('../actions/AppState');
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 
 var UserAuth = React.createClass({
 
-    propTypes: {
-    },
-
-    getInitialState: function() {
-        return {
-            email: '',
-            username: '',
-            password: '',
-            view: 'login'
-        }
-    },
-
     /**
      * @return {object}
      */
     render: function() {
-        console.log('User Auth props', this.props);
+        console.log('UserAuth State', this.state);
+        console.log('UserAuth Props', this.props);
 
         return (
             <div className="mdl-grid">
@@ -30,11 +17,9 @@ var UserAuth = React.createClass({
                 <div className="mdl-cell mdl-cell--4-col login-form">
                     <div className="card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
                         <div className="mdl-card__title mdl-card--expand">
-                            <h2 className="mdl-card__title-text">Welcome to Code Paste</h2>
+                            <h2 className="mdl-card__title-text">{this._getTitle()}</h2>
                         </div>
-                        <form className="form" onSubmit={this._onSubmit}>
-                            {this._renderActiveView()}
-                        </form>
+                        {this._renderActiveView()}
                     </div>
                 </div>
                 <div className="mdl-cell mdl-cell--4-col"></div>
@@ -42,120 +27,265 @@ var UserAuth = React.createClass({
         );
     },
 
+    /**
+     * Render active view
+     * @returns {*}
+     * @private
+     */
     _renderActiveView: function() {
         var view = null;
-        console.log('render active view', this.state.view);
-        if (this.state.view == 'login') {
-            view =
-                <div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderEmailField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderPasswordField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderRegistrationButton()}
-                        </div>
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderLoginButton()}
-                        </div>
-                    </div>
-                </div>
-        } else if (this.state.view == 'registration') {
-            view =
-                <div className="mdl-cell mdl-cell--12-col">
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderUsernameField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderEmailField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderPasswordField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderRegistrationButton(true)}
-                        </div>
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderLoginViewButton()}
-                        </div>
-                    </div>
-                </div>
+        if (this.props.view == 'login') {
+            view = this._renderLoginFields();
+        } else if (this.props.view == 'registration') {
+            view = this._renderRegisterFields();
         }
 
         return (view);
     },
 
+    /**
+     * Get title
+     * @returns {*}
+     * @private
+     */
+    _getTitle: function() {
+        if (this.props.view == 'login') {
+            return 'Welcome to Code paste'
+        } else if (this.props.view == 'registration') {
+            return 'Register'
+        }
+    },
+
+    /**
+     * Render login fields
+     * @returns {XML}
+     * @private
+     */
+    _renderLoginFields: function() {
+        return (
+            <div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderUsernameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderPasswordField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderEmailField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderFirstNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderLastNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderRegistrationButton()}
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderLoginButton()}
+                    </div>
+                </div>
+            </div>
+        )
+    },
+
+    /**
+     * Render register fields
+     * @returns {XML}
+     * @private
+     */
+    _renderRegisterFields: function() {
+        return (
+            <div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderUsernameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderFirstNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderLastNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderEmailField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderPasswordField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderRegisterButton(true)}
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderLoginViewButton()}
+                    </div>
+                </div>
+            </div>
+        )
+    },
+
+    /**
+     * Render email field
+     * @returns {XML}
+     * @private
+     */
     _renderEmailField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
         return (
             <Input
+                id="email"
                 className="email"
                 label="Email"
                 floatingLabel={true}
+                hidden={hidden}
+                value={this.props.user.email}
                 pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
-                value={this.state.email}
-                type="email"
+                type="text"
+                errorMessage="Please enter a valid email"
                 onChange={this._onEmailChange}
             />
         )
     },
 
+    /**
+     * Render username field
+     * @returns {XML}
+     * @private
+     */
     _renderUsernameField: function() {
         return (
             <Input
+                id="username"
                 className="username"
                 label="Username"
-                value={this.state.username}
+                autoFocus={true}
+                value={this.props.user.username}
                 floatingLabel={true}
+                pattern="\w{4,}"
                 type="text"
+                errorMessage="Please enter a valid username"
                 onChange={this._onUsernameChange}
             />
         )
     },
 
+    /**
+     * Render first name field
+     * @returns {XML}
+     * @private
+     */
+    _renderFirstNameField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
+        return (
+            <Input
+                id="first-name"
+                className="first-name"
+                label="First name"
+                hidden={hidden}
+                value={this.props.user.firstName}
+                floatingLabel={true}
+                type="text"
+                pattern="^.+$"
+                errorMessage="Please enter a valid first name"
+                onChange={this._onFirstNameChange}
+            />
+        )
+    },
+
+    /**
+     * Render last name field
+     * @returns {XML}
+     * @private
+     */
+    _renderLastNameField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
+        return (
+            <Input
+                id="last-name"
+                className="last-name"
+                hidden={hidden}
+                label="Last name"
+                pattern="^.+$"
+                value={this.props.user.lastName}
+                floatingLabel={true}
+                type="text"
+                errorMessage="Please enter a valid last name"
+                onChange={this._onLastNameChange}
+            />
+        )
+    },
+
+    /**
+     * Render password field
+     * @returns {XML}
+     * @private
+     */
     _renderPasswordField: function() {
         return (
             <Input
+                id="password"
                 className="password"
                 label="Password"
                 floatingLabel={true}
-                pattern=""
-                value={this.state.password}
+                pattern="\w{4,}"
+                value={this.props.user.password}
                 type="password"
+                errorMessage="Please enter a valid password"
                 onChange={this._onPasswordChange}
             />
         )
     },
 
-    _renderRegisterButton: function(primary) {
+    /**
+     * Render register button
+     * @param accent
+     * @returns {XML}
+     * @private
+     */
+    _renderRegisterButton: function(accent) {
         return (
             <Button
                 className="button"
                 label="Register"
                 raised={true}
-                primary={primary}
+                disabled={this.props.registerBtnDisabled}
+                accent={accent}
                 rippleEffect={true}
                 onClick={this._register}
             />
         )
     },
 
+    /**
+     * Render login button
+     * @returns {XML}
+     * @private
+     */
     _renderLoginButton: function() {
         return (
             <Button
                 className="button"
                 label="Login"
                 raised={true}
-                primary={true}
+                disabled={this.props.loginBtnDisabled}
+                accent={true}
                 rippleEffect={true}
                 onClick={this._login}
             />
         )
     },
 
+    /**
+     * Render registration button
+     * @param isPrimary
+     * @returns {XML}
+     * @private
+     */
     _renderRegistrationButton: function(isPrimary) {
         return (
             <Button
@@ -169,6 +299,11 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render login view button
+     * @returns {XML}
+     * @private
+     */
     _renderLoginViewButton: function() {
         return (
             <Button
@@ -181,37 +316,74 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * On email changed
+     * @param event
+     * @private
+     */
     _onEmailChange: function(event) {
-        console.log('_onEmailChange', event.target.value);
-        this.setState({email: event.target.value});
+        this.props.onEmailChange(event.target.value);
     },
 
+    /**
+     * On password change
+     * @param event
+     * @private
+     */
     _onPasswordChange: function(event) {
-        console.log('_onPasswordChange', event.target.value);
-        this.setState({password: event.target.value});
+        this.props.onPasswordChange(event.target.value);
     },
 
+    /**
+     * On username change
+     * @param event
+     * @private
+     */
     _onUsernameChange: function(event) {
-        console.log('_onUsernameChange', event.target.value);
-        this.setState({username: event.target.value});
+        this.props.onUsernameChange(event.target.value);
     },
-    
+
+    /**
+     * On first name change
+     * @param event
+     * @private
+     */
+    _onFirstNameChange: function(event) {
+        this.props.onFirstNameChange(event.target.value);
+    },
+
+    /**
+     * On last name change
+     * @param event
+     * @private
+     */
+    _onLastNameChange: function(event) {
+        this.props.onLastNameChange(event.target.value);
+    },
+
+    /**
+     * Login
+     * @private
+     */
     _login: function () {
-        console.log('login');
+        this.props.login(this.props.user.username, this.props.user.password);
     },
-    
+
+    /**
+     * Register
+     * @private
+     */
     _register: function () {
-        console.log('register');
-        AppStateActions.register();
+        this.props.register(this.props.user.username, this.props.user.email, this.props.user.password);
     },
 
-    _onSubmit: function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-    },
-
+    /**
+     * Change view
+     * @param view
+     * @private
+     */
     _changeView: function(view) {
-        this.setState({view: view});
+        this.props.changeView(view);
     }
 
 });
