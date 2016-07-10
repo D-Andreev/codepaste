@@ -14,7 +14,6 @@ module.exports = class Singleton
 
     login: (user, done) ->
       authHeader = new Buffer("#{user.username}:#{user.password}").toString('base64');
-      console.log 'THE AUTH HEADER: ', authHeader
       options =
         method: 'POST'
         uri: "#{USERS_API_URL}/token"
