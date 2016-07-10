@@ -6,10 +6,11 @@ var LocalStorage = require('../Utils/LocalStorage');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
+var DEFAULT_USER = {username: '', password: '', email: '', firstName: '', lastName: ''};
 
 var _url = '';
 var _view = '';
-var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};
+var _user = LocalStorage.getUser() || DEFAULT_USER;
 var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
@@ -32,6 +33,24 @@ function _init(props) {
  */
 function _setUsername(username) {
     _user.username = username;
+}
+
+/**
+ * Set First Name
+ * @param firstName
+ * @private
+ */
+function _setFirstName(firstName) {
+    _user.firstName = firstName;
+}
+
+/**
+ * Set last name
+ * @param lastName
+ * @private
+ */
+function _setLastName(lastName) {
+    _user.lastName = lastName;
 }
 
 /**
@@ -185,30 +204,58 @@ function _setToastNotification(message, type) {
  */
 var AppStateStore = assign({}, EventEmitter.prototype, {
 
+    /**
+     * Get url
+     * @returns {string}
+     */
     getUrl: function () {
         return _url;
     },
 
+    /**
+     * Get view
+     * @returns {string}
+     */
     getView: function () {
       return _view;
     },
 
+    /**
+     * Get login button disabled
+     * @returns {boolean}
+     */
     getLoginBtnDisabled: function() {
         return _loginBtnDisabled;
     },
 
-    getUser: function() {
-        return _user;
-    },
-
+    /**
+     * Get register button disabled
+     * @returns {boolean}
+     */
     getRegisterBtnDisabled: function() {
         return _registerBtnDisabled;
     },
 
+    /**
+     * Get user
+     * @returns {*|{username: string, password: string, email: string}}
+     */
+    getUser: function() {
+        return _user;
+    },
+
+    /**
+     * Get toast
+     * @returns {string}
+     */
     getToast: function () {
         return _toast;
     },
 
+    /**
+     * Get toast type.
+     * @returns {string}
+     */
     getToastType: function () {
         return _toastType;
     },
@@ -253,6 +300,18 @@ AppDispatcher.register(function(action) {
         case Constants.SET_USERNAME:
             username = action.username;
             _setUsername(username);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_FIRST_NAME:
+            firstName = action.firstName;
+            _setFirstName(firstName);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_LAST_NAME:
+            lastName = action.lastName;
+            _setLastName(lastName);
             AppStateStore.emitChange();
             break;
 

@@ -27,6 +27,11 @@ var UserAuth = React.createClass({
         );
     },
 
+    /**
+     * Render active view
+     * @returns {*}
+     * @private
+     */
     _renderActiveView: function() {
         var view = null;
         if (this.props.view == 'login') {
@@ -38,6 +43,11 @@ var UserAuth = React.createClass({
         return (view);
     },
 
+    /**
+     * Get title
+     * @returns {*}
+     * @private
+     */
     _getTitle: function() {
         if (this.props.view == 'login') {
             return 'Welcome to Code paste'
@@ -46,6 +56,11 @@ var UserAuth = React.createClass({
         }
     },
 
+    /**
+     * Render login fields
+     * @returns {XML}
+     * @private
+     */
     _renderLoginFields: function() {
         return (
             <div>
@@ -57,6 +72,12 @@ var UserAuth = React.createClass({
                 </div>
                 <div className="mdl-cell mdl-cell--12-col">
                     {this._renderEmailField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderFirstNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderLastNameField()}
                 </div>
                 <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
                     <div className="mdl-cell mdl-cell--6-col">
@@ -70,11 +91,22 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render register fields
+     * @returns {XML}
+     * @private
+     */
     _renderRegisterFields: function() {
         return (
             <div>
                 <div className="mdl-cell mdl-cell--12-col">
                     {this._renderUsernameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderFirstNameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderLastNameField()}
                 </div>
                 <div className="mdl-cell mdl-cell--12-col">
                     {this._renderEmailField()}
@@ -94,6 +126,11 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render email field
+     * @returns {XML}
+     * @private
+     */
     _renderEmailField: function() {
         var hidden = true;
         if (this.props.view == 'registration') hidden = false;
@@ -113,6 +150,11 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render username field
+     * @returns {XML}
+     * @private
+     */
     _renderUsernameField: function() {
         return (
             <Input
@@ -130,6 +172,59 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render first name field
+     * @returns {XML}
+     * @private
+     */
+    _renderFirstNameField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
+        return (
+            <Input
+                id="first-name"
+                className="first-name"
+                label="First name"
+                hidden={hidden}
+                value={this.props.user.firstName}
+                floatingLabel={true}
+                type="text"
+                pattern="^.+$"
+                errorMessage="Please enter a valid first name"
+                onChange={this._onFirstNameChange}
+            />
+        )
+    },
+
+    /**
+     * Render last name field
+     * @returns {XML}
+     * @private
+     */
+    _renderLastNameField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
+        return (
+            <Input
+                id="last-name"
+                className="last-name"
+                hidden={hidden}
+                label="Last name"
+                pattern="^.+$"
+                value={this.props.user.lastName}
+                floatingLabel={true}
+                type="text"
+                errorMessage="Please enter a valid last name"
+                onChange={this._onLastNameChange}
+            />
+        )
+    },
+
+    /**
+     * Render password field
+     * @returns {XML}
+     * @private
+     */
     _renderPasswordField: function() {
         return (
             <Input
@@ -146,6 +241,12 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render register button
+     * @param accent
+     * @returns {XML}
+     * @private
+     */
     _renderRegisterButton: function(accent) {
         return (
             <Button
@@ -160,6 +261,11 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render login button
+     * @returns {XML}
+     * @private
+     */
     _renderLoginButton: function() {
         return (
             <Button
@@ -174,6 +280,12 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render registration button
+     * @param isPrimary
+     * @returns {XML}
+     * @private
+     */
     _renderRegistrationButton: function(isPrimary) {
         return (
             <Button
@@ -187,6 +299,11 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * Render login view button
+     * @returns {XML}
+     * @private
+     */
     _renderLoginViewButton: function() {
         return (
             <Button
@@ -199,26 +316,72 @@ var UserAuth = React.createClass({
         )
     },
 
+    /**
+     * On email changed
+     * @param event
+     * @private
+     */
     _onEmailChange: function(event) {
         this.props.onEmailChange(event.target.value);
     },
 
+    /**
+     * On password change
+     * @param event
+     * @private
+     */
     _onPasswordChange: function(event) {
         this.props.onPasswordChange(event.target.value);
     },
 
+    /**
+     * On username change
+     * @param event
+     * @private
+     */
     _onUsernameChange: function(event) {
         this.props.onUsernameChange(event.target.value);
     },
-    
+
+    /**
+     * On first name change
+     * @param event
+     * @private
+     */
+    _onFirstNameChange: function(event) {
+        this.props.onFirstNameChange(event.target.value);
+    },
+
+    /**
+     * On last name change
+     * @param event
+     * @private
+     */
+    _onLastNameChange: function(event) {
+        this.props.onLastNameChange(event.target.value);
+    },
+
+    /**
+     * Login
+     * @private
+     */
     _login: function () {
         this.props.login(this.props.user.username, this.props.user.password);
     },
-    
+
+    /**
+     * Register
+     * @private
+     */
     _register: function () {
         this.props.register(this.props.user.username, this.props.user.email, this.props.user.password);
     },
 
+    /**
+     * Change view
+     * @param view
+     * @private
+     */
     _changeView: function(view) {
         this.props.changeView(view);
     }

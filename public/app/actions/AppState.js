@@ -25,6 +25,28 @@ var AppStateActions = {
   },
 
   /**
+   * Set first name
+   * @param firstName
+     */
+  setFirstName: function(firstName) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_FIRST_NAME,
+      firstName: firstName
+    });
+  },
+
+  /**
+   * Set last name
+   * @param lastName
+     */
+  setLastName: function(lastName) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_LAST_NAME,
+      lastName: lastName
+    });
+  },
+
+  /**
    * set Password
    * @param password
      */

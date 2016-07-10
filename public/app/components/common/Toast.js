@@ -12,6 +12,9 @@ var Toast = React.createClass({
         type: ReactPropTypes.oneOf(['warning', 'success', 'error', 'notification'])
     },
 
+    /**
+     * Component did update
+     */
     componentDidUpdate: function() {
         if (this.props.toast && this.props.show) this._show();
     },
@@ -31,6 +34,11 @@ var Toast = React.createClass({
         )
     },
 
+    /**
+     * Get color
+     * @returns {string}
+     * @private
+     */
     _getColor: function() {
         var color = 'grey';
         if (this.props.type == 'warning') {
@@ -46,6 +54,10 @@ var Toast = React.createClass({
         return color;
     },
 
+    /**
+     * Show
+     * @private
+     */
     _show: function() {
         var toast = document.querySelector('#toast');
         toast.MaterialSnackbar.showSnackbar({message: this.props.toast});

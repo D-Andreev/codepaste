@@ -22,6 +22,10 @@ var Input = React.createClass({
 
     },
 
+    /**
+     * Get default props
+     * @returns {{autoFocus: boolean}}
+     */
     getDefaultProps: function() {
         return {
             autoFocus: false

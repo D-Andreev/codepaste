@@ -26,6 +26,10 @@ module.exports = React.createClass({
         url: ReactPropTypes.string.isRequired
     },
 
+    /**
+     * Get initial state
+     * @returns {{view: string, user: {username: string, password: string, email: string}}}
+     */
     getInitialState: function() {
         return {
             view: 'login',
@@ -37,15 +41,25 @@ module.exports = React.createClass({
         }
     },
 
+    /**
+     * Component Did mount
+     */
     componentDidMount: function() {
         AppStateStore.addChangeListener(this._onChange);
         AppStateActions.init(this.props);
     },
 
+    /**
+     * Component will mount
+     */
     componentWillUnmount: function() {
         AppStateStore.removeChangeListener(this._onChange);
     },
 
+    /**
+     * Render
+     * @returns {XML}
+     */
     render: function() {
         console.log('App', this.state, this.props);
         var show = false, toast = null;
@@ -61,6 +75,11 @@ module.exports = React.createClass({
         );
     },
 
+    /**
+     * Render active view
+     * @returns {*}
+     * @private
+     */
     _renderActiveView: function() {
         var view = null;
         if (this.state.view == 'app') {
@@ -72,6 +91,8 @@ module.exports = React.createClass({
                     onUsernameChange={this._onUsernameChange}
                     onPasswordChange={this._onPasswordChange}
                     onEmailChange={this._onEmailChange}
+                    onFirstNameChange={this._onFirstNameChange}
+                    onLastNameChange={this._onLastNameChange}
                     register={this._register}
                     login={this._login}
                     view={this.state.view}
@@ -85,30 +106,85 @@ module.exports = React.createClass({
         return view;
     },
 
+    /**
+     * On username change
+     * @param username
+     * @private
+     */
     _onUsernameChange: function(username) {
         AppStateActions.setUsername(username);
     },
 
+    /**
+     * On password change
+     * @param password
+     * @private
+     */
     _onPasswordChange: function(password) {
         AppStateActions.setPassword(password);
     },
 
+    /**
+     * On email change
+     * @param email
+     * @private
+     */
     _onEmailChange: function(email) {
         AppStateActions.setEmail(email);
     },
 
+    /**
+     * On first name change
+     * @param firstName
+     * @private
+     */
+    _onFirstNameChange: function(firstName) {
+        AppStateActions.setFirstName(firstName);
+    },
+
+    /**
+     * On last name change
+     * @param lastName
+     * @private
+     */
+    _onLastNameChange: function(lastName) {
+        AppStateActions.setLastName(lastName);
+    },
+
+    /**
+     * Register
+     * @param username
+     * @param email
+     * @param password
+     * @private
+     */
     _register: function(username, email, password) {
         AppStateActions.register(username, email, password);
     },
 
+    /**
+     * Login
+     * @param username
+     * @param password
+     * @private
+     */
     _login: function(username, password) {
         AppStateActions.login(username, password);
     },
 
+    /**
+     * Change view
+     * @param view
+     * @private
+     */
     _changeView: function(view) {
         AppStateActions.setView(view);
     },
 
+    /**
+     * On toast done
+     * @private
+     */
     _onToastDone: function() {
         AppStateActions.setToast(false);
     },
