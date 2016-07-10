@@ -17,7 +17,6 @@
       function Users() {}
 
       Users.prototype.register = function(user, done) {
-        console.log('Registering useer: ', user);
         return request({
           method: 'PUT',
           uri: USERS_API_URL + "/",

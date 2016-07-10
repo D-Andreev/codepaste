@@ -19,8 +19,6 @@ module.exports = class Singleton
         next()
       app.get routes.index, index
       app.get routes.healthCheck, healthCheck
-      console.log('reguiister', register);
-      
       app.put routes.register, register
 
 

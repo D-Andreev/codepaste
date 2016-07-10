@@ -19,8 +19,7 @@ module.exports = class Singleton
       @_setCookieParser()
       @_setCompression()
       @_setMethodOverride()
-
-      console.log('Listening on ', process.env.PORT);
+      
       @app.listen process.env.PORT
 
 

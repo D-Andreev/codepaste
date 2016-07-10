@@ -53,7 +53,6 @@ module.exports = React.createClass({
             show = true;
             toast = this.state.toast
         }
-        console.log('showToast', show, toast);
         return (
             <div className="app">
                 <UserAuth
@@ -86,8 +85,7 @@ module.exports = React.createClass({
     },
 
     _register: function(username, email, password) {
-        console.log('asd', username, email, password);
-        console.log('APP register', this.state);
+        console.log('APP register', this.state, username, email, password);
         AppStateActions.register(username, email, password);
     },
 

@@ -98,13 +98,11 @@ function _register(username, email, password) {
         if (err) return;
         if (response.statusCode == 200) {
             _user = {username: username, email: email, password: password};
-            console.log('The registered useres', _user);
             _toast = 'User registered successfully!';
             _setView('login');
             AppStateStore.emitChange();
         } else {
             _toast = response.body;
-            console.log('set toast', _toast);
             AppStateStore.emitChange();
         }
     });
@@ -212,7 +210,6 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_VIEW:
             view = action.view;
-            console.log('setting view2', view);
             if (view) {
                 _setView(view);
                 AppStateStore.emitChange();

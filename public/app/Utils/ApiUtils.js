@@ -10,9 +10,7 @@ module.exports = {
      * @param done
      */
     register: function(url, username, email, password, done) {
-
         var data = {username: username, email: email, password: password};
-        console.log('AJAX', url, data);
         this.request('PUT', url + '/register', data, function(err, res) {
             done(err, res);
         });
@@ -33,11 +31,9 @@ module.exports = {
                 method: method,
 
                 success: function(result) {
-                    console.log('success', result);
                     done(null, result);
                 },
                 error: function(error) {
-                    console.log('error in request', error);
                     done(error, false);
                 }
         });

@@ -7,7 +7,6 @@ module.exports = class Singleton
   class Users
 
     register: (user, done) ->
-      console.log('Registering useer: ', user);
       request {method: 'PUT', uri: "#{USERS_API_URL}/", json: user}, (err, res) ->
         console.log(err);
         done err, res

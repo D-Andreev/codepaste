@@ -51,7 +51,6 @@ var AppStateActions = {
    * @param view
      */
   setView: function(view) {
-    console.log('action set view', view);
     AppDispatcher.dispatch({
       actionType: Constants.SET_VIEW,
       view: view
@@ -63,7 +62,6 @@ var AppStateActions = {
    * @param toast
      */
   setToast: function(toast) {
-    console.log('action set toast', toast);
     AppDispatcher.dispatch({
       actionType: Constants.SET_TOAST,
       toast: toast

@@ -13,7 +13,6 @@
   Users = require('../../services/users');
 
   module.exports = express.Router().put(routes.register, function(req, res) {
-    console.log('body', typeof req.body, req.body);
     return Users.get().register(req.body, function(err, result) {
       var body, ref, statusCode;
       ref = new Response(err, result, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;

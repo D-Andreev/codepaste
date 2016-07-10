@@ -39,7 +39,6 @@ var Input = React.createClass({
         var inputClassName = classnames(
             'mdl-textfield__input',
             this.props.className);
-        console.log("INPUT", wrapperClassName, inputClassName, this.props)
         return (
             <div className={wrapperClassName}>
                 <input

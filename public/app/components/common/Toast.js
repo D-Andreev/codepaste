@@ -12,7 +12,6 @@ var Toast = React.createClass({
     },
 
     componentDidUpdate: function() {
-        console.log('COMPONENT DID UPDATE', this.props);
         if (this.props.toast && this.props.show) this._show();
     },
 
@@ -20,7 +19,6 @@ var Toast = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('render Toast', this.props);
         return (
             <div id="toast" className="mdl-js-snackbar mdl-snackbar">
                 <div className="mdl-snackbar__text"></div>
@@ -31,7 +29,6 @@ var Toast = React.createClass({
 
     _show: function() {
         var toast = document.querySelector('#toast');
-        console.log('toasts', toast, this.props.toast);
         toast.MaterialSnackbar.showSnackbar({message: this.props.toast});
         this.props.callback();
     }
