@@ -17,6 +17,20 @@ module.exports = {
     },
 
     /**
+     * Login
+     * @param url
+     * @param username
+     * @param password
+     * @param done
+     */
+    login: function(url, username, password, done) {
+        var data = {username: username, password: password};
+        this.request('POST', url + '/login', data, function(err, res) {
+            done(err, res);
+        });
+    },
+
+    /**
      * Request
      * @param method
      * @param url
@@ -26,7 +40,7 @@ module.exports = {
     request: function(method, url, data, done) {
         $.ajax(
             {
-                url: url + '/register',
+                url: url,
                 data: data,
                 method: method,
 

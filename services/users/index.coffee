@@ -11,5 +11,20 @@ module.exports = class Singleton
         console.log(err);
         done err, res
 
+
+    login: (user, done) ->
+      authHeader = new Buffer("#{user.username}:#{user.password}").toString('base64');
+      console.log 'THE AUTH HEADER: ', authHeader
+      options =
+        method: 'POST'
+        uri: "#{USERS_API_URL}/token"
+        json: user
+        headers:
+          'Authorization': "Basic #{authHeader}"
+
+      request options, (err, res) ->
+        console.log(err);
+        done err, res
+
   @get: ->
     instance ?= new Users()

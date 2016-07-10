@@ -85,13 +85,13 @@ var AppStateActions = {
 
   /**
    * Login
-   * @param email
+   * @param username
    * @param password
      */
-  login: function(email, password) {
+  login: function(username, password) {
     AppDispatcher.dispatch({
       actionType: Constants.LOGIN,
-      email: email,
+      username: username,
       password: password
     });
   }

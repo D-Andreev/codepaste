@@ -3,4 +3,5 @@ module.exports =
   all: '/*'
   healthCheck: new RegExp /\/health-check$/
   register: new RegExp /\/register$/
-  
+  login: new RegExp /\/login$/
+

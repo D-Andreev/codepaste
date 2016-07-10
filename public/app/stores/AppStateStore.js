@@ -1,20 +1,17 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/Constants');
-var AppStateActions = require('../actions/AppState');
 var ApiUtils = require('../Utils/ApiUtils');
+var LocalStorage = require('../Utils/LocalStorage');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
 
 var _url = '';
 var _view = '';
-var _user = {
-    email: '',
-    username: '',
-    password: ''
-};
+var _user = LocalStorage.getUser() || {username: '', password: '', email: ''};
 var _toast = '';
+var _toastType = 'notification';
 var _registerBtnDisabled = false;
 var _loginBtnDisabled = false;
 
@@ -25,6 +22,7 @@ var _loginBtnDisabled = false;
 function _init(props) {
     _url = props.url;
     _view = props.view;
+    if (_user.token) _view = 'app';
 }
 
 /**
@@ -60,13 +58,9 @@ function _setEmail(email) {
  * @private
  */
 function _setView(view) {
-    console.log('setting view1', view);
+    console.log('setting view', view);
     _view = view;
-    _user = {
-        email: '',
-        username: '',
-        password: ''
-    };
+    if (view != 'app') _user = {};
     AppStateStore.emitChange();
 }
 
@@ -80,6 +74,32 @@ function _setToast(toast) {
 }
 
 /**
+ * Set register button timeout
+ * @private
+ */
+function _setRegisterButtonTimeout() {
+    _registerBtnDisabled = true;
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        _registerBtnDisabled = false;
+        AppStateStore.emitChange();
+    }, 3000);
+}
+
+/**
+ * Set login button timeout
+ * @private
+ */
+function _setLoginButtonTimeout() {
+    _loginBtnDisabled = true;
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        _loginBtnDisabled = false;
+        AppStateStore.emitChange();
+    }, 3000);
+}
+
+/**
  * Register
  * @param username
  * @param email
@@ -87,22 +107,26 @@ function _setToast(toast) {
  * @private
  */
 function _register(username, email, password) {
-    console.log('store register', username, email, password);
-    _registerBtnDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _registerBtnDisabled = false;
+    _setRegisterButtonTimeout();
+    if (!username || !email || !password) {
+        _toast = 'All fields are required!';
+        _toastType = 'warning';
         AppStateStore.emitChange();
-    }, 3000);
+        return;
+    }
+
+    console.log('store register', username, email, password);
     ApiUtils.register(_url, username, email, password, function(err, response) {
         if (err) return;
         if (response.statusCode == 200) {
             _user = {username: username, email: email, password: password};
             _toast = 'User registered successfully!';
+            _toastType = 'success';
             _setView('login');
             AppStateStore.emitChange();
         } else {
             _toast = response.body;
+            _toastType = 'error';
             AppStateStore.emitChange();
         }
     });
@@ -111,11 +135,54 @@ function _register(username, email, password) {
 /**
  * Login
  * @param username
- * @param email
+ * @param password
  * @private
  */
-function _login(username, email) {
-    console.log('store login', username, email);
+function _login(username, password) {
+    console.log('store login', username, password);
+    _setLoginButtonTimeout();
+    if (!username || !password) {
+        _toast = 'All fields are required!';
+        _toastType = 'warning';
+        AppStateStore.emitChange();
+        return;
+    }
+
+    ApiUtils.login(_url, username, password, function(err, response) {
+        if (err) return;
+        console.log('the response', response);
+        if (response.statusCode == 201) {
+            _saveLoggedInUser(response.body);
+            _setToastNotification('Logged in!', 'success');
+            _setView('app');
+            AppStateStore.emitChange();
+        } else {
+            _setToastNotification(response.body, 'error');
+            AppStateStore.emitChange();
+        }
+    });
+}
+
+/**
+ * Save logged in user.
+ * @param user
+ * @private
+ */
+function _saveLoggedInUser(user) {
+    console.log('Sacing user', user, typeof user);
+    _user = user;
+    LocalStorage.setUser(_user);
+}
+
+/**
+ * Set toast
+ * @param message
+ * @param type
+ * @private
+ */
+function _setToastNotification(message, type) {
+    _toast = message;
+    _toastType = type;
 }
 
 /**
@@ -145,6 +212,10 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
 
     getToast: function () {
         return _toast;
+    },
+
+    getToastType: function () {
+        return _toastType;
     },
 
     /**
@@ -186,31 +257,26 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_USERNAME:
             username = action.username;
-            if (username) {
-                _setUsername(username);
-                AppStateStore.emitChange();
-            }
+            _setUsername(username);
+            AppStateStore.emitChange();
             break;
 
         case Constants.SET_PASSWORD:
             password = action.password;
-            if (password) {
-                _setPassword(password);
-                AppStateStore.emitChange();
-            }
+            _setPassword(password);
+            AppStateStore.emitChange();
             break;
 
         case Constants.SET_EMAIL:
             email = action.email;
-            if (email) {
-                _setEmail(email);
-                AppStateStore.emitChange();
-            }
+            _setEmail(email);
+            AppStateStore.emitChange();
             break;
 
         case Constants.SET_VIEW:
             view = action.view;
             if (view) {
+                if (view == 'registration' || view == 'login') _user = {};
                 _setView(view);
                 AppStateStore.emitChange();
             }
@@ -225,7 +291,9 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.LOGIN:
-            _login();
+            username = action.username;
+            password = action.password;
+            _login(username, password);
             AppStateStore.emitChange();
             break;
 

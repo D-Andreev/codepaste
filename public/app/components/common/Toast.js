@@ -8,7 +8,8 @@ var Toast = React.createClass({
         className: ReactPropTypes.string,
         toast: ReactPropTypes.string,
         show: ReactPropTypes.bool,
-        callback: ReactPropTypes.func
+        callback: ReactPropTypes.func,
+        type: ReactPropTypes.oneOf(['warning', 'success', 'error', 'notification'])
     },
 
     componentDidUpdate: function() {
@@ -19,12 +20,31 @@ var Toast = React.createClass({
      * @return {object}
      */
     render: function() {
+        console.log('Toast: ', this.props);
+        var $this = this;
+        var color = 'mdl-color--' + $this._getColor();
+        var className = 'mdl-js-snackbar mdl-snackbar ' + color;
         return (
-            <div id="toast" className="mdl-js-snackbar mdl-snackbar">
+            <div id="toast" className={className}>
                 <div className="mdl-snackbar__text"></div>
                 <button className="mdl-snackbar__action" type="button"></button>
             </div>
         )
+    },
+
+    _getColor: function() {
+        var color = 'grey';
+        if (this.props.type == 'warning') {
+            color = 'orange';
+        } else if (this.props.type == 'success') {
+            color = 'green';
+        } else if (this.props.type == 'error') {
+            color = 'red';
+        } else if (this.props.type == 'notification') {
+            color = 'blue';
+        }
+
+        return color;
     },
 
     _show: function() {

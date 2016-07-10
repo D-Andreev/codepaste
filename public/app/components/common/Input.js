@@ -11,14 +11,21 @@ var Input = React.createClass({
         onChange: ReactPropTypes.func,
         type: ReactPropTypes.string.isRequired,
         floatingLabel: ReactPropTypes.bool,
-        error: ReactPropTypes.bool,
+        errorMessage: ReactPropTypes.string,
         expandable: ReactPropTypes.bool,
         expandableHolder: ReactPropTypes.bool,
         isInvalid: ReactPropTypes.bool,
-        autoFocus: ReactPropTypes.bool,
         pattern: ReactPropTypes.string,
-        placeholder: ReactPropTypes.string
+        placeholder: ReactPropTypes.string,
+        hidden: ReactPropTypes.bool,
+        autoFocus: ReactPropTypes.bool
 
+    },
+
+    getDefaultProps: function() {
+        return {
+            autoFocus: false
+        }
     },
 
     /**
@@ -30,6 +37,7 @@ var Input = React.createClass({
             'mdl-textfield',
             'mdl-js-textfield',
             {
+                'hidden': $this.props.hidden,
                 'mdl-textfield--floating-label': $this.props.floatingLabel,
                 'mdl-textfield__error': $this.props.error,
                 'mdl-textfield--expandable': $this.props.expandable,
@@ -53,10 +61,10 @@ var Input = React.createClass({
                     onChange={this.props.onChange}
                 >
                 </input>
-                <label className="mdl-textfield__label" for={this.props.id}>
+                <label className="mdl-textfield__label" htmlFor={this.props.id}>
                     {this.props.label}
                 </label>
-                <span class="mdl-textfield__error">{this.props.error}</span>
+                <span className="mdl-textfield__error">{this.props.errorMessage}</span>
             </div>
         );
     }

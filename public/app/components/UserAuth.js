@@ -3,17 +3,13 @@ var Button = require('./common/Button');
 var Input = require('./common/Input');
 
 var UserAuth = React.createClass({
-    getInitialState: function() {
-        return {
-            
-        }
-    },
 
     /**
      * @return {object}
      */
     render: function() {
-        console.log('User Auth props', this.props);
+        console.log('UserAuth State', this.state);
+        console.log('UserAuth Props', this.props);
 
         return (
             <div className="mdl-grid">
@@ -33,46 +29,10 @@ var UserAuth = React.createClass({
 
     _renderActiveView: function() {
         var view = null;
-        console.log('render active view', this.props.view);
         if (this.props.view == 'login') {
-            view =
-                <div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderEmailField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderPasswordField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderRegistrationButton()}
-                        </div>
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderLoginButton()}
-                        </div>
-                    </div>
-                </div>
+            view = this._renderLoginFields();
         } else if (this.props.view == 'registration') {
-            view =
-                <div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderUsernameField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderEmailField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        {this._renderPasswordField()}
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderRegisterButton(true)}
-                        </div>
-                        <div className="mdl-cell mdl-cell--6-col">
-                            {this._renderLoginViewButton()}
-                        </div>
-                    </div>
-                </div>
+            view = this._renderRegisterFields();
         }
 
         return (view);
@@ -86,16 +46,68 @@ var UserAuth = React.createClass({
         }
     },
 
+    _renderLoginFields: function() {
+        return (
+            <div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderUsernameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderPasswordField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderEmailField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderRegistrationButton()}
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderLoginButton()}
+                    </div>
+                </div>
+            </div>
+        )
+    },
+
+    _renderRegisterFields: function() {
+        return (
+            <div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderUsernameField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderEmailField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderPasswordField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderRegisterButton(true)}
+                    </div>
+                    <div className="mdl-cell mdl-cell--6-col">
+                        {this._renderLoginViewButton()}
+                    </div>
+                </div>
+            </div>
+        )
+    },
+
     _renderEmailField: function() {
+        var hidden = true;
+        if (this.props.view == 'registration') hidden = false;
         return (
             <Input
                 id="email"
                 className="email"
                 label="Email"
                 floatingLabel={true}
+                hidden={hidden}
                 value={this.props.user.email}
                 pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
-                type="email"
+                type="text"
+                errorMessage="Please enter a valid email"
                 onChange={this._onEmailChange}
             />
         )
@@ -107,10 +119,12 @@ var UserAuth = React.createClass({
                 id="username"
                 className="username"
                 label="Username"
+                autoFocus={true}
                 value={this.props.user.username}
                 floatingLabel={true}
-                pattern="^.+$"
+                pattern="\w{4,}"
                 type="text"
+                errorMessage="Please enter a valid username"
                 onChange={this._onUsernameChange}
             />
         )
@@ -123,22 +137,23 @@ var UserAuth = React.createClass({
                 className="password"
                 label="Password"
                 floatingLabel={true}
-                pattern="^.+$"
+                pattern="\w{4,}"
                 value={this.props.user.password}
                 type="password"
+                errorMessage="Please enter a valid password"
                 onChange={this._onPasswordChange}
             />
         )
     },
 
-    _renderRegisterButton: function(primary) {
+    _renderRegisterButton: function(accent) {
         return (
             <Button
                 className="button"
                 label="Register"
                 raised={true}
                 disabled={this.props.registerBtnDisabled}
-                primary={primary}
+                accent={accent}
                 rippleEffect={true}
                 onClick={this._register}
             />
@@ -152,7 +167,7 @@ var UserAuth = React.createClass({
                 label="Login"
                 raised={true}
                 disabled={this.props.loginBtnDisabled}
-                primary={true}
+                accent={true}
                 rippleEffect={true}
                 onClick={this._login}
             />
@@ -185,28 +200,20 @@ var UserAuth = React.createClass({
     },
 
     _onEmailChange: function(event) {
-        console.log('_onEmailChange', event.target.value);
-        var user = this.props.user;
-        user.email = event.target.value;
-        this.setState({user: user});
+        this.props.onEmailChange(event.target.value);
     },
 
     _onPasswordChange: function(event) {
-        console.log('_onPasswordChange', event.target.value);
-        var user = this.props.user;
-        user.password = event.target.value;
-        this.setState({user: user});
+        this.props.onPasswordChange(event.target.value);
     },
 
     _onUsernameChange: function(event) {
-        console.log('_onUsernameChange', event.target.value);
-        var user = this.props.user;
-        user.username = event.target.value;
-        this.setState({user: user});
+        this.props.onUsernameChange(event.target.value);
     },
     
     _login: function () {
         console.log('login');
+        this.props.login(this.props.user.username, this.props.user.password);
     },
     
     _register: function () {

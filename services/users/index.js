@@ -27,6 +27,24 @@
         });
       };
 
+      Users.prototype.login = function(user, done) {
+        var authHeader, options;
+        authHeader = new Buffer(user.username + ":" + user.password).toString('base64');
+        console.log('THE AUTH HEADER: ', authHeader);
+        options = {
+          method: 'POST',
+          uri: USERS_API_URL + "/token",
+          json: user,
+          headers: {
+            'Authorization': "Basic " + authHeader
+          }
+        };
+        return request(options, function(err, res) {
+          console.log(err);
+          return done(err, res);
+        });
+      };
+
       return Users;
 
     })();

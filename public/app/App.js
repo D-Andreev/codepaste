@@ -13,6 +13,7 @@ function getAppState() {
         url: AppStateStore.getUrl(),
         view: AppStateStore.getView(),
         toast: AppStateStore.getToast(),
+        toastType: AppStateStore.getToastType(),
         loginBtnDisabled: AppStateStore.getLoginBtnDisabled(),
         registerBtnDisabled: AppStateStore.getRegisterBtnDisabled(),
         user: AppStateStore.getUser()
@@ -38,7 +39,6 @@ module.exports = React.createClass({
 
     componentDidMount: function() {
         AppStateStore.addChangeListener(this._onChange);
-        console.log('props', this.props);
         AppStateActions.init(this.props);
     },
 
@@ -47,7 +47,8 @@ module.exports = React.createClass({
     },
 
     render: function() {
-        console.log('state', this.state);
+        console.log('App State', this.state);
+        console.log('App Props', this.props);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;
@@ -55,6 +56,19 @@ module.exports = React.createClass({
         }
         return (
             <div className="app">
+                {this._renderActiveView()}
+                <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>;
+            </div>
+        );
+    },
+
+    _renderActiveView: function() {
+        var view = null;
+        if (this.state.view == 'app') {
+            view =
+                <div>THE APP</div>
+        } else {
+            view =
                 <UserAuth
                     onUsernameChange={this._onUsernameChange}
                     onPasswordChange={this._onPasswordChange}
@@ -67,9 +81,9 @@ module.exports = React.createClass({
                     registerBtnDisabled={this.state.registerBtnDisabled}
                     user={this.state.user}
                 />
-                <Toast toast={toast} show={show} callback={this._onToastDone}/>;
-            </div>
-        );
+        }
+
+        return view;
     },
 
     _onUsernameChange: function(username) {
@@ -89,9 +103,9 @@ module.exports = React.createClass({
         AppStateActions.register(username, email, password);
     },
 
-    _login: function() {
-        console.log('APP login', this.state);
-        AppStateActions.login();
+    _login: function(username, password) {
+        console.log('APP login', this.state, username, password);
+        AppStateActions.login(username, password);
     },
 
     _changeView: function(view) {
@@ -106,7 +120,6 @@ module.exports = React.createClass({
      * Event handler for 'change' events coming from the TodoStore
      */
     _onChange: function() {
-        console.log('OnChange');
         this.setState(getAppState());
     }
 });

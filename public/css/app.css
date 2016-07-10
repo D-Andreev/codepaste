@@ -24,6 +24,10 @@
     color: white;
 }
 
+.app .hidden {
+    display: none;
+}
+
 .app .login-form .mdl-card__title {
     min-height: 5rem;
     background-image: url("/img/card-background.jpg");
