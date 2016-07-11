@@ -9,10 +9,17 @@
     position: absolute;
     height: 100%;
     width: 100%;
+}
+
+.app.login-view, .app.registration-view {
     background-image: url("/img/background.jpg");
     background-size: cover;
     background-repeat:   no-repeat;
     background-position: center center;
+}
+
+.app .app-view {
+    background-color: white;
 }
 
 .app .login-form {
@@ -40,6 +47,11 @@
 .app .login-form .button-wrapper {
     display: flex;
     justify-content: space-between;
+}
+
+.app .drawer-title {
+    background-color: rgb(63,81,181);
+    color: white;
 }
 
 footer {

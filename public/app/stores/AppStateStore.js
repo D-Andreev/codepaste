@@ -168,13 +168,13 @@ function _login(username, password) {
         if (err) return;
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
-            _setToastNotification('Logged in!', 'success');
             _setView('app');
             AppStateStore.emitChange();
         } else {
             _setToastNotification(response.body, 'error');
             AppStateStore.emitChange();
         }
+        location.reload();
     });
 }
 
