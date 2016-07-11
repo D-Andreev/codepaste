@@ -4,6 +4,7 @@ var AppStateActions = require('./actions/AppState');
 var AppStateStore = require('./stores/AppStateStore');
 var UserAuth = require('./components/UserAuth');
 var Toast = require('./components/common/Toast');
+var Navigation = require('./components/Navigation');
 
 /**
  * Retrieve the current data from store
@@ -67,8 +68,9 @@ module.exports = React.createClass({
             show = true;
             toast = this.state.toast
         }
+        var className = 'app ' + this.state.view + '-view'
         return (
-            <div className="app">
+            <div className={className}>
                 {this._renderActiveView()}
                 <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>;
             </div>
@@ -84,7 +86,9 @@ module.exports = React.createClass({
         var view = null;
         if (this.state.view == 'app') {
             view =
-                <div>THE APP</div>
+                <div>
+                    {this._renderNavigation()}
+                </div>
         } else {
             view =
                 <UserAuth
@@ -103,7 +107,36 @@ module.exports = React.createClass({
                 />
         }
 
-        return view;
+        return view
+    },
+
+    /**
+     * Render navigation
+     * @private
+     */
+    _renderNavigation: function() {
+        return (
+            <Navigation
+                user={this.state.user.user}
+                onNavigationLinkClick={this._onNavigationLinkClick}
+            />
+        )
+    },
+
+    /**
+     * On navigation link click
+     * @param label
+     * @private
+     */
+    _onNavigationLinkClick: function(label) {
+        console.log('Navigate: ', label);
+        if (label == 'Latest') {
+
+        } else if (label == 'New Paste') {
+
+        } else if (label == 'Logout') {
+
+        }
     },
 
     /**
