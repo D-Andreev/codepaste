@@ -90,7 +90,6 @@ module.exports = React.createClass({
                 <Navigation
                     user={this.state.user.user}
                     onNavigationLinkClick={this._onNavigationLinkClick}
-                    hidden={false}
                 />
         } else {
             view =

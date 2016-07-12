@@ -5,8 +5,7 @@ var classnames = require('classnames');
 var Navigation = React.createClass({
 
     propTypes: {
-        user: ReactPropTypes.object,
-        hidden: ReactPropTypes.bool
+        user: ReactPropTypes.object
     },
 
 
@@ -14,9 +13,7 @@ var Navigation = React.createClass({
      * @return {object}
      */
     render: function() {
-        var className = classnames('mdl-layout', 'mdl-js-layout', 'mdl-layout--fixed-header', {
-            hidden: this.props.hidden
-        });
+        var className = classnames('mdl-layout', 'mdl-js-layout', 'mdl-layout--fixed-header');
         return (
             <div className={className}>
                 <header className="mdl-layout__header">
