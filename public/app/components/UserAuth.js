@@ -141,6 +141,7 @@ var UserAuth = React.createClass({
                 label="Email"
                 floatingLabel={true}
                 hidden={hidden}
+                disabled={this.props.fieldsDisabled}
                 value={this.props.user.email}
                 pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
                 type="text"
@@ -162,6 +163,7 @@ var UserAuth = React.createClass({
                 className="username"
                 label="Username"
                 autoFocus={true}
+                disabled={this.props.fieldsDisabled}
                 value={this.props.user.username}
                 floatingLabel={true}
                 pattern="\w{4,}"
@@ -184,6 +186,7 @@ var UserAuth = React.createClass({
             <Input
                 id="first-name"
                 className="first-name"
+                disabled={this.props.fieldsDisabled}
                 label="First name"
                 hidden={hidden}
                 value={this.props.user.firstName}
@@ -209,6 +212,7 @@ var UserAuth = React.createClass({
                 id="last-name"
                 className="last-name"
                 hidden={hidden}
+                disabled={this.props.fieldsDisabled}
                 label="Last name"
                 pattern="^.+$"
                 value={this.props.user.lastName}
@@ -233,6 +237,7 @@ var UserAuth = React.createClass({
                 label="Password"
                 floatingLabel={true}
                 pattern="\w{4,}"
+                disabled={this.props.fieldsDisabled}
                 value={this.props.user.password}
                 type="password"
                 errorMessage="Please enter a valid password"
@@ -247,14 +252,14 @@ var UserAuth = React.createClass({
      * @returns {XML}
      * @private
      */
-    _renderRegisterButton: function(accent) {
+    _renderRegisterButton: function(primary) {
         return (
             <Button
                 className="button"
                 label="Register"
                 raised={true}
                 disabled={this.props.registerBtnDisabled}
-                accent={accent}
+                primary={primary}
                 rippleEffect={true}
                 onClick={this._register}
             />
@@ -273,7 +278,7 @@ var UserAuth = React.createClass({
                 label="Login"
                 raised={true}
                 disabled={this.props.loginBtnDisabled}
-                accent={true}
+                primary={true}
                 rippleEffect={true}
                 onClick={this._login}
             />
@@ -291,6 +296,7 @@ var UserAuth = React.createClass({
             <Button
                 className="button"
                 label="Register"
+                accent={true}
                 raised={true}
                 primary={isPrimary}
                 rippleEffect={true}

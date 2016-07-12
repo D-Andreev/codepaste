@@ -116,6 +116,15 @@ var AppStateActions = {
       username: username,
       password: password
     });
+  },
+
+  /**
+   * Logout
+   */
+  logout: function() {
+    AppDispatcher.dispatch({
+      actionType: Constants.LOGOUT
+    });
   }
 
 };

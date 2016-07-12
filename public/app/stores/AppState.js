@@ -15,6 +15,8 @@ var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
 var _loginBtnDisabled = false;
+var _fieldsDisabled = false;
+
 
 /**
  * Init app
@@ -25,6 +27,8 @@ function _init(props) {
     _view = props.view;
     if (_user.token) _view = 'app';
 }
+
+
 
 /**
  * Set username
@@ -97,9 +101,11 @@ function _setToast(toast) {
  */
 function _setRegisterButtonTimeout() {
     _registerBtnDisabled = true;
+    _fieldsDisabled = true;
     AppStateStore.emitChange();
     setTimeout(function() {
         _registerBtnDisabled = false;
+        _fieldsDisabled = false;
         AppStateStore.emitChange();
     }, 3000);
 }
@@ -110,9 +116,11 @@ function _setRegisterButtonTimeout() {
  */
 function _setLoginButtonTimeout() {
     _loginBtnDisabled = true;
+    _fieldsDisabled = true;
     AppStateStore.emitChange();
     setTimeout(function() {
         _loginBtnDisabled = false;
+        _fieldsDisabled = false;
         AppStateStore.emitChange();
     }, 3000);
 }
@@ -163,18 +171,16 @@ function _login(username, password) {
         AppStateStore.emitChange();
         return;
     }
-
+    
     ApiUtils.login(_url, username, password, function(err, response) {
         if (err) return;
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
-            _setView('app');
-            AppStateStore.emitChange();
+            location.reload();
         } else {
             _setToastNotification(response.body, 'error');
             AppStateStore.emitChange();
         }
-        location.reload();
     });
 }
 
@@ -186,6 +192,16 @@ function _login(username, password) {
 function _saveLoggedInUser(user) {
     _user = user;
     LocalStorage.setUser(_user);
+}
+
+/**
+ * Logout
+ * @private
+ */
+function _logout() {
+    _user = DEFAULT_USER;
+    LocalStorage.clearUser();
+    _view = 'login';
 }
 
 /**
@@ -258,6 +274,14 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
      */
     getToastType: function () {
         return _toastType;
+    },
+
+    /**
+     * Get fields disabled
+     * @returns {boolean}
+     */
+    getFieldsDisabled: function () {
+        return _fieldsDisabled;
     },
 
     /**
@@ -348,6 +372,11 @@ AppDispatcher.register(function(action) {
             username = action.username;
             password = action.password;
             _login(username, password);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.LOGOUT:
+            _logout();
             AppStateStore.emitChange();
             break;
 

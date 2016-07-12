@@ -1,7 +1,7 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var AppStateActions = require('./actions/AppState');
-var AppStateStore = require('./stores/AppStateStore');
+var AppStateStore = require('./stores/AppState');
 var UserAuth = require('./components/UserAuth');
 var Toast = require('./components/common/Toast');
 var Navigation = require('./components/Navigation');
@@ -17,14 +17,15 @@ function getAppState() {
         toastType: AppStateStore.getToastType(),
         loginBtnDisabled: AppStateStore.getLoginBtnDisabled(),
         registerBtnDisabled: AppStateStore.getRegisterBtnDisabled(),
-        user: AppStateStore.getUser()
+        user: AppStateStore.getUser(),
+        fieldsDisabled: AppStateStore.getFieldsDisabled()
     };
 }
 
 module.exports = React.createClass({
     propTypes: {
-        view: ReactPropTypes.string.isRequired,
-        url: ReactPropTypes.string.isRequired
+        url: ReactPropTypes.string.isRequired,
+        view: ReactPropTypes.string
     },
 
     /**
@@ -68,7 +69,7 @@ module.exports = React.createClass({
             show = true;
             toast = this.state.toast
         }
-        var className = 'app ' + this.state.view + '-view'
+        var className = 'app mdl-layout__container ' + this.state.view + '-view'
         return (
             <div className={className}>
                 {this._renderActiveView()}
@@ -86,9 +87,11 @@ module.exports = React.createClass({
         var view = null;
         if (this.state.view == 'app') {
             view =
-                <div>
-                    {this._renderNavigation()}
-                </div>
+                <Navigation
+                    user={this.state.user.user}
+                    onNavigationLinkClick={this._onNavigationLinkClick}
+                    hidden={false}
+                />
         } else {
             view =
                 <UserAuth
@@ -104,23 +107,11 @@ module.exports = React.createClass({
                     loginBtnDisabled={this.state.loginBtnDisabled}
                     registerBtnDisabled={this.state.registerBtnDisabled}
                     user={this.state.user}
+                    fieldsDisabled={this.state.fieldsDisabled}
                 />
         }
 
         return view
-    },
-
-    /**
-     * Render navigation
-     * @private
-     */
-    _renderNavigation: function() {
-        return (
-            <Navigation
-                user={this.state.user.user}
-                onNavigationLinkClick={this._onNavigationLinkClick}
-            />
-        )
     },
 
     /**
@@ -134,8 +125,9 @@ module.exports = React.createClass({
 
         } else if (label == 'New Paste') {
 
-        } else if (label == 'Logout') {
 
+        } else if (label == 'Logout') {
+            AppStateActions.logout();
         }
     },
 

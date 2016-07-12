@@ -5,7 +5,8 @@ var classnames = require('classnames');
 var Navigation = React.createClass({
 
     propTypes: {
-        user: ReactPropTypes.object
+        user: ReactPropTypes.object,
+        hidden: ReactPropTypes.bool
     },
 
 
@@ -13,30 +14,31 @@ var Navigation = React.createClass({
      * @return {object}
      */
     render: function() {
+        var className = classnames('mdl-layout', 'mdl-js-layout', 'mdl-layout--fixed-header', {
+            hidden: this.props.hidden
+        });
         return (
-            <div className="mdl-layout__container">
-                <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
-                    <header className="mdl-layout__header">
-                        <div className="mdl-layout__header-row">
-                            <span className="mdl-layout-title">Code paste</span>
-                            <div className="mdl-layout-spacer"></div>
-                            <nav className="mdl-navigation mdl-layout--large-screen-only">
-                                {this._renderNavigationItems()}
-                            </nav>
-                        </div>
-                    </header>
-                    <div className="mdl-layout__drawer">
-                        <span className="mdl-layout-title drawer-title">
-                            {this.props.user.username}
-                        </span>
-                        <nav className="mdl-navigation">
+            <div className={className}>
+                <header className="mdl-layout__header">
+                    <div className="mdl-layout__header-row">
+                        <span className="mdl-layout-title">Code paste</span>
+                        <div className="mdl-layout-spacer"></div>
+                        <nav className="mdl-navigation mdl-layout--large-screen-only">
                             {this._renderNavigationItems()}
                         </nav>
                     </div>
-                    <main className="mdl-layout__content">
-                        <div className="page-content">CONTENT</div>
-                    </main>
+                </header>
+                <div className="mdl-layout__drawer">
+                        <span className="mdl-layout-title drawer-title">
+                            {this.props.user.username}
+                        </span>
+                    <nav className="mdl-navigation">
+                        {this._renderNavigationItems()}
+                    </nav>
                 </div>
+                <main className="mdl-layout__content">
+                    <div className="page-content">CONTENT</div>
+                </main>
             </div>
         )
     },
