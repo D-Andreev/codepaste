@@ -13,7 +13,9 @@
   module.exports = express.Router().get(routes.all, function(req, res) {
     var body, ref1, statusCode;
     ref1 = new Response(null, {}, STATUS_CODES.OK), statusCode = ref1.statusCode, body = ref1.body;
-    return res.status(statusCode).render(VIEWS.INDEX);
+    return res.status(statusCode).render(VIEWS.INDEX, {
+      url: process.env.APP_URL
+    });
   });
 
 }).call(this);

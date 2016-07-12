@@ -10,6 +10,7 @@ module.exports = keyMirror({
   SET_LAST_NAME: null,
   REGISTER: null,
   LOGIN: null,
+  LOGOUT: null,
   SET_VIEW: null,
   SET_TOAST: null
 });

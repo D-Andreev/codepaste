@@ -18,7 +18,8 @@ var Input = React.createClass({
         pattern: ReactPropTypes.string,
         placeholder: ReactPropTypes.string,
         hidden: ReactPropTypes.bool,
-        autoFocus: ReactPropTypes.bool
+        autoFocus: ReactPropTypes.bool,
+        disabled: ReactPropTypes.bool
 
     },
 
@@ -59,6 +60,7 @@ var Input = React.createClass({
                     onClick={this.props.onClick}
                     autoFocus={this.props.autoFocus}
                     type={this.props.type}
+                    disabled={this.props.disabled}
                     pattern={this.props.pattern}
                     placeholder={this.props.placeholder}
                     value={this.props.value}
