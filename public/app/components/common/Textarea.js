@@ -49,7 +49,7 @@ var Textarea = React.createClass({
             this.props.className);
         return (
             <div className={wrapperClassName}>
-                <input
+                <textarea
                     id={this.props.id}
                     className={inputClassName}
                     onClick={this.props.onClick}
@@ -62,7 +62,7 @@ var Textarea = React.createClass({
                     onChange={this.props.onChange}
                     rows={this.props.rows}
                 >
-                </input>
+                </textarea>
                 <label className="mdl-textfield__label" htmlFor={this.props.id}>
                     {this.props.label}
                 </label>
