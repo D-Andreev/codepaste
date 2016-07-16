@@ -54,6 +54,10 @@
     color: white;
 }
 
+.app .mdl-radio {
+    margin-right: 1rem;
+}
+
 footer {
     position: absolute;
     bottom: 0;

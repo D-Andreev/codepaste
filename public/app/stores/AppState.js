@@ -17,6 +17,8 @@ var _toastType = 'notification';
 var _registerBtnDisabled = false;
 var _loginBtnDisabled = false;
 var _fieldsDisabled = false;
+var _createNewBtnDisabled = false;
+var _pasteId = 0;
 
 
 /**
@@ -150,6 +152,19 @@ function _setLoginButtonTimeout() {
 }
 
 /**
+ * Set create new timeout
+ * @private
+ */
+function _setCreateNewButtonTimeout() {
+    _createNewBtnDisabled = true;
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        _createNewBtnDisabled = false;
+        AppStateStore.emitChange();
+    }, 3000);
+}
+
+/**
  * Register
  * @param username
  * @param email
@@ -192,8 +207,7 @@ function _login(username, password) {
     if (!username || !password) {
         _toast = 'All fields are required!';
         _toastType = 'warning';
-        AppStateStore.emitChange();
-        return;
+        return AppStateStore.emitChange();
     }
     
     ApiUtils.login(_url, username, password, function(err, response) {
@@ -202,6 +216,37 @@ function _login(username, password) {
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
             _setView('pastes');
+        } else {
+            _setToastNotification(response.body, 'error');
+            AppStateStore.emitChange();
+        }
+    });
+}
+
+/**
+ * Create new
+ * @param value
+ * @param title
+ * @param mode
+ * @returns {*}
+ * @private
+ */
+function _createNew(value, title, mode) {
+    _setCreateNewButtonTimeout();
+    console.log('Creating new paste', value, title, mode);
+    if (!value) {
+        _toast = 'Please paste code!';
+        _toastType = 'warning';
+        return AppStateStore.emitChange();
+    }
+
+    ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
+        if (err) return _setToastNotification('Service error!', 'error');
+
+        if (response.statusCode == 201) {
+            console.log('create new response', response);
+            _pasteId = response.body.pasteId;
+            _setView('paste');
         } else {
             _setToastNotification(response.body, 'error');
             AppStateStore.emitChange();
@@ -310,6 +355,14 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get create new paste button disabled
+     * @returns {*}
+     */
+    getCreateNewBtnDisabled: function () {
+        return _createNewBtnDisabled;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -408,8 +461,17 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.NAVIGATE:
-            path = action.path;
+            var path = action.path;
             _route(path);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.CREATE_NEW:
+            var value = action.value;
+            var title = action.title;
+            var mode = action.mode;
+            console.log('action', action);
+            _createNew(value, title, mode);
             AppStateStore.emitChange();
             break;
 
