@@ -240,7 +240,7 @@ function _createNew(value, title, mode) {
         return AppStateStore.emitChange();
     }
 
-    ApiUtils.createNew(_url, {value: value, title: title, mode: mode}, function(err, response) {
+    ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
         if (err) return _setToastNotification('Service error!', 'error');
 
         if (response.statusCode == 201) {

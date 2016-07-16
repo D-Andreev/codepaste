@@ -33,10 +33,12 @@ module.exports = {
     /**
      * Create new
      * @param url
+     * @param user
      * @param data
      * @param done
      */
-    createNew: function(url, data, done) {
+    createNew: function(url, user, data, done) {
+        data.user = user;
         this.request('PUT', url + '/new', data, function(err, res) {
             done(err, res);
         });

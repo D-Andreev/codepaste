@@ -106,6 +106,7 @@ module.exports = React.createClass({
                     registerBtnDisabled={this.state.registerBtnDisabled}
                     user={this.state.user}
                     fieldsDisabled={this.state.fieldsDisabled}
+                    createNewPasteBtnDisabled={this.state.createNewPasteBtnDisabled}
                     createNew={this._createNew}
                 />
             </span>
