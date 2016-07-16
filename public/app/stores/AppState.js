@@ -45,7 +45,6 @@ function _userIsLoggedIn() {
 function _route(path) {
     var view = path || Router.getViewFromUrl();
     var userIsLoggedIn = _userIsLoggedIn();
-    console.log('_route', view, userIsLoggedIn);
     if (!userIsLoggedIn) {
         if (view == 'registration') _setView('registration');
         else _setView('login');

@@ -10,7 +10,6 @@ module.exports = {
         var hash = '/' + location.hash;
         if (!location.hash) hash = '/';
         var views = Object.keys(routes);
-        console.log('============HASH+==============', hash);
         for (var i = 0; i < views.length; i++) {
             if (routes[views[i]].test(hash)) return views[i];
         }
