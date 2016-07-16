@@ -1,4 +1,4 @@
-    var React = require('react');
+var React = require('react');
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 

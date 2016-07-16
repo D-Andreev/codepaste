@@ -48,8 +48,9 @@ module.exports = React.createClass({
     componentDidMount: function() {
         AppStateStore.addChangeListener(this._onChange);
         AppStateActions.init(this.props);
+        var $this = this;
         window.onpopstate = function() {
-            AppStateActions.init(this.props);
+            AppStateActions.init($this.props);
         };
     },
 
