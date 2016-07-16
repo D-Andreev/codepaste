@@ -4,6 +4,7 @@ var classnames = require('classnames');
 var Editor = require('../components/Editor');
 var Grid = require('../components/Grid');
 var UserAuth = require('../components/UserAuth');
+var Contacts = require('../components/Contacts');
 
 var Content = React.createClass({
 
@@ -34,6 +35,7 @@ var Content = React.createClass({
         });
         var username = '';
         if (this.props.user.user) username = this.props.user.user.username;
+        var items = this._getItems();
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <header className={className}>
@@ -41,24 +43,7 @@ var Content = React.createClass({
                         <span className="mdl-layout-title">Code paste</span>
                         <div className="mdl-layout-spacer"></div>
                         <nav className="mdl-navigation mdl-layout--large-screen-only">
-                            <a
-                                className="mdl-navigation__link"
-                                href="#paste"
-                                key="new"
-                                onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
-                            </a>
-                            <a
-                                className="mdl-navigation__link"
-                                href="#pastes"
-                                key="latest"
-                                onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
-                            </a>
-                            <a
-                                className="mdl-navigation__link"
-                                href="#logout"
-                                key="logout"
-                                onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
-                            </a>
+                            {items}
                         </nav>
                     </div>
                 </header>
@@ -67,24 +52,7 @@ var Content = React.createClass({
                             {username}
                         </span>
                     <nav className="mdl-navigation">
-                        <a
-                            className="mdl-navigation__link"
-                            href="#paste"
-                            key="new"
-                            onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
-                        </a>
-                        <a
-                            className="mdl-navigation__link"
-                            href="#pastes"
-                            key="latest"
-                            onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
-                        </a>
-                        <a
-                            className="mdl-navigation__link"
-                            href="#logout"
-                            key="logout"
-                            onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
-                        </a>
+                        {items}
                     </nav>
                 </div>
                 <main className="mdl-layout__content">
@@ -94,6 +62,40 @@ var Content = React.createClass({
                 </main>
             </div>
         )
+    },
+
+    /**
+     * Get items
+     * @returns {XML[]}
+     * @private
+     */
+    _getItems: function() {
+        return [
+            <a
+                className="mdl-navigation__link"
+                href="#paste"
+                key="new"
+                onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
+            </a>,
+            <a
+                className="mdl-navigation__link"
+                href="#pastes"
+                key="latest"
+                onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
+            </a>,
+            <a
+                className="mdl-navigation__link"
+                href="#contacts"
+                key="contacts"
+                onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
+            </a>,
+            <a
+                className="mdl-navigation__link"
+                href="#logout"
+                key="logout"
+                onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
+            </a>
+        ];
     },
 
     /**
@@ -113,6 +115,8 @@ var Content = React.createClass({
             content = <Grid />
         } else if (this.props.view == 'new') {
             content = <Editor />
+        } else if (this.props.view == 'contacts') {
+            content = <Contacts />
         } else {
             content =
                 <UserAuth

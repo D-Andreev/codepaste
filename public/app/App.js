@@ -48,7 +48,7 @@ module.exports = React.createClass({
     componentDidMount: function() {
         AppStateStore.addChangeListener(this._onChange);
         AppStateActions.init(this.props);
-        window.onpopstate = function(event) {
+        window.onpopstate = function() {
             AppStateActions.init(this.props);
         };
     },
@@ -120,6 +120,8 @@ module.exports = React.createClass({
             AppStateActions.navigate('pastes');
         } else if (label == 'New') {
             AppStateActions.navigate('new');
+        } else if (label == 'Contacts') {
+            AppStateActions.navigate('contacts');
         } else if (label == 'Logout') {
             AppStateActions.logout();
         }

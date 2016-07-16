@@ -1,4 +1,4 @@
-var React = require('react');
+    var React = require('react');
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 
@@ -17,7 +17,6 @@ var ContactUs = React.createClass({
                         <div className="mdl-card__title mdl-card--expand">
                             <h2 className="mdl-card__title-text">Contact Us</h2>
                         </div>
-                        {this._renderContactUsView()}
                     </div>
                 </div>
                 <div className="mdl-cell mdl-cell--2-col"></div>
