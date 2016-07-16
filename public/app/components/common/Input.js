@@ -20,7 +20,6 @@ var Input = React.createClass({
         hidden: ReactPropTypes.bool,
         autoFocus: ReactPropTypes.bool,
         disabled: ReactPropTypes.bool
-
     },
 
     /**
@@ -30,6 +29,16 @@ var Input = React.createClass({
     getDefaultProps: function() {
         return {
             autoFocus: false
+        }
+    },
+
+    /**
+     * Get Initial state
+     * @returns {{value: *}}
+     */
+    getInitialState: function() {
+        return {
+            value: this.props.value
         }
     },
 
@@ -63,8 +72,8 @@ var Input = React.createClass({
                     disabled={this.props.disabled}
                     pattern={this.props.pattern}
                     placeholder={this.props.placeholder}
-                    value={this.props.value}
-                    onChange={this.props.onChange}
+                    value={this.state.value}
+                    onChange={this._onChange}
                 >
                 </input>
                 <label className="mdl-textfield__label" htmlFor={this.props.id}>
@@ -73,6 +82,16 @@ var Input = React.createClass({
                 <span className="mdl-textfield__error">{this.props.errorMessage}</span>
             </div>
         );
+    },
+
+    /**
+     * On change
+     * @param event
+     * @private
+     */
+    _onChange(event) {
+        this.props.onChange(event);
+        this.setState({value: event.target.value});
     }
 });
 
