@@ -1,6 +1,3 @@
 #!/usr/bin/env bash
 
-export DEBIAN_FRONTEND=noninteractive
-sudo -E apt-get -q -y install mysql-server
-/etc/init.d/mysql start
-mysql -u root < ../sql/users.sql
+nohup APP_URL=http://162.243.123.212:666 APP_ENV=production APP_PORT=666 node ./node_modules/nodemon/bin/nodemon ./ localhost 666
