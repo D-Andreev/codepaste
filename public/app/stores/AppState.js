@@ -3,6 +3,7 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/Constants');
 var ApiUtils = require('../Utils/ApiUtils');
 var LocalStorage = require('../Utils/LocalStorage');
+var Router = require('../Utils/Router');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
@@ -24,11 +25,34 @@ var _fieldsDisabled = false;
  */
 function _init(props) {
     _url = props.url;
-    _view = props.view;
-    if (_user.token) _view = 'app';
+    _route();
 }
 
+/**
+ * User is logged in
+ * @returns {*}
+ * @private
+ */
+function _userIsLoggedIn() {
+    return _user.token && _user.refreshToken;
+}
 
+/**
+ * Route
+ * @param path
+ * @private
+ */
+function _route(path) {
+    var view = path || Router.getViewFromUrl();
+    var userIsLoggedIn = _userIsLoggedIn();
+    if (!userIsLoggedIn) {
+        if (view == 'registration') _setView('registration');
+        else _setView('login');
+    } else {
+        if (view == '/') view = 'pastes';
+        _setView(view);
+    }
+}
 
 /**
  * Set username
@@ -82,7 +106,7 @@ function _setEmail(email) {
  */
 function _setView(view) {
     _view = view;
-    if (view != 'app') _user = {};
+    Router.setUrl('#' + view);
     AppStateStore.emitChange();
 }
 
@@ -173,10 +197,11 @@ function _login(username, password) {
     }
     
     ApiUtils.login(_url, username, password, function(err, response) {
-        if (err) return;
+        if (err) return _setToastNotification('Service error!', 'error');
+
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
-            location.reload();
+            _setView('pastes');
         } else {
             _setToastNotification(response.body, 'error');
             AppStateStore.emitChange();
@@ -201,7 +226,7 @@ function _saveLoggedInUser(user) {
 function _logout() {
     _user = DEFAULT_USER;
     LocalStorage.clearUser();
-    _view = 'login';
+    location.reload();
 }
 
 /**
@@ -365,14 +390,12 @@ AppDispatcher.register(function(action) {
             email = action.email;
             password = action.password;
             _register(username, email, password);
-            AppStateStore.emitChange();
             break;
 
         case Constants.LOGIN:
             username = action.username;
             password = action.password;
             _login(username, password);
-            AppStateStore.emitChange();
             break;
 
         case Constants.LOGOUT:
@@ -382,6 +405,12 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_TOAST:
             _setToast();
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.NAVIGATE:
+            path = action.path;
+            _route(path);
             AppStateStore.emitChange();
             break;
 

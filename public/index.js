@@ -1,7 +1,8 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var App = require('./app/App');
 
-React.render(
-    <App url="http://localhost:666" view="login"/>,
+ReactDOM.render(
+    <App url="http://localhost:666"/>,
     document.getElementById('container')
 );

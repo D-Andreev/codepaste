@@ -125,6 +125,17 @@ var AppStateActions = {
     AppDispatcher.dispatch({
       actionType: Constants.LOGOUT
     });
+  },
+
+  /**
+   * Navigate
+   * @param path
+     */
+  navigate: function(path) {
+    AppDispatcher.dispatch({
+      actionType: Constants.NAVIGATE,
+      path: path
+    });
   }
 
 };

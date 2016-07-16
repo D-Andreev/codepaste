@@ -2,9 +2,8 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var AppStateActions = require('./actions/AppState');
 var AppStateStore = require('./stores/AppState');
-var UserAuth = require('./components/UserAuth');
 var Toast = require('./components/common/Toast');
-var Navigation = require('./components/Navigation');
+var Content = require('./components/Content');
 
 /**
  * Retrieve the current data from store
@@ -49,6 +48,10 @@ module.exports = React.createClass({
     componentDidMount: function() {
         AppStateStore.addChangeListener(this._onChange);
         AppStateActions.init(this.props);
+        var $this = this;
+        window.onpopstate = function() {
+            AppStateActions.init($this.props);
+        };
     },
 
     /**
@@ -84,16 +87,12 @@ module.exports = React.createClass({
      * @private
      */
     _renderActiveView: function() {
-        var view = null;
-        if (this.state.view == 'app') {
-            view =
-                <Navigation
+        return (
+            <span>
+                <Content
                     user={this.state.user.user}
                     onNavigationLinkClick={this._onNavigationLinkClick}
-                />
-        } else {
-            view =
-                <UserAuth
+                    view={this.state.view}
                     onUsernameChange={this._onUsernameChange}
                     onPasswordChange={this._onPasswordChange}
                     onEmailChange={this._onEmailChange}
@@ -101,16 +100,14 @@ module.exports = React.createClass({
                     onLastNameChange={this._onLastNameChange}
                     register={this._register}
                     login={this._login}
-                    view={this.state.view}
                     changeView={this._changeView}
                     loginBtnDisabled={this.state.loginBtnDisabled}
                     registerBtnDisabled={this.state.registerBtnDisabled}
                     user={this.state.user}
                     fieldsDisabled={this.state.fieldsDisabled}
                 />
-        }
-
-        return view
+            </span>
+        )
     },
 
     /**
@@ -120,11 +117,12 @@ module.exports = React.createClass({
      */
     _onNavigationLinkClick: function(label) {
         console.log('Navigate: ', label);
-        if (label == 'Latest') {
-
-        } else if (label == 'New Paste') {
-
-
+        if (label == 'Pastes') {
+            AppStateActions.navigate('pastes');
+        } else if (label == 'New') {
+            AppStateActions.navigate('new');
+        } else if (label == 'Contacts') {
+            AppStateActions.navigate('contacts');
         } else if (label == 'Logout') {
             AppStateActions.logout();
         }

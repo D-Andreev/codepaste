@@ -12,5 +12,6 @@ module.exports = keyMirror({
   LOGIN: null,
   LOGOUT: null,
   SET_VIEW: null,
-  SET_TOAST: null
+  SET_TOAST: null,
+  NAVIGATE: null
 });

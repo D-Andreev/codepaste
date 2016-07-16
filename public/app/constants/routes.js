@@ -1,8 +1,9 @@
 module.exports = {
     '/': new RegExp(/^\/$/),
-    'login': new RegExp(/^\/login$/),
-    'register': new RegExp(/^\/$register/),
-    'code-pastes': new RegExp(/^\/$code-pastes/),
-    'new-pastes': new RegExp(/^\/$new/),
-    'paste': new RegExp(/^\/paste\/\d+$/),
+    'login': new RegExp(/^\/#login$/),
+    'registration': new RegExp(/^\/#registration$/),
+    'pastes': new RegExp(/^\/#pastes$/),
+    'new': new RegExp(/^\/#new$/),
+    'contacts': new RegExp(/^\/#contacts/),
+    'paste': new RegExp(/^\/#paste\/\d+$/)
 };
