@@ -103,6 +103,9 @@ var UserAuth = React.createClass({
                     {this._renderUsernameField()}
                 </div>
                 <div className="mdl-cell mdl-cell--12-col">
+                    {this._renderPasswordField()}
+                </div>
+                <div className="mdl-cell mdl-cell--12-col">
                     {this._renderFirstNameField()}
                 </div>
                 <div className="mdl-cell mdl-cell--12-col">
@@ -110,9 +113,6 @@ var UserAuth = React.createClass({
                 </div>
                 <div className="mdl-cell mdl-cell--12-col">
                     {this._renderEmailField()}
-                </div>
-                <div className="mdl-cell mdl-cell--12-col">
-                    {this._renderPasswordField()}
                 </div>
                 <div className="mdl-cell mdl-cell--12-col mdl-card__actions mdl-card--border button-wrapper">
                     <div className="mdl-cell mdl-cell--6-col">
@@ -248,7 +248,7 @@ var UserAuth = React.createClass({
 
     /**
      * Render register button
-     * @param accent
+     * @param primary
      * @returns {XML}
      * @private
      */
