@@ -379,7 +379,6 @@ AppDispatcher.register(function(action) {
         case Constants.SET_VIEW:
             view = action.view;
             if (view) {
-                if (view == 'registration' || view == 'login') _user = {};
                 _setView(view);
                 AppStateStore.emitChange();
             }
