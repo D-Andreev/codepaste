@@ -136,6 +136,21 @@ var AppStateActions = {
       actionType: Constants.NAVIGATE,
       path: path
     });
+  },
+
+  /**
+   * Create new
+   * @param value
+   * @param title
+   * @param mode
+     */
+  createNew: function(value, title, mode) {
+    AppDispatcher.dispatch({
+      actionType: Constants.CREATE_NEW,
+      value: value,
+      title: title,
+      mode: mode
+    });
   }
 
 };

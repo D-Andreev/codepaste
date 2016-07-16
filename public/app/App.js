@@ -17,7 +17,8 @@ function getAppState() {
         loginBtnDisabled: AppStateStore.getLoginBtnDisabled(),
         registerBtnDisabled: AppStateStore.getRegisterBtnDisabled(),
         user: AppStateStore.getUser(),
-        fieldsDisabled: AppStateStore.getFieldsDisabled()
+        fieldsDisabled: AppStateStore.getFieldsDisabled(),
+        createNewPasteBtnDisabled: AppStateStore.getCreateNewBtnDisabled(),
     };
 }
 
@@ -105,6 +106,7 @@ module.exports = React.createClass({
                     registerBtnDisabled={this.state.registerBtnDisabled}
                     user={this.state.user}
                     fieldsDisabled={this.state.fieldsDisabled}
+                    createNew={this._createNew}
                 />
             </span>
         )
@@ -209,6 +211,17 @@ module.exports = React.createClass({
      */
     _onToastDone: function() {
         AppStateActions.setToast(false);
+    },
+
+    /**
+     * Create new
+     * @param value
+     * @param title
+     * @param mode
+     * @private
+     */
+    _createNew: function(value, title, mode) {
+        AppStateActions.createNew(value, title, mode);
     },
 
     /**

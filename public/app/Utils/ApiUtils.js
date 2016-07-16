@@ -31,6 +31,18 @@ module.exports = {
     },
 
     /**
+     * Create new
+     * @param url
+     * @param data
+     * @param done
+     */
+    createNew: function(url, data, done) {
+        this.request('PUT', url + '/new', data, function(err, res) {
+            done(err, res);
+        });
+    },
+
+    /**
      * Request
      * @param method
      * @param url

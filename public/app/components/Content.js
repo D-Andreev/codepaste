@@ -21,7 +21,9 @@ var Content = React.createClass({
         changeView: ReactPropTypes.func,
         loginBtnDisabled: ReactPropTypes.bool,
         registerBtnDisabled: ReactPropTypes.bool,
-        fieldsDisabled: ReactPropTypes.bool
+        fieldsDisabled: ReactPropTypes.bool,
+        createNewPasteBtnDisabled: ReactPropTypes.bool,
+        createNew: ReactPropTypes.func
     },
 
 
@@ -114,7 +116,11 @@ var Content = React.createClass({
         if (this.props.view == 'pastes') {
             content = <Grid />
         } else if (this.props.view == 'new') {
-            content = <Editor />
+            content =
+                <Editor
+                    createNewPasteBtnDisabled={this.props.createNewPasteBtnDisabled}
+                    createNew={this.props.createNew}
+                />
         } else if (this.props.view == 'contacts') {
             content = <Contacts />
         } else {
