@@ -4,7 +4,9 @@
     healthCheck: require('./health_check'),
     index: require('./app'),
     register: require('./register'),
-    login: require('./login')
+    login: require('./login'),
+    newPaste: require('./newpaste'),
+    paste: require('./paste')
   };
 
 }).call(this);

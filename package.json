@@ -26,6 +26,8 @@
     "keymirror": "~0.1.0",
     "lodash": "^4.11.1",
     "method-override": "^2.3.6",
+    "moment": "^2.14.1",
+    "mongoose": "^4.5.4",
     "nodemailer": "^2.4.1",
     "nodemon": "^1.9.2",
     "object-assign": "^1.0.0",

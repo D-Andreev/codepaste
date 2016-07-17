@@ -6,3 +6,7 @@ Dependencies
  * node-gyp dependencies
  * mongo
  * npm install
+ 
+Start dev
+npm run watch
+npm run start-dev-win

@@ -1,45 +1,83 @@
 var React = require('react');
+var moment = require('moment');
 var ReactPropTypes = React.PropTypes;
 var Radio = require('./common/Radio');
 var Input = require('./common/Input');
 var Button = require('./common/Button');
+var List = require('./common/List');
 
 var Editor = React.createClass({
 
     propTypes: {
         createNewPasteBtnDisabled: ReactPropTypes.bool,
-        createNew: ReactPropTypes.func
+        createNew: ReactPropTypes.func,
+        hidden: ReactPropTypes.bool,
+        readOnly: ReactPropTypes.bool,
+        viewedPaste: ReactPropTypes.object,
+        cmOptions: ReactPropTypes.object,
+        onTypeChecked: ReactPropTypes.func,
+        onTitleChange: ReactPropTypes.func,
+        title: ReactPropTypes.string,
+        view: ReactPropTypes.string
     },
 
     _cm: null,
 
-    /**
-     * Get Initial state
-     * @returns {{options: {lineNumbers: boolean, mode: {name: string}, theme: string, extraKeys: {Ctrl-Space: string}, matchBrackets: boolean, closeBrackets: boolean, closeTag: boolean, continueList: boolean}, value: string, javascriptChecked: boolean, htmlChecked: boolean, sqlChecked: boolean, cSharpChecked: boolean, cssChecked: boolean, title: string}}
-     */
-    getInitialState: function() {
+    componentWillUpdate: function(nextProps) {
+        if (this.props.readOnly != nextProps.readOnly) {
+            this._cm.setOption('readOnly', nextProps.readOnly);
+            this._cm.setOption('mode', nextProps.mode);
+        }
+    },
+
+    _setValue: function (value) {
+        this._cm.setValue(value);
+        var $this = this;
+        setTimeout(function() {
+            $this._cm.refresh();
+        },1);
+    },
+
+    getDefaultProps: function() {
         return {
-            options: {
+            cmOptions: {
                 lineNumbers: true,
+                readOnly: false,
                 mode: {
                     name: 'javascript'
                 },
-                theme: 'material',
+                theme: 'pastel-on-dark',
                 extraKeys: {
                     'Ctrl-Space': 'autocomplete'
                 },
                 matchBrackets: true,
                 closeBrackets: true,
                 closeTag: true,
-                continueList: true
-            },
-            value: '',
-            javascriptChecked: true,
-            htmlChecked: false,
-            sqlChecked: false,
-            cSharpChecked: false,
-            cssChecked: false,
-            title: ''
+                continueList: true,
+                indentWithTabs: true,
+                lineWrapping: true
+            }
+
+        }
+    },
+
+    componentWillUpdate: function(nextProps) {
+        console.log('========asdads===========', nextProps);
+        if (this._cm) {
+            if (this.props.view != nextProps.view && nextProps.view == 'new') {
+                this._cm.setValue('');
+                this._cm.clearHistory();
+            }
+            this._cm.setOption('readOnly', nextProps.cmOptions.readOnly);
+            var $this = this;
+            setTimeout(function() {
+                $this._cm.refresh();
+            },1);
+            if (nextProps.view == 'paste' && nextProps.viewedPaste) {
+                if(!this.props.viewedPaste || this.props.viewedPaste.code != nextProps.viewedPaste.code) {
+                    this._setValue(nextProps.viewedPaste.code);
+                }
+            }
         }
     },
 
@@ -47,75 +85,163 @@ var Editor = React.createClass({
      * Component did mount
      */
     componentDidMount: function() {
-        this._cm = CodeMirror.fromTextArea(document.getElementById('code'), this.state.options);
+        this._cm = CodeMirror.fromTextArea(document.getElementById('code'), this.props.cmOptions);
     },
 
     /**
      * @return {object}
      */
     render: function() {
-        console.log('Editor', this.state);
+        console.log('Editor', this.props);
+        var className = 'mdl-grid';
+        if (this.props.hidden) className += ' hidden';
         return (
-            <div className="mdl-grid">
-                <div className="mdl-cell mdl-cell--2-col"></div>
-                <div className="mdl-cell mdl-cell--8-col">
-                    <div className="mdl-cell mdl-cell--12-col">
-                        <Input
-                            value={this.state.title}
-                            onChange={this._onTitleChange}
-                            floatingLabel={true}
-                            type="text"
-                            label="Title"
-                        />
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        <Radio
-                            name='code'
-                            label='Javascript'
-                            value="javascript"
-                            checked={this.state.javascriptChecked}
-                            onCheck={this._onCheck}
-                        />
-                        <Radio
-                            name='code'
-                            label='HTML'
-                            onCheck={this._onCheck}
-                            checked={this.state.htmlChecked}
-                            value="text/html"
-                        />
-                        <Radio
-                            name='code'
-                            label='SQL'
-                            onCheck={this._onCheck}
-                            checked={this.state.sqlChecked}
-                            value="text/x-sql"
-                        />
-                        <Radio
-                            name='code'
-                            label='CSS'
-                            onCheck={this._onCheck}
-                            checked={this.state.cssChecked}
-                            value="text/css"
-                        />
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        <textarea id="code">
+            <div className={className}>
+                <div className="mdl-cell mdl-cell--12-col">
+                    <div className="card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
+                        <div className="mdl-card__title mdl-card--expand view-title-wrapper">
+                            <h2 className="mdl-card__title-text view-title">{this._getTitle()}</h2>
+                        </div>
+                        <div className="mdl-cell mdl-cell--12-col ">
+                            {this._renderTopSection()}
+                        </div>
+                        {this._renderTypes()}
+                        <div className="mdl-cell mdl-cell--12-col">
+                            <textarea id="code">
 
-                    </textarea>
-                    </div>
-                    <div className="mdl-cell mdl-cell--12-col">
-                        <Button
-                            label="Create New Paste"
-                            raised={true}
-                            disabled={this.props.createNewPasteBtnDisabled}
-                            primary={true}
-                            rippleEffect={true}
-                            onClick={this._createNewPaste}
-                        />
+                            </textarea>
+                        </div>
+                        {this._renderCreateNewButton()}
                     </div>
                 </div>
+            </div>
+        )
+    },
 
-                <div className="mdl-cell mdl-cell--2-col"></div>
+    /**
+     * Get Title
+     * @returns {*}
+     * @private
+     */
+    _getTitle: function () {
+        var title = this.props.view;
+        if (title == 'paste') title = this.props.title || title;
+        return title;
+    },
+
+    /**
+     * Render top secion
+     * @returns {XML}
+     * @private
+     */
+    _renderTopSection: function() {
+        var inputHidden = false;
+        var listHidden = true;
+        var items = [];
+        console.log('top', this.props.viewedPaste);
+        if (this.props.view == 'paste') {
+            inputHidden = true;
+            listHidden = false;
+            items = [
+                {label: this.props.viewedPaste.user.username, icon: 'account_circle'},
+                {label: this.props.viewedPaste.mode, icon: 'code'},
+                {label: moment(this.props.viewedPaste.created).format('MMMM Do YYYY, h:mm:ss a'), icon: 'schedule'}
+            ]
+        }
+
+        return (
+            <span>
+                <Input
+                    hidden={inputHidden}
+                    value={this.props.title}
+                    onChange={this._onTitleChange}
+                    floatingLabel={true}
+                    type="text"
+                    pattern="\w{0,20}"
+                    label="Title"
+                />
+                <List
+                    hidden={listHidden}
+                    items={items}
+                />
+            </span>
+        )
+    },
+
+    /**
+     * Render Types
+     * @returns {XML}
+     * @private
+     */
+    _renderTypes: function () {
+        var className = 'mdl-cell mdl-cell--12-col';
+        var mode = 'javascript';
+        var readOnly = false;
+        if (this.props.view == 'paste') {
+            className += ' hidden';
+            mode = this.props.cmOptions.mode;
+            readOnly = true;
+        } else if (this.props.view == 'new') {
+            mode = this.props.cmOptions.mode;
+        }
+        console.log('Render radio', mode);
+
+        return (
+            <div className={className}>
+                <Radio
+                    name='code'
+                    label='Javascript'
+                    value="javascript"
+                    checked={mode == 'javascript'}
+                    onCheck={this._onCheck}
+                    disabled={readOnly}
+                />
+                <Radio
+                    name='code'
+                    label='HTML'
+                    onCheck={this._onCheck}
+                    checked={mode == 'text/html'}
+                    value="text/html"
+                    disabled={readOnly}
+                />
+                <Radio
+                    name='code'
+                    label='SQL'
+                    onCheck={this._onCheck}
+                    checked={mode == 'text/x-sql'}
+                    value="text/x-sql"
+                    disabled={readOnly}
+                />
+                <Radio
+                    name='code'
+                    label='CSS'
+                    onCheck={this._onCheck}
+                    checked={mode == 'text/css'}
+                    value="text/css"
+                    disabled={readOnly}
+                />
+            </div>
+        )
+    },
+
+    /**
+     * Render Create new button
+     * @returns {XML}
+     * @private
+     */
+    _renderCreateNewButton: function() {
+        var className = 'mdl-cell mdl-cell--12-col';
+        if (this.props.view == 'paste') className += ' hidden';
+        return (
+            <div className={className}>
+                <Button
+                    label="Create New Paste"
+                    raised={true}
+                    disabled={this.props.createNewPasteBtnDisabled}
+                    primary={true}
+                    rippleEffect={true}
+                    onClick={this._createNewPaste}
+                />
             </div>
         )
     },
@@ -126,42 +252,7 @@ var Editor = React.createClass({
      * @private
      */
     _onCheck: function(name) {
-        if (name == 'javascript') {
-            this.setState({
-                javascriptChecked: true,
-                htmlChecked: false,
-                sqlChecked: false,
-                cssChecked: false,
-                cSharpChecked: false
-            });
-        } else if (name == 'text/html') {
-            this.setState({
-                htmlChecked: true,
-                javascriptChecked: false,
-                sqlChecked: false,
-                cssChecked: false,
-                cSharpChecked: false
-            });
-        } else if (name == 'text/x-sql') {
-            this.setState({
-                sqlChecked: true,
-                htmlChecked: false,
-                javascriptChecked: false,
-                cssChecked: false,
-                cSharpChecked: false
-            });
-        } else if (name == 'text/css') {
-            this.setState({
-                cssChecked: true,
-                sqlChecked: false,
-                htmlChecked: false,
-                javascriptChecked: false,
-                cSharpChecked: false
-            });
-        }
-        var opts = this.state.options;
-        opts.mode.name = name;
-        this.setState({options: opts});
+        this.props.onTypeChecked(name);
     },
 
     /**
@@ -170,7 +261,7 @@ var Editor = React.createClass({
      * @private
      */
     _onTitleChange: function (e) {
-        this.setState({title: e.target.value});
+        this.props.onTitleChange(e.target.value);
     },
 
     /**
@@ -179,8 +270,7 @@ var Editor = React.createClass({
      */
     _createNewPaste: function() {
         var value = this._cm.getValue();
-        console.log('create new', value, this.state);
-        this.props.createNew(value, this.state.title, this.state.options.mode.name);
+        this.props.createNew(value, this.props.title, this.props.cmOptions.mode);
     }
 });
 

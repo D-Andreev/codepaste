@@ -19,6 +19,9 @@ function getAppState() {
         user: AppStateStore.getUser(),
         fieldsDisabled: AppStateStore.getFieldsDisabled(),
         createNewPasteBtnDisabled: AppStateStore.getCreateNewBtnDisabled(),
+        viewedPaste: AppStateStore.getViewedPaste(),
+        cmOptions: AppStateStore.getCmOptions(),
+        title: AppStateStore.getTitle()
     };
 }
 
@@ -108,6 +111,11 @@ module.exports = React.createClass({
                     fieldsDisabled={this.state.fieldsDisabled}
                     createNewPasteBtnDisabled={this.state.createNewPasteBtnDisabled}
                     createNew={this._createNew}
+                    viewedPaste={this.state.viewedPaste}
+                    cmOptions={this.state.cmOptions}
+                    onTypeChecked={this._onTypeChecked}
+                    onTitleChange={this._onTitleChange}
+                    title={this.state.title}
                 />
             </span>
         )
@@ -223,6 +231,24 @@ module.exports = React.createClass({
      */
     _createNew: function(value, title, mode) {
         AppStateActions.createNew(value, title, mode);
+    },
+
+    /**
+     * Set mode
+     * @param name
+     * @private
+     */
+    _onTypeChecked: function(name) {
+        AppStateActions.setMode(name);
+    },
+
+    /**
+     * On title change
+     * @param title
+     * @private
+     */
+    _onTitleChange: function(title) {
+        AppStateActions.changeTitle(title);
     },
 
     /**

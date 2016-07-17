@@ -43,6 +43,16 @@ var Input = React.createClass({
     },
 
     /**
+     * Component will update
+     * @param nextProps
+     */
+    componentWillUpdate: function(nextProps) {
+        if (nextProps.value != this.state.value) {
+            this.setState({value: nextProps.value});
+        }
+    },
+
+    /**
      * @return {object}
      */
     render: function() {

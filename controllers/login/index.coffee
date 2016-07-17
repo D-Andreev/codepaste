@@ -7,4 +7,4 @@ Users = require '../../services/users'
 module.exports = express.Router().post routes.login, (req, res) ->
   Users.get().login req.body, (err, result) ->
     {statusCode, body} = new Response err, result, STATUS_CODES.OK
-    return res.json body
+    return res.status(statusCode).json body

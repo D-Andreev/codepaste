@@ -10,9 +10,10 @@ var UserAuth = React.createClass({
     render: function() {
         console.log('UserAuth State', this.state);
         console.log('UserAuth Props', this.props);
-
+        var className = 'mdl-grid';
+        if (this.props.hidden) className += ' hidden';
         return (
-            <div className="mdl-grid">
+            <div className={className}>
                 <div className="mdl-cell mdl-cell--4-col"></div>
                 <div className="mdl-cell mdl-cell--4-col login-form">
                     <div className="card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
