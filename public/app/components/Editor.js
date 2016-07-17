@@ -103,7 +103,7 @@ var Editor = React.createClass({
 
         this._client.on("ready", function() {
             $this._client.on("aftercopy", function() {
-                $this.props.showToast('Copied!', 'success');
+                alert('Copied!');
             });
         } );
     },

@@ -7,7 +7,7 @@ var Router = require('../Utils/Router');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
-DISABLE_TIMEOUT = 3000;
+var DISABLE_TIMEOUT = 3000;
 var DEFAULT_USER = {username: '', password: '', email: '', firstName: '', lastName: ''};
 var DEFAULT_CM_OPTIONS = {
     lineNumbers: true,
@@ -169,7 +169,6 @@ function _createNew(value, title, mode) {
  */
 function _setToast(toast) {
     _toast = toast;
-    _toastType = 'notification';
 }
 
 /**
