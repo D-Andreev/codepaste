@@ -29,6 +29,7 @@ var Content = React.createClass({
         onTypeChecked: ReactPropTypes.func,
         onTitleChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
+        showToast: ReactPropTypes.func
     },
 
 
@@ -145,6 +146,7 @@ var Content = React.createClass({
                     onTitleChange={this.props.onTitleChange}
                     title={this.props.title}
                     view={this.props.view}
+                    showToast={this.props.showToast}
                 />
                 <UserAuth
                     onUsernameChange={this.props.onUsernameChange}

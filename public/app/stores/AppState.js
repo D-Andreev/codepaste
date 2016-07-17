@@ -7,6 +7,7 @@ var Router = require('../Utils/Router');
 var assign = require('object-assign');
 
 var CHANGE_EVENT = 'change';
+var DISABLE_TIMEOUT = 3000;
 var DEFAULT_USER = {username: '', password: '', email: '', firstName: '', lastName: ''};
 var DEFAULT_CM_OPTIONS = {
     lineNumbers: true,
@@ -182,7 +183,7 @@ function _setRegisterButtonTimeout() {
         _registerBtnDisabled = false;
         _fieldsDisabled = false;
         AppStateStore.emitChange();
-    }, 3000);
+    }, DISABLE_TIMEOUT);
 }
 
 /**
@@ -197,7 +198,7 @@ function _setLoginButtonTimeout() {
         _loginBtnDisabled = false;
         _fieldsDisabled = false;
         AppStateStore.emitChange();
-    }, 3000);
+    }, DISABLE_TIMEOUT);
 }
 
 /**
@@ -210,7 +211,7 @@ function _setCreateNewButtonTimeout() {
     setTimeout(function() {
         _createNewBtnDisabled = false;
         AppStateStore.emitChange();
-    }, 3000);
+    }, DISABLE_TIMEOUT);
 }
 
 /**
@@ -261,7 +262,7 @@ function _login(username, password) {
 
     ApiUtils.login(_url, username, password, function(err, response) {
         if (err) return _setToastNotification('Service error!', 'error');
-        if (response) {
+        if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
             _setView('pastes');
         } else {
@@ -588,6 +589,13 @@ AppDispatcher.register(function(action) {
         case Constants.CHANGE_TITLE:
             var title = action.title;
             _setTitle(title);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SHOW_TOAST:
+            var message = action.message;
+            var type = action.type;
+            _setToastNotification(message, type);
             AppStateStore.emitChange();
             break;
 
