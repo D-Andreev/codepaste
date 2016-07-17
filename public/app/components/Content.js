@@ -135,6 +135,7 @@ var Content = React.createClass({
 
         return (
             <span>
+                
                 <Editor
                     createNewPasteBtnDisabled={this.props.createNewPasteBtnDisabled}
                     createNew={this.props.createNew}

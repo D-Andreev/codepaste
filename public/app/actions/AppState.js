@@ -186,6 +186,17 @@ var AppStateActions = {
       message: message,
       type: type
     });
+  },
+
+  /**
+   * Set loading
+   * @param loading
+     */
+  setLoading: function(loading) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_LOADING,
+      loading: loading
+    });
   }
 };
 

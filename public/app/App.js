@@ -4,6 +4,7 @@ var AppStateActions = require('./actions/AppState');
 var AppStateStore = require('./stores/AppState');
 var Toast = require('./components/common/Toast');
 var Content = require('./components/Content');
+var Spinner = require('./components/common/Spinner');
 
 /**
  * Retrieve the current data from store
@@ -21,7 +22,8 @@ function getAppState() {
         createNewPasteBtnDisabled: AppStateStore.getCreateNewBtnDisabled(),
         viewedPaste: AppStateStore.getViewedPaste(),
         cmOptions: AppStateStore.getCmOptions(),
-        title: AppStateStore.getTitle()
+        title: AppStateStore.getTitle(),
+        loading: AppStateStore.getLoading()
     };
 }
 
@@ -56,6 +58,7 @@ module.exports = React.createClass({
         window.onpopstate = function() {
             AppStateActions.init($this.props);
         };
+        AppStateActions.setLoading(false);
     },
 
     /**
@@ -78,6 +81,7 @@ module.exports = React.createClass({
         var className = 'app mdl-layout__container ' + this.state.view + '-view'
         return (
             <div className={className}>
+                <Spinner loading={this.state.loading} />
                 {this._renderActiveView()}
                 <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>;
             </div>
