@@ -27,6 +27,7 @@ var DEFAULT_CM_OPTIONS = {
     lineWrapping: true
 };
 
+var _loading = true;
 var _url = '';
 var _view = '';
 var _user = LocalStorage.getUser() || DEFAULT_USER;
@@ -140,21 +141,28 @@ function _setView(view, props) {
  */
 function _createNew(value, title, mode) {
     _setCreateNewButtonTimeout();
+    _setLoading(true);
     if (!value) {
         _toast = 'Please paste code!';
         _toastType = 'warning';
+        _setLoading(false);
         return AppStateStore.emitChange();
     }
 
     ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
-        if (err) return _setToastNotification('Service error!', 'error');
+        if (err) {
+            _setLoading(false);
+            return _setToastNotification('Service error!', 'error');
+        }
         if (response) {
             _pasteId = response._id;
             _viewedPaste = response;
             _viewedPaste.user = {username: _user.user.username};
             _cmOptions.readOnly = false;
             _setView('paste', {id: _pasteId});
+            _setLoading(false);
         } else {
+            _setLoading(false);
             _setToastNotification('Error creating new paste!', 'error');
             AppStateStore.emitChange();
         }
@@ -222,28 +230,45 @@ function _setCreateNewButtonTimeout() {
  * @private
  */
 function _register(username, email, password) {
+    _setLoading(true);
     _setRegisterButtonTimeout();
     if (!username || !email || !password) {
         _toast = 'All fields are required!';
         _toastType = 'warning';
+        _setLoading(false);
         AppStateStore.emitChange();
         return;
     }
 
     ApiUtils.register(_url, username, email, password, function(err, response) {
-        if (err) return;
+        if (err) {
+            _setLoading(false);
+            _setToastNotification('Service error!', 'error');
+            return AppStateStore.emitChange();
+        }
         if (response.statusCode == 200) {
             _user = {username: username, email: email, password: password};
             _toast = 'User registered successfully!';
             _toastType = 'success';
             _setView('login');
+            _setLoading(false);
             AppStateStore.emitChange();
         } else {
             _toast = response.body;
             _toastType = 'error';
+            _setLoading(false);
             AppStateStore.emitChange();
         }
     });
+}
+
+/**
+ * Set Loading
+ * @param loading
+ * @private
+ */
+function _setLoading(loading) {
+    _loading = loading;
 }
 
 /**
@@ -254,6 +279,7 @@ function _register(username, email, password) {
  */
 function _login(username, password) {
     _setLoginButtonTimeout();
+    _setLoading(true);
     if (!username || !password) {
         _toast = 'All fields are required!';
         _toastType = 'warning';
@@ -261,11 +287,17 @@ function _login(username, password) {
     }
 
     ApiUtils.login(_url, username, password, function(err, response) {
-        if (err) return _setToastNotification('Service error!', 'error');
+        if (err) {
+            _setLoading(false);
+            _setToastNotification('Service error!', 'error');
+            return AppStateStore.emitChange();
+        }
         if (response.statusCode == 201) {
             _saveLoggedInUser(response.body);
             _setView('pastes');
+            _setLoading(false);
         } else {
+            _setLoading(false);
             _setToastNotification(response.body, 'error');
             AppStateStore.emitChange();
         }
@@ -469,6 +501,13 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get Loading
+     */
+    getLoading: function() {
+        return _loading;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -596,6 +635,12 @@ AppDispatcher.register(function(action) {
             var message = action.message;
             var type = action.type;
             _setToastNotification(message, type);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_LOADING:
+            var loading = action.loading;
+            _setLoading(loading);
             AppStateStore.emitChange();
             break;
 
