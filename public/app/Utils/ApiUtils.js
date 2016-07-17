@@ -45,6 +45,18 @@ module.exports = {
     },
 
     /**
+     * Get paste
+     * @param url
+     * @param pasteId
+     * @param done
+     */
+    getPaste: function (url, pasteId, done) {
+        this.request('GET', url + '/paste?id=' + pasteId, false, function(err, res) {
+            done(err, res);
+        });
+    },
+
+    /**
      * Request
      * @param method
      * @param url

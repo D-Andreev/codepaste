@@ -36,7 +36,6 @@ var Input = React.createClass({
     _onChange: function() {},
         
     _onClick: function() {
-        console.log('ON LICK',this.props.value);
         this.props.onCheck(this.props.value);
     }
 });

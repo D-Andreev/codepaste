@@ -23,7 +23,12 @@ var Content = React.createClass({
         registerBtnDisabled: ReactPropTypes.bool,
         fieldsDisabled: ReactPropTypes.bool,
         createNewPasteBtnDisabled: ReactPropTypes.bool,
-        createNew: ReactPropTypes.func
+        createNew: ReactPropTypes.func,
+        viewedPaste: ReactPropTypes.object,
+        cmOptions: ReactPropTypes.object,
+        onTypeChecked: ReactPropTypes.func,
+        onTitleChange: ReactPropTypes.func,
+        title: ReactPropTypes.string,
     },
 
 
@@ -31,7 +36,6 @@ var Content = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('Content', this.props);
         var className = classnames("mdl-layout__header", {
             'hidden': (this.props.view == 'login' || this.props.view == 'registration')
         });
@@ -112,19 +116,36 @@ var Content = React.createClass({
     },
 
     _renderView: function() {
-        var content;
-        if (this.props.view == 'pastes') {
-            content = <Grid />
-        } else if (this.props.view == 'new') {
-            content =
+        var editorHidden = true;
+        var userAuthHidden = true;
+        var contactsHidden = true;
+        var gridHidden = true;
+        var editorReadOnly = false;
+
+        if (this.props.view == 'pastes') gridHidden = false;
+        else if (this.props.view == 'new') editorHidden = false;
+        else if (this.props.view == 'contacts') contactsHidden = false;
+        else if (this.props.view == 'paste') {
+            editorReadOnly = true;
+            editorHidden = false;
+        }
+        else userAuthHidden = false;
+
+
+        return (
+            <span>
                 <Editor
                     createNewPasteBtnDisabled={this.props.createNewPasteBtnDisabled}
                     createNew={this.props.createNew}
+                    hidden={editorHidden}
+                    readOnly={editorReadOnly}
+                    viewedPaste={this.props.viewedPaste}
+                    cmOptions={this.props.cmOptions}
+                    onTypeChecked={this.props.onTypeChecked}
+                    onTitleChange={this.props.onTitleChange}
+                    title={this.props.title}
+                    view={this.props.view}
                 />
-        } else if (this.props.view == 'contacts') {
-            content = <Contacts />
-        } else {
-            content =
                 <UserAuth
                     onUsernameChange={this.props.onUsernameChange}
                     onPasswordChange={this.props.onPasswordChange}
@@ -139,10 +160,16 @@ var Content = React.createClass({
                     registerBtnDisabled={this.props.registerBtnDisabled}
                     user={this.props.user}
                     fieldsDisabled={this.props.fieldsDisabled}
+                    hidden={userAuthHidden}
                 />
-        }
-
-        return content;
+                <Contacts
+                    hidden={contactsHidden}
+                />
+                <Grid
+                    hidden={gridHidden}
+                />
+            </span>
+        )
     }
 });
 

@@ -5,6 +5,7 @@ var classnames = require('classnames');
 var Grid = React.createClass({
 
     propTypes: {
+        hidden: ReactPropTypes.bool
     },
 
 
@@ -12,9 +13,11 @@ var Grid = React.createClass({
      * @return {object}
      */
     render: function() {
-      return (
-          <span>GRID</span>
-      )
+        var className = 'mdl-grid';
+        if (this.props.hidden) className += ' hidden';
+        return (
+          <span className={className}>GRID</span>
+        )
     }
 });
 

@@ -18,6 +18,14 @@
     background-position: center center;
 }
 
+.app .view-title-wrapper {
+    background-image: url("/img/card-background.jpg");
+    background-size: cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
+    color: white;
+}
+
 .app .app-view {
     background-color: white;
 }
@@ -56,6 +64,10 @@
 
 .app .mdl-radio {
     margin-right: 1rem;
+}
+
+.app .view-title {
+    text-transform: uppercase;
 }
 
 footer {

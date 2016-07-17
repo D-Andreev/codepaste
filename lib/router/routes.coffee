@@ -4,4 +4,6 @@ module.exports =
   healthCheck: new RegExp /\/health-check$/
   register: new RegExp /\/register$/
   login: new RegExp /\/login$/
+  newPaste: new RegExp /\/new$/
+  paste: new RegExp /\/paste/
 

@@ -19,6 +19,9 @@ function getAppState() {
         user: AppStateStore.getUser(),
         fieldsDisabled: AppStateStore.getFieldsDisabled(),
         createNewPasteBtnDisabled: AppStateStore.getCreateNewBtnDisabled(),
+        viewedPaste: AppStateStore.getViewedPaste(),
+        cmOptions: AppStateStore.getCmOptions(),
+        title: AppStateStore.getTitle()
     };
 }
 
@@ -67,7 +70,6 @@ module.exports = React.createClass({
      * @returns {XML}
      */
     render: function() {
-        console.log('App', this.state, this.props);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;
@@ -108,6 +110,11 @@ module.exports = React.createClass({
                     fieldsDisabled={this.state.fieldsDisabled}
                     createNewPasteBtnDisabled={this.state.createNewPasteBtnDisabled}
                     createNew={this._createNew}
+                    viewedPaste={this.state.viewedPaste}
+                    cmOptions={this.state.cmOptions}
+                    onTypeChecked={this._onTypeChecked}
+                    onTitleChange={this._onTitleChange}
+                    title={this.state.title}
                 />
             </span>
         )
@@ -119,7 +126,6 @@ module.exports = React.createClass({
      * @private
      */
     _onNavigationLinkClick: function(label) {
-        console.log('Navigate: ', label);
         if (label == 'Pastes') {
             AppStateActions.navigate('pastes');
         } else if (label == 'New') {
@@ -223,6 +229,24 @@ module.exports = React.createClass({
      */
     _createNew: function(value, title, mode) {
         AppStateActions.createNew(value, title, mode);
+    },
+
+    /**
+     * Set mode
+     * @param name
+     * @private
+     */
+    _onTypeChecked: function(name) {
+        AppStateActions.setMode(name);
+    },
+
+    /**
+     * On title change
+     * @param title
+     * @private
+     */
+    _onTitleChange: function(title) {
+        AppStateActions.changeTitle(title);
     },
 
     /**

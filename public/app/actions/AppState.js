@@ -151,8 +151,29 @@ var AppStateActions = {
       title: title,
       mode: mode
     });
-  }
+  },
 
+  /**
+   * Set mode
+   * @param mode
+     */
+  setMode: function(mode) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_MODE,
+      mode: mode
+    });
+  },
+
+  /**
+   * Change title
+   * @param title
+     */
+  changeTitle: function(title) {
+    AppDispatcher.dispatch({
+      actionType: Constants.CHANGE_TITLE,
+      title: title
+    });
+  }
 };
 
 module.exports = AppStateActions;

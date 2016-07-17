@@ -16,7 +16,7 @@
     return Users.get().login(req.body, function(err, result) {
       var body, ref, statusCode;
       ref = new Response(err, result, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
-      return res.json(body);
+      return res.status(statusCode).json(body);
     });
   });
 

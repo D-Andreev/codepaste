@@ -5,5 +5,5 @@ module.exports = {
     'pastes': new RegExp(/^\/#pastes$/),
     'new': new RegExp(/^\/#new$/),
     'contacts': new RegExp(/^\/#contacts/),
-    'paste': new RegExp(/^\/#paste\/\d+$/)
+    'paste': new RegExp(/^\/#paste\/.+$/)
 };

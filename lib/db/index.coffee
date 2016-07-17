@@ -1,5 +1,6 @@
 mongoose = require 'mongoose';
-Config = require './config'
+config = require './config.json'
+mongoose = require 'mongoose';
 
 
 module.exports = class Singleton
@@ -7,10 +8,11 @@ module.exports = class Singleton
 
   class PrivateDb
 
-    init: ->
-      # TODO: Use mongoose
-      #@connection = new MySQL Config.getConfig()
-      #@connection.connect()
+    init: (done) ->
+      mongoose.connect "mongodb://localhost/codepaste"
+      @db = mongoose.connection
+      @db.on 'error', (error) -> done error
+      @db.on 'open', done
 
   @get: ->
     instance ?= new PrivateDb()

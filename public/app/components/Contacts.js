@@ -8,9 +8,10 @@ var ContactUs = React.createClass({
      * @return {object}
      */
     render: function() {
-
+        var className = 'mdl-grid';
+        if (this.props.hidden) className += ' hidden';
         return (
-            <div className="mdl-grid">
+            <div className={className}>
                 <div className="mdl-cell mdl-cell--2-col"></div>
                 <div className="mdl-cell mdl-cell--8-col login-form">
                     <div className="card mdl-cell mdl-cell--12-col mdl-card mdl-shadow--2dp">
