@@ -15,14 +15,11 @@
   module.exports = express.Router().put(routes.newPaste, function(req, res) {
     var body, paste;
     body = req.body;
-    console.log('body', body);
     body.code = body.value;
     delete body.value;
     paste = new Paste(body);
-    console.log('the paste', paste);
     return paste.save(function(err, paste) {
       var ref, statusCode;
-      console.log('saved', err, paste);
       ref = new Response(err, paste, STATUS_CODES.CREATED), statusCode = ref.statusCode, body = ref.body;
       body.user = {
         username: body.user.username

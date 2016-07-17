@@ -17,7 +17,6 @@
   module.exports = express.Router().get(routes.paste, function(req, res) {
     var id;
     id = _.last(req.url.split('='));
-    console.log('id', id);
     return Paste.findOne({
       _id: id
     }, function(err, paste) {
@@ -27,7 +26,6 @@
       delete paste.user.user.email;
       delete paste.value;
       paste.user = paste.user.user;
-      console.log('saved', err, paste);
       ref = new Response(err, paste, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
       return res.status(statusCode).json(body);
     });

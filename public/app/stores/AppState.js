@@ -68,7 +68,6 @@ function _route(path) {
     var view;
     if (!path) view = Router.getViewFromUrl();
     else view ={name: path};
-    console.log('view from url', view, path);
     var userIsLoggedIn = _userIsLoggedIn();
     if (!userIsLoggedIn) {
         if (view.name == 'registration') _setView('registration');
@@ -79,12 +78,10 @@ function _route(path) {
         if (view.name == 'paste') {
             props = {id: view.props.id};
             _cmOptions.readOnly = true;
-            console.log('fuck', _cmOptions);
             if (_viewedPaste) return _setView(view, props);
             
             ApiUtils.getPaste(_url, view.props.id, function(err, response) {
                 if (err) return _setToastNotification('Error in service!', 'error');
-                console.log('response get viewed paste', err, response);
                 if (response) {
                     _viewedPaste = response;
                     _title = response.title;
@@ -101,7 +98,6 @@ function _route(path) {
             _cmOptions.readOnly = false;
             _cmOptions.mode = 'javascript';
             _pasteId = 0;
-            console.log('Setting new view', _cmOptions);
             _setView('new');
         } else if (view.name == 'pastes') {
             _setView('pastes');
@@ -129,7 +125,6 @@ function _setView(view, props) {
         _cmOptions.readOnly = false;
         _cmOptions.mode = 'javascript'
     }
-    console.log('setting view', view, _cmOptions);
     Router.setUrl('#' + view.name, props);
     AppStateStore.emitChange();
 }
@@ -144,7 +139,6 @@ function _setView(view, props) {
  */
 function _createNew(value, title, mode) {
     _setCreateNewButtonTimeout();
-    console.log('Creating new paste', value, title, mode);
     if (!value) {
         _toast = 'Please paste code!';
         _toastType = 'warning';
@@ -158,7 +152,6 @@ function _createNew(value, title, mode) {
             _viewedPaste = response;
             _viewedPaste.user = {username: _user.user.username};
             _cmOptions.readOnly = false;
-            console.log('create new response', response, _cmOptions);
             _setView('paste', {id: _pasteId});
         } else {
             _setToastNotification('Error creating new paste!', 'error');
@@ -266,10 +259,7 @@ function _login(username, password) {
         return AppStateStore.emitChange();
     }
 
-    console.log('login', username, password);
-
     ApiUtils.login(_url, username, password, function(err, response) {
-        console.log('res', err, response);
         if (err) return _setToastNotification('Service error!', 'error');
         if (response) {
             _saveLoggedInUser(response.body);
@@ -562,7 +552,6 @@ AppDispatcher.register(function(action) {
         case Constants.LOGIN:
             username = action.username;
             password = action.password;
-            console.log('login', username, password);
             _login(username, password);
             break;
 
@@ -586,21 +575,18 @@ AppDispatcher.register(function(action) {
             var value = action.value;
             var title = action.title;
             var mode = action.mode;
-            console.log('action', action);
             _createNew(value, title, mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MODE:
             var mode = action.mode;
-            console.log('action', action);
             _setMode(mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.CHANGE_TITLE:
             var title = action.title;
-            console.log('action', action);
             _setTitle(title);
             AppStateStore.emitChange();
             break;

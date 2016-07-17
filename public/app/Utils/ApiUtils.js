@@ -39,7 +39,6 @@ module.exports = {
      */
     createNew: function(url, user, data, done) {
         data.user = user;
-        console.log('data', data);
         this.request('PUT', url + '/new', data, function(err, res) {
             done(err, res);
         });
@@ -52,7 +51,6 @@ module.exports = {
      * @param done
      */
     getPaste: function (url, pasteId, done) {
-        console.log('pasteId', pasteId);
         this.request('GET', url + '/paste?id=' + pasteId, false, function(err, res) {
             done(err, res);
         });

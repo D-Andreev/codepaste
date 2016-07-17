@@ -111,7 +111,6 @@ var AppStateActions = {
    * @param password
      */
   login: function(username, password) {
-    console.log('login', username, password);
     AppDispatcher.dispatch({
       actionType: Constants.LOGIN,
       username: username,

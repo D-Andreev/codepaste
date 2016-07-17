@@ -15,7 +15,6 @@ module.exports = {
                 hash += '/' + props[parts[i]];
             }
         }
-        console.log('set url', props, hash);
         history.pushState(null, '', path + hash);
     },
 
@@ -27,7 +26,6 @@ module.exports = {
         var hash = '/' + location.hash;
         if (!location.hash) return {name: '/'};
         var views = Object.keys(routes);
-        console.log('getViewFromUrl', hash);
         for (var i = 0; i < views.length; i++) {
             if (routes[views[i]].test(hash)) return {name: views[i], props: this._getPropsFromUrl(hash)};
         }

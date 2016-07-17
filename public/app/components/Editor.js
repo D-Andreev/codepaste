@@ -23,13 +23,6 @@ var Editor = React.createClass({
 
     _cm: null,
 
-    componentWillUpdate: function(nextProps) {
-        if (this.props.readOnly != nextProps.readOnly) {
-            this._cm.setOption('readOnly', nextProps.readOnly);
-            this._cm.setOption('mode', nextProps.mode);
-        }
-    },
-
     _setValue: function (value) {
         this._cm.setValue(value);
         var $this = this;
@@ -61,8 +54,11 @@ var Editor = React.createClass({
         }
     },
 
+    /**
+     * Component Will Update
+     * @param nextProps
+     */
     componentWillUpdate: function(nextProps) {
-        console.log('========asdads===========', nextProps);
         if (this._cm) {
             if (this.props.view != nextProps.view && nextProps.view == 'new') {
                 this._cm.setValue('');
@@ -92,7 +88,6 @@ var Editor = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('Editor', this.props);
         var className = 'mdl-grid';
         if (this.props.hidden) className += ' hidden';
         return (
@@ -138,7 +133,6 @@ var Editor = React.createClass({
         var inputHidden = false;
         var listHidden = true;
         var items = [];
-        console.log('top', this.props.viewedPaste);
         if (this.props.view == 'paste') {
             inputHidden = true;
             listHidden = false;
@@ -184,7 +178,6 @@ var Editor = React.createClass({
         } else if (this.props.view == 'new') {
             mode = this.props.cmOptions.mode;
         }
-        console.log('Render radio', mode);
 
         return (
             <div className={className}>
