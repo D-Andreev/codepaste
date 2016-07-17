@@ -8,8 +8,6 @@ var UserAuth = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('UserAuth State', this.state);
-        console.log('UserAuth Props', this.props);
         var className = 'mdl-grid';
         if (this.props.hidden) className += ' hidden';
         return (

@@ -70,7 +70,6 @@ module.exports = React.createClass({
      * @returns {XML}
      */
     render: function() {
-        console.log('App', this.state, this.props);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;
@@ -127,7 +126,6 @@ module.exports = React.createClass({
      * @private
      */
     _onNavigationLinkClick: function(label) {
-        console.log('Navigate: ', label);
         if (label == 'Pastes') {
             AppStateActions.navigate('pastes');
         } else if (label == 'New') {

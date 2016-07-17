@@ -36,7 +36,6 @@ var Content = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('Content', this.props);
         var className = classnames("mdl-layout__header", {
             'hidden': (this.props.view == 'login' || this.props.view == 'registration')
         });
