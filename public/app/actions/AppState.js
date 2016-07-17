@@ -173,6 +173,19 @@ var AppStateActions = {
       actionType: Constants.CHANGE_TITLE,
       title: title
     });
+  },
+
+  /**
+   * Show toast
+   * @param message
+   * @param type
+     */
+  showToast: function(message, type) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SHOW_TOAST,
+      message: message,
+      type: type
+    });
   }
 };
 

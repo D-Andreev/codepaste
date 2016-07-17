@@ -70,6 +70,7 @@ module.exports = React.createClass({
      * @returns {XML}
      */
     render: function() {
+        console.log('App', this.state);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;
@@ -115,9 +116,20 @@ module.exports = React.createClass({
                     onTypeChecked={this._onTypeChecked}
                     onTitleChange={this._onTitleChange}
                     title={this.state.title}
+                    showToast={this._showToast}
                 />
             </span>
         )
+    },
+
+    /**
+     * Show toast
+     * @param message
+     * @param type
+     * @private
+     */
+    _showToast: function(message, type) {
+        AppStateActions.showToast(message, type);
     },
 
     /**

@@ -62,6 +62,10 @@
     color: white;
 }
 
+.app .copy-button {
+    float: right;
+}
+
 .app .mdl-radio {
     margin-right: 1rem;
 }

@@ -5,6 +5,7 @@ var Radio = require('./common/Radio');
 var Input = require('./common/Input');
 var Button = require('./common/Button');
 var List = require('./common/List');
+var Icon = require('./common/Icon');
 
 var Editor = React.createClass({
 
@@ -18,10 +19,21 @@ var Editor = React.createClass({
         onTypeChecked: ReactPropTypes.func,
         onTitleChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
-        view: ReactPropTypes.string
+        view: ReactPropTypes.string,
+        showToast: ReactPropTypes.func
     },
 
     _cm: null,
+
+    /**
+     * Get Initial state
+     * @returns {{copyValue: string}}
+     */
+    getInitialState: function() {
+        return {
+            copyValue: ''
+        }
+    },
 
     _setValue: function (value) {
         this._cm.setValue(value);
@@ -81,7 +93,19 @@ var Editor = React.createClass({
      * Component did mount
      */
     componentDidMount: function() {
+        var $this = this;
         this._cm = CodeMirror.fromTextArea(document.getElementById('code'), this.props.cmOptions);
+        this._cm.on('change', function() {
+            $this.setState({copyValue: $this._cm.getValue()})
+        });
+        this._client = new ZeroClipboard( document.getElementById("copy-button") );
+
+
+        this._client.on("ready", function() {
+            $this._client.on("aftercopy", function() {
+                $this.props.showToast('Copied!', 'success');
+            });
+        } );
     },
 
     /**
@@ -212,6 +236,13 @@ var Editor = React.createClass({
                     checked={mode == 'text/css'}
                     value="text/css"
                     disabled={readOnly}
+                />
+                <Icon
+                    id='copy-button'
+                    className="copy-button"
+                    onClick={this._onCopy}
+                    icon="content_copy"
+                    text={this.state.copyValue}
                 />
             </div>
         )
