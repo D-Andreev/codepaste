@@ -9,4 +9,3 @@ pasteSchema = mongoose.Schema({
 })
 
 module.exports = mongoose.model('Paste', pasteSchema)
-
