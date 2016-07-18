@@ -109,7 +109,8 @@ var Editor = React.createClass({
     },
 
     /**
-     * @return {object}
+     * Render
+     * @returns {XML}
      */
     render: function() {
         var className = 'mdl-grid';
@@ -182,6 +183,14 @@ var Editor = React.createClass({
                     hidden={listHidden}
                     items={items}
                 />
+                <Icon
+                    id='copy-button'
+                    className="copy-button"
+                    onClick={this._onCopy}
+                    icon="content_copy"
+                    text={this.state.copyValue}
+                    hidden={!inputHidden}
+                />
             </span>
         )
     },
@@ -236,13 +245,6 @@ var Editor = React.createClass({
                     checked={mode == 'text/css'}
                     value="text/css"
                     disabled={readOnly}
-                />
-                <Icon
-                    id='copy-button'
-                    className="copy-button"
-                    onClick={this._onCopy}
-                    icon="content_copy"
-                    text={this.state.copyValue}
                 />
             </div>
         )
