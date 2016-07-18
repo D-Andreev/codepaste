@@ -18,13 +18,12 @@ var Textarea = React.createClass({
      * @return {object}
      */
     render: function() {
-        var $this = this;
         var wrapperClassName = classnames(
             'mdl-textfield',
             'mdl-js-textfield',
             {
                 'hidden': $this.props.hidden,
-                'mdl-textfield--floating-label': $this.props.floatingLabel
+                'mdl-textfield--floating-label': this.props.floatingLabel
             });
         var textareaClassName = classnames(
             'mdl-textfield__input',
