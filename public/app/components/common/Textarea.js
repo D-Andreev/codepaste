@@ -10,12 +10,6 @@ var Textarea = React.createClass({
         onClick: ReactPropTypes.func,
         onChange: ReactPropTypes.func,
         floatingLabel: ReactPropTypes.bool,
-        errorMessage: ReactPropTypes.string,
-        isInvalid: ReactPropTypes.bool,
-        pattern: ReactPropTypes.string,
-        placeholder: ReactPropTypes.string,
-        hidden: ReactPropTypes.bool,
-        autoFocus: ReactPropTypes.bool,
         disabled: ReactPropTypes.bool,
         rows: ReactPropTypes.number
     },
@@ -40,9 +34,7 @@ var Textarea = React.createClass({
             'mdl-js-textfield',
             {
                 'hidden': $this.props.hidden,
-                'mdl-textfield--floating-label': $this.props.floatingLabel,
-                'mdl-textfield__error': $this.props.error,
-                'is-invalid': $this.props.isInvalid
+                'mdl-textfield--floating-label': $this.props.floatingLabel
             });
         var inputClassName = classnames(
             'mdl-textfield__input',

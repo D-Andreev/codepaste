@@ -1,6 +1,7 @@
 var React = require('react');
 var Button = require('./common/Button');
 var Input = require('./common/Input');
+var Textarea = require('./common/Textarea');
 
 var ContactUs = React.createClass({
 
@@ -18,6 +19,7 @@ var ContactUs = React.createClass({
                         <div className="mdl-card__title mdl-card--expand">
                             <h2 className="mdl-card__title-text">Contact Us</h2>
                         </div>
+                        {this._renderContactUsView()}
                     </div>
                 </div>
                 <div className="mdl-cell mdl-cell--2-col"></div>
@@ -33,9 +35,6 @@ var ContactUs = React.createClass({
     _renderContactUsView: function() {
         return (
             <div>
-                <div className="mdl-cell mdl-cell--12-col">
-                    {this._renderEmailField()}
-                </div>
                 <div className="mdl-cell mdl-cell--12-col">
                     {this._renderTitleField()}
                 </div>
@@ -57,27 +56,6 @@ var ContactUs = React.createClass({
      * @returns {XML}
      * @private
      */
-    _renderEmailField: function() {
-        return (
-            <Input
-                id="email"
-                className="email"
-                label="Email"
-                floatingLabel={true}
-                value={this.props.user.email}
-                disabled={this.props.fieldsDisabled}
-                pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
-                type="text"
-                errorMessage="Please enter a valid email"
-            />
-        )
-    },
-
-    /**
-     * Render email field
-     * @returns {XML}
-     * @private
-     */
     _renderTitleField: function() {
         return (
             <Input
@@ -85,11 +63,8 @@ var ContactUs = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
-                value={this.props.user.email}
                 disabled={this.props.fieldsDisabled}
-                pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
                 type="text"
-                errorMessage="Please enter a valid title"
             />
         )
     },
@@ -101,15 +76,13 @@ var ContactUs = React.createClass({
      */
     _renderContentField: function() {
         return (
-            <Input
+            <Textarea
                 id="content"
                 className="content"
                 label="Content"
                 floatingLabel={true}
+                rows={10}
                 disabled={this.props.fieldsDisabled}
-                pattern="[^@]+@[^@]+\.[a-zA-Z]{2,}"
-                type="text"
-                errorMessage="Please enter a valid content"
             />
         )
     },
@@ -121,13 +94,14 @@ var ContactUs = React.createClass({
      */
     _renderSendButton: function() {
         return (
-            <Button
-                className="button"
-                label="Send"
-                raised={true}
-                rippleEffect={true}
-                onClick={this._send}
-            />
+                <Button
+                    className="button"
+                    label="Send"
+                    raised={true}
+                    rippleEffect={true}
+                    primary={true}
+                    onClick={this._send}
+                />
         )
     },
 
