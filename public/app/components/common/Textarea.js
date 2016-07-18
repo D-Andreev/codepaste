@@ -10,24 +10,8 @@ var Textarea = React.createClass({
         onClick: ReactPropTypes.func,
         onChange: ReactPropTypes.func,
         floatingLabel: ReactPropTypes.bool,
-        errorMessage: ReactPropTypes.string,
-        isInvalid: ReactPropTypes.bool,
-        pattern: ReactPropTypes.string,
-        placeholder: ReactPropTypes.string,
-        hidden: ReactPropTypes.bool,
-        autoFocus: ReactPropTypes.bool,
         disabled: ReactPropTypes.bool,
         rows: ReactPropTypes.number
-    },
-
-    /**
-     * Get default props
-     * @returns {{autoFocus: boolean}}
-     */
-    getDefaultProps: function() {
-        return {
-            autoFocus: false
-        }
     },
 
     /**
@@ -40,33 +24,24 @@ var Textarea = React.createClass({
             'mdl-js-textfield',
             {
                 'hidden': $this.props.hidden,
-                'mdl-textfield--floating-label': $this.props.floatingLabel,
-                'mdl-textfield__error': $this.props.error,
-                'is-invalid': $this.props.isInvalid
+                'mdl-textfield--floating-label': $this.props.floatingLabel
             });
-        var inputClassName = classnames(
+        var textareaClassName = classnames(
             'mdl-textfield__input',
             this.props.className);
         return (
             <div className={wrapperClassName}>
                 <textarea
                     id={this.props.id}
-                    className={inputClassName}
+                    className={textareaClassName}
                     onClick={this.props.onClick}
-                    autoFocus={this.props.autoFocus}
-                    type={this.props.type}
                     disabled={this.props.disabled}
-                    pattern={this.props.pattern}
-                    placeholder={this.props.placeholder}
-                    value={this.props.value}
-                    onChange={this.props.onChange}
                     rows={this.props.rows}
                 >
                 </textarea>
                 <label className="mdl-textfield__label" htmlFor={this.props.id}>
                     {this.props.label}
                 </label>
-                <span className="mdl-textfield__error">{this.props.errorMessage}</span>
             </div>
         );
     }
