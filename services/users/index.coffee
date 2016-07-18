@@ -8,12 +8,11 @@ module.exports = class Singleton
 
     register: (user, done) ->
       request {method: 'PUT', uri: "#{USERS_API_URL}/", json: user}, (err, res) ->
-        console.log(err);
         done err, res
 
 
     login: (user, done) ->
-      authHeader = new Buffer("#{user.username}:#{user.password}").toString('base64');
+      authHeader = new Buffer("#{user.username}:#{user.password}").toString('base64')
       options =
         method: 'POST'
         uri: "#{USERS_API_URL}/token"
@@ -22,7 +21,6 @@ module.exports = class Singleton
           'Authorization': "Basic #{authHeader}"
 
       request options, (err, res) ->
-        console.log(err);
         done err, res
 
   @get: ->

@@ -7,6 +7,7 @@ methodOverride = require 'method-override'
 
 
 module.exports = class Singleton
+
   instance = null
 
   class Server
@@ -24,9 +25,9 @@ module.exports = class Singleton
 
 
     _setViewEngine: ->
-      @app.set('views', path.join(__dirname, '../', '../', 'views'));
-      @app.set('view engine', 'ejs');
-      @app.use(express.static('public'));
+      @app.set('views', path.join(__dirname, '../', '../', 'views'))
+      @app.set('view engine', 'ejs')
+      @app.use(express.static('public'))
       
       
     _setBodyParser: ->
@@ -45,5 +46,6 @@ module.exports = class Singleton
     _setMethodOverride: ->
       @app.use methodOverride()
 
+      
   @get: ->
     instance ?= new Server()

@@ -9,7 +9,8 @@
     "start-test": "ENV=test PORT=1234 node ./node_modules/nodemon/bin/nodemon ./ localhost 1234",
     "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
     "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
-    "lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json ."
+    "coffee-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json .",
+    "js-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json ."
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
