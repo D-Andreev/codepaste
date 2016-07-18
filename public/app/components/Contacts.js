@@ -3,7 +3,7 @@ var Button = require('./common/Button');
 var Input = require('./common/Input');
 var Textarea = require('./common/Textarea');
 
-var ContactUs = React.createClass({
+var Contacts = React.createClass({
 
     /**
      * @return {object}
@@ -114,4 +114,4 @@ var ContactUs = React.createClass({
     }
 });
 
-module.exports = ContactUs;
+module.exports = Contacts;
