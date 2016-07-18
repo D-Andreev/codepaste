@@ -189,7 +189,7 @@ var Editor = React.createClass({
                     onClick={this._onCopy}
                     icon="content_copy"
                     text={this.state.copyValue}
-                    hidden={!inputHidden}
+                    hidden={listHidden}
                 />
             </span>
         )
