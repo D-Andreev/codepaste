@@ -8,8 +8,6 @@ dependencies:
     - npm install -g coffee-script
     - npm install
     - coffee -c .
-    - sh ./features/scripts/install.sh
 test:
   override:
-    - npm run lint
-    - npm run test-feature
+    - npm run coffee-lint
