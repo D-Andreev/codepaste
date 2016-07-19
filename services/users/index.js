@@ -22,7 +22,6 @@
           uri: USERS_API_URL + "/",
           json: user
         }, function(err, res) {
-          console.log(err);
           return done(err, res);
         });
       };
@@ -39,7 +38,6 @@
           }
         };
         return request(options, function(err, res) {
-          console.log(err);
           return done(err, res);
         });
       };

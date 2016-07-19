@@ -10,5 +10,4 @@ dependencies:
     - coffee -c .
 test:
   override:
-    - npm run lint
-    - npm run test-feature
+    - npm run coffee-lint
