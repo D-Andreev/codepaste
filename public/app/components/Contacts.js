@@ -63,7 +63,6 @@ var Contacts = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
-                disabled={this.props.fieldsDisabled}
                 type="text"
             />
         )
@@ -82,7 +81,6 @@ var Contacts = React.createClass({
                 label="Content"
                 floatingLabel={true}
                 rows={10}
-                disabled={this.props.fieldsDisabled}
             />
         )
     },
@@ -94,14 +92,14 @@ var Contacts = React.createClass({
      */
     _renderSendButton: function() {
         return (
-                <Button
-                    className="button"
-                    label="Send"
-                    raised={true}
-                    rippleEffect={true}
-                    primary={true}
-                    onClick={this._send}
-                />
+            <Button
+                className="button"
+                label="Send"
+                raised={true}
+                rippleEffect={true}
+                primary={true}
+                onClick={this._send}
+            />
         )
     },
 

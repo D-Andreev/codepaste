@@ -22,7 +22,7 @@ var Textarea = React.createClass({
             'mdl-textfield',
             'mdl-js-textfield',
             {
-                'hidden': $this.props.hidden,
+                'hidden': this.props.hidden,
                 'mdl-textfield--floating-label': this.props.floatingLabel
             });
         var textareaClassName = classnames(
