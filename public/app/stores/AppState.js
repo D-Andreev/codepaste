@@ -35,6 +35,7 @@ var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
 var _loginBtnDisabled = false;
+var _sendBtnDisabled = false;
 var _fieldsDisabled = false;
 var _createNewBtnDisabled = false;
 var _pasteId = 0;
@@ -398,19 +399,30 @@ function _setToastNotification(message, type) {
 function _setTitle(title) {
     _title = title;
 }
+function _setSendButtonTimeout() {
+    _sendBtnDisabled = true;
+    _fieldsDisabled = true;
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        _sendBtnDisabled = false;
+        _fieldsDisabled = false;
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
 
 /**
  * Send message
  * @private
  */
 function _sendMessage(title,content) {
-    _setLoginButtonTimeout();
+    //_setLoginButtonTimeout();
+    //_setLoading(true);
+    _setSendButtonTimeout();
     _setLoading(true);
-    _user = LocalStorage.getUser();
     console.log(_user);
     console.log(title);
     console.log(content);
-    location.reload();
+    _setLoading(false);
 }
 
 /**

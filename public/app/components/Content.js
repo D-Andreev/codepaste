@@ -28,6 +28,7 @@ var Content = React.createClass({
         cmOptions: ReactPropTypes.object,
         onTypeChecked: ReactPropTypes.func,
         onTitleChange: ReactPropTypes.func,
+        onContentChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
         showToast: ReactPropTypes.func
     },
@@ -167,7 +168,10 @@ var Content = React.createClass({
                 <Contacts
                     sendBtnDisabled={this.props.sendBtnDisabled}
                     sendMessage={this.props.sendMessage}
+                    onTitleChange={this.props.onTitleChange}
+                    onContentChange={this.props.onContentChange}
                     user={this.props.user}
+                    view={this.props.view}
                     fieldsDisabled={this.props.fieldsDisabled}
                     hidden={contactsHidden}
                 />

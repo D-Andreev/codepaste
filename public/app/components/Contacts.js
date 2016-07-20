@@ -12,7 +12,8 @@ var Contacts = React.createClass({
         content: ReactPropTypes.string,
         user: ReactPropTypes.object,
         fieldsDisabled: ReactPropTypes.bool,
-        sendBtnDisabled: ReactPropTypes.bool
+        sendBtnDisabled: ReactPropTypes.bool,
+        onChange: ReactPropTypes.func
     },
 
     /**
@@ -73,6 +74,7 @@ var Contacts = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
+                onChange={this._onTitleChange()}
                 value={this.props.title}
                 disabled={this.props.fieldsDisabled}
                 type="text"
@@ -91,6 +93,7 @@ var Contacts = React.createClass({
                 id="content"
                 className="content"
                 label="Content"
+                onChange={this._onContentChange}
                 value={this.props.content}
                 floatingLabel={true}
                 disabled={this.props.fieldsDisabled}
@@ -119,11 +122,29 @@ var Contacts = React.createClass({
     },
 
     /**
+     * On title change
+     * @param e
+     * @private
+     */
+    _onTitleChange: function (e) {
+        //this.props.onTitleChange(e.target.value);
+    },
+
+    /**
+     * On title change
+     * @param e
+     * @private
+     */
+    _onContentChange: function (e) {
+        this.props.onContentChange(e.target.value);
+    },
+
+    /**
      * Send
      * @private
      */
     _send: function () {
-        this.props.sendMessage(this.props.title,this.props.content);
+        this.props.sendMessage();
     }
 });
 
