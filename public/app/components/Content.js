@@ -165,6 +165,10 @@ var Content = React.createClass({
                     hidden={userAuthHidden}
                 />
                 <Contacts
+                    sendBtnDisabled={this.props.sendBtnDisabled}
+                    sendMessage={this.props.sendMessage}
+                    user={this.props.user}
+                    fieldsDisabled={this.props.fieldsDisabled}
                     hidden={contactsHidden}
                 />
                 <Grid

@@ -1,9 +1,19 @@
 var React = require('react');
+var ReactPropTypes = React.PropTypes;
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 var Textarea = require('./common/Textarea');
 
 var Contacts = React.createClass({
+
+    propTypes: {
+        sendMessage: ReactPropTypes.func,
+        title: ReactPropTypes.string,
+        content: ReactPropTypes.string,
+        user: ReactPropTypes.object,
+        fieldsDisabled: ReactPropTypes.bool,
+        sendBtnDisabled: ReactPropTypes.bool
+    },
 
     /**
      * @return {object}
@@ -63,6 +73,8 @@ var Contacts = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
+                value={this.props.title}
+                disabled={this.props.fieldsDisabled}
                 type="text"
             />
         )
@@ -79,7 +91,9 @@ var Contacts = React.createClass({
                 id="content"
                 className="content"
                 label="Content"
+                value={this.props.content}
                 floatingLabel={true}
+                disabled={this.props.fieldsDisabled}
                 rows={10}
             />
         )
@@ -94,11 +108,12 @@ var Contacts = React.createClass({
         return (
             <Button
                 className="button"
-                label="Send"
+                label="Send message"
                 raised={true}
                 rippleEffect={true}
                 primary={true}
                 onClick={this._send}
+                disabled={this.props.sendBtnDisabled}
             />
         )
     },
@@ -108,7 +123,7 @@ var Contacts = React.createClass({
      * @private
      */
     _send: function () {
-        //TODO: add send functionality
+        this.props.sendMessage(this.props.title,this.props.content);
     }
 });
 

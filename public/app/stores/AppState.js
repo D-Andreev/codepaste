@@ -400,6 +400,20 @@ function _setTitle(title) {
 }
 
 /**
+ * Send message
+ * @private
+ */
+function _sendMessage(title,content) {
+    _setLoginButtonTimeout();
+    _setLoading(true);
+    _user = LocalStorage.getUser();
+    console.log(_user);
+    console.log(title);
+    console.log(content);
+    location.reload();
+}
+
+/**
  * App Store
  */
 var AppStateStore = assign({}, EventEmitter.prototype, {
@@ -641,6 +655,13 @@ AppDispatcher.register(function(action) {
         case Constants.SET_LOADING:
             var loading = action.loading;
             _setLoading(loading);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SEND_CONTACT:
+            var title = action.title;
+            var content = action.content;
+            _sendMessage(title,content);
             AppStateStore.emitChange();
             break;
 

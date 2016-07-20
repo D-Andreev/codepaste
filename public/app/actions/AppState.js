@@ -197,6 +197,19 @@ var AppStateActions = {
       actionType: Constants.SET_LOADING,
       loading: loading
     });
+  },
+
+  /**
+   * Send contact
+   * @param title
+   * @param content
+   */
+  sendMessage: function(title, content) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SEND_CONTACT,
+      title: title,
+      content: content
+    });
   }
 };
 
