@@ -6,7 +6,4 @@ module.exports = (ws, msg) ->
   q = {}
   q = JSON.parse(msg) if msg and _.isObject(msg)
   Pastes.getPastes q, (err, res) ->
-    ws.send JSON.stringify(res);
-
-
-
+    ws.send JSON.stringify(res)
