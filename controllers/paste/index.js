@@ -16,9 +16,7 @@
 
   module.exports = express.Router().get(routes.paste, function(req, res) {
     var id;
-    console.log('controller', req.url);
     id = _.last(req.url.split('/'));
-    console.log('q', id);
     return Paste.findOne({
       _id: id
     }, function(err, paste) {

@@ -26,7 +26,6 @@ module.exports = class Singleton
       app.put routes.newPaste, newPaste
       app.get routes.paste, (req, response, next) ->
         Tokens.get().validate req, response, (err, res) ->
-          console.log 'err', err, res.statusCode
           return response.status(STATUS_CODES.UNAUTHORIZED).json {} if err or res.statusCode isnt 200
           paste req, response, next
 

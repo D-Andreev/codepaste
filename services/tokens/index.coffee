@@ -1,5 +1,4 @@
 request = require 'request'
-url = require 'url'
 {STATUS_CODES} = require '../../lib/constants'
 {USERS_API_URL} = require '../../lib/constants'
 
@@ -15,11 +14,9 @@ module.exports = class Singleton
   class Tokens
 
     validate: (req, res, next) ->
-      console.log 'validateing', req.url
       token = _getAuthHeader req
-      console.log 'token', token
       return res.status(STATUS_CODES.UNAUTHORIZED).json {} unless token
-      
+
       options =
         method: 'POST'
         uri: "#{USERS_API_URL}/validate"
