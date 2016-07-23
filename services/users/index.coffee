@@ -1,5 +1,5 @@
 request = require 'request'
-USERS_API_URL = 'http://162.243.123.212'
+{USERS_API_URL} = require '../../lib/constants'
 
 module.exports = class Singleton
   instance = null

@@ -1,5 +1,5 @@
 routes = require './routes'
-{healthCheck, index, register, login, newPaste, paste} = require '../../controllers'
+{healthCheck, index, register, login, newPaste, paste, pastes} = require '../../controllers'
 {STATUS_CODES} = require '../constants'
 
 module.exports = class Singleton
@@ -23,6 +23,8 @@ module.exports = class Singleton
       app.post routes.login, login
       app.put routes.newPaste, newPaste
       app.get routes.paste, paste
+      app.ws routes.pastes, (ws) ->
+        ws.on 'message', (msg) -> pastes(ws, msg)
 
 
   @get: ->
