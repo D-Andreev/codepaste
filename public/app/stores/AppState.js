@@ -82,17 +82,16 @@ function _route(path) {
             _cmOptions.readOnly = true;
             if (_viewedPaste) return _setView(view, props);
             
-            ApiUtils.getPaste(_url, view.props.id, function(err, response) {
-                if (err) return _setToastNotification('Error in service!', 'error');
-                if (response) {
-                    _viewedPaste = response;
-                    _title = response.title;
-                    _setView('paste', view.props);
-                } else {
-                    _viewedPaste = null;
-                    _setToast('Error getting paste!', 'error');
-                    _setView('pastes');
+            ApiUtils.getPaste(_user.token, _url, view.props.id, function(err, response) {
+                console.log('err', err, response);
+                if (err) {
+                    if (err.status == 401) return _logout();
+                    else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
                 }
+
+                _viewedPaste = response;
+                _title = response.title;
+                _setView('paste', view.props);
             });
         } else if (view.name == 'new') {
             _viewedPaste = null;
