@@ -5,3 +5,4 @@ module.exports =
   login: require './login'
   newPaste: require './newpaste'
   paste: require './paste'
+  pastes: require './pastes'

@@ -6,7 +6,8 @@
     register: require('./register'),
     login: require('./login'),
     newPaste: require('./newpaste'),
-    paste: require('./paste')
+    paste: require('./paste'),
+    pastes: require('./pastes')
   };
 
 }).call(this);
