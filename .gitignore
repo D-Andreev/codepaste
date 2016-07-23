@@ -15,6 +15,9 @@ node_modules
 # Watchers
 *.js.map
 
+# Err log
+error-log
+
 # IDE
 .idea
 
