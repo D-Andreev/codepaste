@@ -1,6 +1,8 @@
 routes = require './routes'
 {healthCheck, index, register, login, newPaste, paste} = require '../../controllers'
 {STATUS_CODES} = require '../constants'
+{Tokens} = require '../../services'
+{STATUS_CODES} = require '../../lib/constants'
 
 module.exports = class Singleton
   instance = null
@@ -22,7 +24,10 @@ module.exports = class Singleton
       app.put routes.register, register
       app.post routes.login, login
       app.put routes.newPaste, newPaste
-      app.get routes.paste, paste
+      app.get routes.paste, (req, response, next) ->
+        Tokens.get().validate req, response, (err, res) ->
+          return response.status(STATUS_CODES.UNAUTHORIZED).json {} if err or res.statusCode isnt 200
+          paste req, response, next
 
 
   @get: ->

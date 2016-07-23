@@ -6,7 +6,7 @@ Response = require '../../lib/response/index'
 {STATUS_CODES} = require '../../lib/constants'
 
 module.exports = express.Router().get routes.paste, (req, res) ->
-  id = _.last req.url.split '='
+  id = _.last req.url.split '/'
   return res.status(STATUS_CODES.BAD_REQUEST).json {} unless id
 
   Paste.findOne {_id: id}, (err, paste) ->
