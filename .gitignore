@@ -15,11 +15,6 @@ node_modules
 # Watchers
 *.js.map
 
-<<<<<<< HEAD
-# Err log
-=======
-# Error log
->>>>>>> master
 error-log
 
 # IDE

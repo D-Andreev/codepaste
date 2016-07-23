@@ -24,16 +24,10 @@ module.exports = class Singleton
       app.put routes.register, register
       app.post routes.login, login
       app.put routes.newPaste, newPaste
-<<<<<<< HEAD
-      app.get routes.paste, paste
-      app.ws routes.pastes, (ws) ->
-        ws.on 'message', (msg) -> pastes(ws, msg)
-=======
       app.get routes.paste, (req, response, next) ->
         Tokens.get().validate req, response, (err, res) ->
           return response.status(STATUS_CODES.UNAUTHORIZED).json {} if err or res.statusCode isnt 200
           paste req, response, next
->>>>>>> master
 
 
   @get: ->
