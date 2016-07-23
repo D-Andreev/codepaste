@@ -84,7 +84,7 @@ function _route(path) {
             
             ApiUtils.getPaste(_user.token, _url, view.props.id, function(err, response) {
                 if (err) {
-                    if (err.status >= 500 && < 600) return _setToastNotification('Service error!', 'error');
+                    if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
                     if (err.status == 401) return _logout();
                     else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
                 }
