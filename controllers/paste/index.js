@@ -17,6 +17,9 @@
   module.exports = express.Router().get(routes.paste, function(req, res) {
     var id;
     id = _.last(req.url.split('/'));
+    if (!id) {
+      return res.status(STATUS_CODES.BAD_REQUEST).json({});
+    }
     return Paste.findOne({
       _id: id
     }, function(err, paste) {
