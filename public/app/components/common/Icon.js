@@ -10,7 +10,18 @@ var Icon = React.createClass({
         icon: ReactPropTypes.string,
         onClick: ReactPropTypes.func,
         text: ReactPropTypes.string,
-        hidden: ReactPropTypes.bool
+        hidden: ReactPropTypes.bool,
+        wrapperClassName: ReactPropTypes.string
+    },
+
+    /**
+     * Get default props
+     * @returns {{wrapperClassName: string}}
+     */
+    getDefaultProps: function() {
+        return {
+            wrapperClassName: ''
+        }
     },
 
     /**
@@ -22,7 +33,7 @@ var Icon = React.createClass({
         classes.hidden = this.props.hidden;
         var className = classnames("material-icons mdl-list__item-icon", classes);
         return (
-            <span>
+            <span className={this.props.wrapperClassName}>
                 <i
                     id={this.props.id}
                     className={className}

@@ -5,6 +5,7 @@ var Editor = require('../components/Editor');
 var Grid = require('../components/Grid');
 var UserAuth = require('../components/UserAuth');
 var Contacts = require('../components/Contacts');
+var Icon = require('../components/common/Icon');
 
 var Content = React.createClass({
 
@@ -29,7 +30,9 @@ var Content = React.createClass({
         onTypeChecked: ReactPropTypes.func,
         onTitleChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
-        showToast: ReactPropTypes.func
+        showToast: ReactPropTypes.func,
+        onActionClick: ReactPropTypes.func,
+        pastes: ReactPropTypes.object
     },
 
 
@@ -78,30 +81,55 @@ var Content = React.createClass({
      */
     _getItems: function() {
         return [
-            <a
-                className="mdl-navigation__link"
-                href="#paste"
-                key="new"
-                onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#pastes"
-                key="latest"
-                onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#contacts"
-                key="contacts"
-                onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#logout"
-                key="logout"
-                onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
-            </a>
+            <span className="drawer-nav-item">
+                <Icon
+                    wrapperClassName="drawer-nav-item-icon"
+                    icon="add_circle"
+                />
+                <a
+                    className="mdl-navigation__link"
+                    href="#paste"
+                    key="new"
+                    onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
+                </a>
+            </span>,
+            <span className="drawer-nav-item">
+                <Icon
+                    wrapperClassName="drawer-nav-item-icon"
+                    icon="code"
+                />
+                <a
+                    className="mdl-navigation__link"
+                    href="#pastes"
+                    key="latest"
+                    onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
+                </a>
+            </span>,
+            <span className="drawer-nav-item">
+                <Icon
+                    wrapperClassName="drawer-nav-item-icon"
+                    icon="contact_mail"
+                />
+                <a
+                    className="mdl-navigation__link"
+                    href="#contacts"
+                    key="contacts"
+                    onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
+                </a>
+            </span>,
+            <span className="drawer-nav-item">
+                <Icon
+                    wrapperClassName="drawer-nav-item-icon"
+                    icon="exit_to_app"
+                />
+                <a
+                    className="mdl-navigation__link"
+                    href="#logout"
+                    key="logout"
+                    onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
+                </a>
+            </span>
+
         ];
     },
 
@@ -169,6 +197,8 @@ var Content = React.createClass({
                 />
                 <Grid
                     hidden={gridHidden}
+                    onActionClick={this.props.onActionClick}
+                    pastes={this.props.pastes}
                 />
             </span>
         )

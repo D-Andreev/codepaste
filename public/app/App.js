@@ -23,7 +23,8 @@ function getAppState() {
         viewedPaste: AppStateStore.getViewedPaste(),
         cmOptions: AppStateStore.getCmOptions(),
         title: AppStateStore.getTitle(),
-        loading: AppStateStore.getLoading()
+        loading: AppStateStore.getLoading(),
+        pastes: AppStateStore.getPastes()
     };
 }
 
@@ -38,14 +39,7 @@ module.exports = React.createClass({
      * @returns {{view: string, user: {username: string, password: string, email: string}}}
      */
     getInitialState: function() {
-        return {
-            view: 'login',
-            user: {
-                username: '',
-                password: '',
-                email: ''
-            }
-        }
+        return getAppState();
     },
 
     /**
@@ -73,6 +67,7 @@ module.exports = React.createClass({
      * @returns {XML}
      */
     render: function() {
+        console.log('app', this.state)
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;
@@ -120,9 +115,20 @@ module.exports = React.createClass({
                     onTitleChange={this._onTitleChange}
                     title={this.state.title}
                     showToast={this._showToast}
+                    onActionClick={this._onActionClick}
+                    pastes={this.state.pastes}
                 />
             </span>
         )
+    },
+
+    /**
+     * On Action click
+     * @param row
+     * @private
+     */
+    _onActionClick: function (row) {
+        AppStateActions.navigate('paste', {id: row._id});
     },
 
     /**

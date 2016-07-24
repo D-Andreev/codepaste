@@ -15,6 +15,7 @@ module.exports = class Singleton
     init: ->
       @app = express()
       @ws = require('express-ws')(@app)
+      @wsConnections = [];
 
       @_setViewEngine()
       @_setBodyParser()
