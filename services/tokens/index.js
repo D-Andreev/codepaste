@@ -46,6 +46,36 @@
         return request(options, next);
       };
 
+      Tokens.prototype.validateWs = function(req, done) {
+        var e, error, obj, options, token;
+        try {
+          obj = JSON.parse(req);
+        } catch (error) {
+          e = error;
+          return done({
+            statusCode: STATUS_CODES.UNAUTHORIZED
+          });
+        }
+        console.log('validat ews', obj);
+        token = obj.token;
+        if (!token) {
+          return done({
+            statusCode: STATUS_CODES.UNAUTHORIZED
+          });
+        }
+        options = {
+          method: 'POST',
+          uri: USERS_API_URL + "/validate",
+          json: {
+            token: token
+          },
+          headers: {
+            'Authorization': "Bearer " + (new Buffer(token).toString('base64'))
+          }
+        };
+        return request(options, done);
+      };
+
       return Tokens;
 
     })();

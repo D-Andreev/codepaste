@@ -26,5 +26,25 @@ module.exports = class Singleton
 
       request options, next
 
+    validateWs: (req, done) ->
+      try
+        obj = JSON.parse req
+      catch e
+        return done statusCode: STATUS_CODES.UNAUTHORIZED
+
+      console.log 'validat ews', obj
+      token = obj.token
+      return done statusCode: STATUS_CODES.UNAUTHORIZED unless token
+      options =
+        method: 'POST'
+        uri: "#{USERS_API_URL}/validate"
+        json: {token}
+        headers:
+          'Authorization': "Bearer #{new Buffer(token).toString('base64')}"
+
+      request options, done
+
+
+
   @get: ->
     instance ?= new Tokens()
