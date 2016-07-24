@@ -7,7 +7,8 @@ var Grid = React.createClass({
 
     propTypes: {
         hidden: ReactPropTypes.bool,
-        pastes: ReactPropTypes.object
+        pastes: ReactPropTypes.array,
+        search: ReactPropTypes.func
     },
 
 
@@ -34,6 +35,7 @@ var Grid = React.createClass({
                                 {icon: 'date_range', text: 'created'}
                                 ]}
                             rows={this.props.pastes}
+                            search={this.props.search}
                         />
                     </div>
                 </div>

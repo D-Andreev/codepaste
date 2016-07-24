@@ -18,5 +18,6 @@ module.exports = keyMirror({
     SET_MODE: null,
     CHANGE_TITLE: null,
     SHOW_TOAST: null,
-    SET_LOADING: null
+    SET_LOADING: null,
+    SEARCH: null
 });

@@ -64,8 +64,18 @@ var Contacts = React.createClass({
                 label="Title"
                 floatingLabel={true}
                 type="text"
+                onChange={this._onChange}
             />
         )
+    },
+
+    /**
+     * On title change
+     * @param e
+     * @private
+     */
+    _onTitleChange: function (e) {
+
     },
 
     /**
@@ -80,9 +90,19 @@ var Contacts = React.createClass({
                 className="content"
                 label="Content"
                 floatingLabel={true}
+                onChange={this._onTextareaChange}
                 rows={10}
             />
         )
+    },
+
+    /**
+     * On textarea change
+     * @param e
+     * @private
+     */
+    _onTextareaChange: function (e) {
+
     },
 
     /**

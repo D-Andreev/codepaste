@@ -201,6 +201,13 @@ var AppStateActions = {
             actionType: Constants.SET_LOADING,
             loading: loading
         });
+    },
+
+    search: function(query) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SEARCH,
+            query: query
+        });
     }
 };
 

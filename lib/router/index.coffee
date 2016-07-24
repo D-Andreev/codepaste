@@ -26,15 +26,9 @@ module.exports = class Singleton
       app.post routes.login, login
       app.put routes.newPaste, newPaste
       app.get routes.paste, paste
-      app.ws routes.pastes, (ws, req) ->
-        clients = Server.get().ws.getWss().clients
-        setInterval (->
-          Pastes.getPastes {}, (err, docs) ->
-            _.forEach Server.get().ws.getWss().clients, (client) -> client.send JSON.stringify(docs)
-        ), 1000
+      app.ws routes.pastes, (ws) ->
         ws.on 'message', (msg) ->
           pastes(ws, msg)
-
 
   @get: ->
     instance ?= new Router()

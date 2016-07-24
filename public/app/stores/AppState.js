@@ -42,15 +42,55 @@ var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
 var _pastes = [];
+var _filter = {};
 var _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
-_socket.onopen = function (event) {
-    _socket.send({});
+_socket.onopen = function () {
+    _socket.send(JSON.stringify(_filter));
 };
 _socket.onmessage = function (event) {
-    _pastes = JSON.parse(event.data);
-    AppStateStore.emitChange();
+    var data;
+    try {
+        data = JSON.parse(event.data);
+    } catch (e) {
+        return;
+    }
+
+    if (data.action && data.action == 'update') {
+        if (typeof _filter == 'string') _filter = _setSearchQuery(_filter);
+        else _filter = {};
+        _socket.send(JSON.stringify(_filter));
+    } else {
+        _pastes = JSON.parse(event.data);
+        AppStateStore.emitChange();
+    }
 };
 
+/**
+ * Set search query
+ * @param message
+ * @returns {{$or: *[]}}
+ * @private
+ */
+function _setSearchQuery(message) {
+    return {
+        $or: [
+            {'user.user.username': {$regex : message}},
+            {'title': {$regex : message}},
+            {'mode': {$regex : message}},
+            {'code': {$regex : message}}
+        ]
+    }
+}
+
+/**
+ * Send message
+ * @param message
+ * @private
+ */
+function _sendMessage(message) {
+    _filter = message;
+    _socket.send(JSON.stringify(_setSearchQuery(_filter)));
+}
 
 /**
  * Init app
@@ -248,7 +288,7 @@ function _register(username, email, password) {
     _setLoading(true);
     _setRegisterButtonTimeout();
     if (!username || !email || !password) {
-        _toast = 'All fields are required!';
+        _toast = 'Please enter all required fields!';
         _toastType = 'warning';
         _setLoading(false);
         AppStateStore.emitChange();
@@ -667,6 +707,11 @@ AppDispatcher.register(function(action) {
             var loading = action.loading;
             _setLoading(loading);
             AppStateStore.emitChange();
+            break;
+
+        case Constants.SEARCH:
+            var query = action.query;
+            _sendMessage(query);
             break;
 
     default:

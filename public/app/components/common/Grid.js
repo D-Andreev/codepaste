@@ -32,11 +32,20 @@ var Grid = React.createClass({
                     <i className="material-icons">search</i>
                 </label>
                 <div className="mdl-textfield__expandable-holder">
-                    <input className="mdl-textfield__input" type="text" id="search" placeholder="Search by any column..." />
+                    <input className="mdl-textfield__input" onChange={this._onSearch} type="text" id="search" placeholder="Search by any column..." />
                         <label className="mdl-textfield__label">Expandable Input</label>
                 </div>
             </div>
         )
+    },
+
+    /**
+     * On search
+     * @param e
+     * @private
+     */
+    _onSearch: function (e) {
+        this.props.search(e.target.value);
     },
 
     /**
@@ -97,6 +106,13 @@ var Grid = React.createClass({
      * @private
      */
     _renderRows: function() {
+        if (this.props.rows.length == 0) {
+            return (
+                <div className="grid-row no-results">
+                    <h3>No results</h3>
+                </div>
+            )
+        }
         var markup = [];
         for (var i = 0; i < this.props.rows.length; i++) {
             var row = this.props.rows[i];
