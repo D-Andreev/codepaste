@@ -32,7 +32,8 @@ var Content = React.createClass({
         title: ReactPropTypes.string,
         showToast: ReactPropTypes.func,
         onActionClick: ReactPropTypes.func,
-        pastes: ReactPropTypes.object
+        pastes: ReactPropTypes.array,
+        search: ReactPropTypes.func
     },
 
 
@@ -45,25 +46,20 @@ var Content = React.createClass({
         });
         var username = '';
         if (this.props.user.user) username = this.props.user.user.username;
-        var items = this._getItems();
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <header className={className}>
                     <div className="mdl-layout__header-row">
                         <span className="mdl-layout-title">Code paste</span>
                         <div className="mdl-layout-spacer"></div>
-                        <nav className="mdl-navigation mdl-layout--large-screen-only">
-                            {items}
-                        </nav>
+                        {this._getItems(true)}
                     </div>
                 </header>
                 <div className="mdl-layout__drawer">
                         <span className="mdl-layout-title drawer-title">
                             {username}
                         </span>
-                    <nav className="mdl-navigation">
-                        {items}
-                    </nav>
+                    {this._getItems()}
                 </div>
                 <main className="mdl-layout__content">
                     <div className="page-content">
@@ -76,61 +72,65 @@ var Content = React.createClass({
 
     /**
      * Get items
-     * @returns {XML[]}
+     * @param largeScreenOnly
+     * @returns {XML}
      * @private
      */
-    _getItems: function() {
-        return [
-            <span className="drawer-nav-item">
-                <Icon
-                    wrapperClassName="drawer-nav-item-icon"
-                    icon="add_circle"
-                />
-                <a
-                    className="mdl-navigation__link"
-                    href="#paste"
-                    key="new"
-                    onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
-                </a>
-            </span>,
-            <span className="drawer-nav-item">
-                <Icon
-                    wrapperClassName="drawer-nav-item-icon"
-                    icon="code"
-                />
-                <a
-                    className="mdl-navigation__link"
-                    href="#pastes"
-                    key="latest"
-                    onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
-                </a>
-            </span>,
-            <span className="drawer-nav-item">
-                <Icon
-                    wrapperClassName="drawer-nav-item-icon"
-                    icon="contact_mail"
-                />
-                <a
-                    className="mdl-navigation__link"
-                    href="#contacts"
-                    key="contacts"
-                    onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
-                </a>
-            </span>,
-            <span className="drawer-nav-item">
-                <Icon
-                    wrapperClassName="drawer-nav-item-icon"
-                    icon="exit_to_app"
-                />
-                <a
-                    className="mdl-navigation__link"
-                    href="#logout"
-                    key="logout"
-                    onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
-                </a>
-            </span>
-
-        ];
+    _getItems: function(largeScreenOnly) {
+        var className = 'mdl-navigation';
+        if (largeScreenOnly) className += ' mdl-layout--large-screen-only';
+        return (
+            <nav className={className}>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="add_circle"
+                    />
+                    <a
+                        className="mdl-navigation__link"
+                        href="#paste"
+                        key="new"
+                        onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="code"
+                    />
+                    <a
+                        className="mdl-navigation__link"
+                        href="#pastes"
+                        key="latest"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="contact_mail"
+                    />
+                    <a
+                        className="mdl-navigation__link"
+                        href="#contacts"
+                        key="contacts"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="exit_to_app"
+                    />
+                    <a
+                        className="mdl-navigation__link"
+                        href="#logout"
+                        key="logout"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
+                    </a>
+                </span>
+            </nav>
+        )
     },
 
     /**
@@ -199,6 +199,7 @@ var Content = React.createClass({
                     hidden={gridHidden}
                     onActionClick={this.props.onActionClick}
                     pastes={this.props.pastes}
+                    search={this.props.search}
                 />
             </span>
         )

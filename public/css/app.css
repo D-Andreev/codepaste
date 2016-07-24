@@ -11,6 +11,22 @@
     width: 100%;
 }
 
+.app .info-wrapper {
+    display: flex;
+}
+
+.app .pad-right {
+    padding-right: 1rem;
+}
+
+.app .pad-left {
+    padding-right: 0.5rem;
+}
+
+.app .info-label {
+    margin-left: auto;
+}
+
 .app.login-view, .app.registration-view {
     background-image: url("/img/background.jpg");
     background-size: cover;
@@ -154,7 +170,6 @@
     display: flex;
     flex-direction: column;
     border: 1px solid rgba(0,0,0,.12);
-    margin-bottom: 1rem;
 }
 
 .app .grid .grid-header {
@@ -187,6 +202,11 @@
 .app .grid .grid-row {
     display: flex;
     border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.app .grid .grid-row.no-results {
+    align-items: center;
+    justify-content: center;
 }
 
 .app .grid .grid-row:nth-child(odd) {

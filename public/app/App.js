@@ -116,9 +116,19 @@ module.exports = React.createClass({
                     showToast={this._showToast}
                     onActionClick={this._onActionClick}
                     pastes={this.state.pastes}
+                    search={this._search}
                 />
             </span>
         )
+    },
+
+    /**
+     * Search
+     * @param query
+     * @private
+     */
+    _search: function (query) {
+        AppStateActions.search(query);
     },
 
     /**

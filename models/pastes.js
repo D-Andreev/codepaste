@@ -6,9 +6,6 @@
 
   module.exports = {
     getPastes: function(q, done) {
-      if (q == null) {
-        q = {};
-      }
       return Paste.find(q, {
         'user.token': 0,
         'user.refreshToken': 0
