@@ -12,7 +12,7 @@
 
   STATUS_CODES = require('../../lib/constants').STATUS_CODES;
 
-  module.exports = express.Router().put(routes.newPaste, function(req, response) {
+  module.exports = express.Router().put(routes.newPaste, function(req, res) {
     var body, paste;
     body = req.body;
     body.code = body.value;
@@ -24,7 +24,7 @@
       body.user = {
         username: body.user.username
       };
-      return response.status(statusCode).json(body);
+      return res.status(statusCode).json(body);
     });
   });
 
