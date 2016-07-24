@@ -33,7 +33,6 @@ module.exports = class Singleton
             _.forEach clients, (client) -> client.send JSON.stringify(docs)
         ), 1000
         ws.on 'message', (msg) ->
-          console.log('message', ws)
           pastes(ws, msg)
 
 

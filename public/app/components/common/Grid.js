@@ -19,7 +19,12 @@ var Grid = React.createClass({
             </div>
         )
     },
-    
+
+    /**
+     * Render search input
+     * @returns {XML}
+     * @private
+     */
     _renderSearch: function () {
         return (
             <div className="mdl-textfield mdl-js-textfield mdl-textfield--expandable grid-search">
@@ -34,12 +39,22 @@ var Grid = React.createClass({
         )
     },
 
+    /**
+     * Render pagination
+     * @returns {XML}
+     * @private
+     */
     _renderPagination: function () {
         return (
             <h2>Pagination</h2>
         )
     },
 
+    /**
+     * Render header
+     * @returns {XML}
+     * @private
+     */
     _renderHeader: function() {
         return (
             <div className="grid-header">
@@ -48,10 +63,13 @@ var Grid = React.createClass({
         )
     },
 
+    /**
+     * Render titles
+     * @returns {Array}
+     * @private
+     */
     _renderTitles: function () {
         var titles = [];
-
-
         for (var i = 0; i < this.props.columns.length; i++) {
             titles.push(
                 <div
@@ -73,6 +91,11 @@ var Grid = React.createClass({
         return titles;
     },
 
+    /**
+     * Render rows
+     * @returns {Array}
+     * @private
+     */
     _renderRows: function() {
         var markup = [];
         for (var i = 0; i < this.props.rows.length; i++) {
@@ -87,6 +110,12 @@ var Grid = React.createClass({
         return markup;
     },
 
+    /**
+     * Render cols
+     * @param rowIndex
+     * @returns {Array}
+     * @private
+     */
     _renderCols: function(rowIndex) {
         var cols = [], keys = [], i = 0;
         var row = this.props.rows[rowIndex];
@@ -120,10 +149,14 @@ var Grid = React.createClass({
         return cols;
     },
 
+    /**
+     * On action click
+     * @param row
+     * @private
+     */
     _onActionClick: function (row) {
         this.props.onActionClick(row);
     }
-
 });
 
 module.exports = Grid;

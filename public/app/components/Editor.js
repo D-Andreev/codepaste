@@ -161,10 +161,10 @@ var Editor = React.createClass({
         if (this.props.view == 'paste') {
             inputHidden = true;
             listHidden = false;
-            var date = moment(this.props.viewedPaste.created || '').format('MMMM Do YYYY, h:mm:ss a');
+            var date = moment(this.props.viewedPaste.created).format('MMMM Do YYYY, h:mm:ss a');
             items = [
-                {label: this.props.viewedPaste.user.username || '', icon: 'account_circle'},
-                {label: this.props.viewedPaste.mode || '', icon: 'code'},
+                {label: this.props.viewedPaste.user.username, icon: 'account_circle'},
+                {label: this.props.viewedPaste.mode, icon: 'code'},
                 {label: date, icon: 'schedule'}
             ]
         }

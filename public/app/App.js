@@ -67,7 +67,6 @@ module.exports = React.createClass({
      * @returns {XML}
      */
     render: function() {
-        console.log('app', this.state)
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;

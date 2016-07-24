@@ -44,6 +44,7 @@
 .app .mdl-layout__drawer  .drawer-nav-item .mdl-navigation__link{
     flex-grow: 1;
     flex-basis: 0;
+    padding-left: 3rem;
 }
 
 .app .mdl-layout--large-screen-only .drawer-nav-item-icon {

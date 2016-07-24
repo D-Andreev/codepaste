@@ -42,14 +42,11 @@ var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
 var _pastes = [];
-console.log('heree')
 var _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
 _socket.onopen = function (event) {
-    console.log('Connection oponed.');
     _socket.send({});
 };
 _socket.onmessage = function (event) {
-    console.log('onmessage', event.data.length);
     _pastes = JSON.parse(event.data);
     AppStateStore.emitChange();
 };

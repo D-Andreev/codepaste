@@ -15,7 +15,6 @@ var Grid = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log('props', this.props)
         var className = 'mdl-grid';
         if (this.props.hidden) className += ' hidden';
         return (
