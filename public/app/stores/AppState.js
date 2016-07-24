@@ -5,7 +5,6 @@ var ApiUtils = require('../Utils/ApiUtils');
 var LocalStorage = require('../Utils/LocalStorage');
 var Router = require('../Utils/Router');
 var assign = require('object-assign');
-var _ = require('lodash');
 
 var CHANGE_EVENT = 'change';
 var DISABLE_TIMEOUT = 3000;

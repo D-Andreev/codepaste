@@ -13,7 +13,6 @@
       error = error1;
     }
     return Pastes.getPastes(q, function(err, res) {
-      console.log('res', res.length);
       return ws.send(JSON.stringify(res));
     });
   };

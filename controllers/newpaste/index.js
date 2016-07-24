@@ -28,7 +28,6 @@
       body.user = {
         username: body.user.username
       };
-      console.log('sending to clients', Server.get().ws.getWss().clients.length);
       _.forEach(Server.get().ws.getWss().clients, function(client) {
         return client.send(JSON.stringify({
           action: 'update'

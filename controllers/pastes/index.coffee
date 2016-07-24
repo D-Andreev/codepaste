@@ -7,5 +7,4 @@ module.exports = (ws, msg) ->
   catch error
 
   Pastes.getPastes q, (err, res) ->
-    console.log 'res', res.length
     ws.send JSON.stringify(res)
