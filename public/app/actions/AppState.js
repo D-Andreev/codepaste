@@ -203,10 +203,27 @@ var AppStateActions = {
         });
     },
 
+    /**
+     * Search
+     * @param query
+     */
     search: function(query) {
         AppDispatcher.dispatch({
             actionType: Constants.SEARCH,
             query: query
+        });
+    },
+
+    /**
+     * Sort
+     * @param col
+     * @param direction
+     */
+    sort: function(col, direction) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SORT,
+            col: col,
+            direction: direction
         });
     }
 };

@@ -24,7 +24,8 @@ function getAppState() {
         cmOptions: AppStateStore.getCmOptions(),
         title: AppStateStore.getTitle(),
         loading: AppStateStore.getLoading(),
-        pastes: AppStateStore.getPastes()
+        pastes: AppStateStore.getPastes(),
+        sort: AppStateStore.getSort()
     };
 }
 
@@ -117,9 +118,21 @@ module.exports = React.createClass({
                     onActionClick={this._onActionClick}
                     pastes={this.state.pastes}
                     search={this._search}
+                    sort={this._sort}
+                    sortingOptions={this.state.sort}
                 />
             </span>
         )
+    },
+
+    /**
+     * Sort
+     * @param col
+     * @param direction
+     * @private
+     */
+    _sort: function(col, direction) {
+        AppStateActions.sort(col, direction);
     },
 
     /**

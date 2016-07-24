@@ -13,7 +13,7 @@ module.exports = class Singleton
 
   class Tokens
 
-    validate: (req, res, next) ->
+    validate: (req, res, done) ->
       token = _getAuthHeader req
       return res.status(STATUS_CODES.UNAUTHORIZED).json {} unless token
 

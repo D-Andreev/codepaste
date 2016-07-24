@@ -7,5 +7,5 @@ module.exports = (ws, msg) ->
   catch error
     return
 
-  Pastes.getPastes q, (err, res) ->
+  Pastes.getPastes q.query, q.sort, (err, res) ->
     ws.send JSON.stringify res

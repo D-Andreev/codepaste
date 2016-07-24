@@ -8,7 +8,9 @@ var Grid = React.createClass({
     propTypes: {
         hidden: ReactPropTypes.bool,
         pastes: ReactPropTypes.array,
-        search: ReactPropTypes.func
+        search: ReactPropTypes.func,
+        sort: ReactPropTypes.func,
+        sortingOptions: ReactPropTypes.object
     },
 
 
@@ -36,6 +38,8 @@ var Grid = React.createClass({
                                 ]}
                             rows={this.props.pastes}
                             search={this.props.search}
+                            sort={this.props.sort}
+                            sortingOptions={this.props.sortingOptions}
                         />
                     </div>
                 </div>
