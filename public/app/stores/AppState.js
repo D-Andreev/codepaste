@@ -43,27 +43,40 @@ var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
 var _pastes = [];
 var _filter = {};
-var _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
-_socket.onopen = function () {
-    _socket.send(JSON.stringify(_filter));
-};
-_socket.onmessage = function (event) {
-    var data;
-    try {
-        data = JSON.parse(event.data);
-    } catch (e) {
-        return;
-    }
+var _socket = null;
 
-    if (data.action && data.action == 'update') {
-        if (typeof _filter == 'string') _filter = _setSearchQuery(_filter);
-        else _filter = {};
-        _socket.send(JSON.stringify(_filter));
-    } else {
-        _pastes = JSON.parse(event.data);
-        AppStateStore.emitChange();
-    }
-};
+function _getFilter() {
+    return _filter;
+}
+
+/**
+ * Init ws
+ * @private
+ */
+function _initWs() {
+    if (_socket) return;
+    _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
+    _socket.onopen = function () {
+        _socket.send(JSON.stringify(_getFilter()));
+    };
+    _socket.onmessage = function (event) {
+        var data;
+        try {
+            data = JSON.parse(event.data);
+        } catch (e) {
+            return;
+        }
+
+        if (data.action && data.action == 'update') {
+            var filter = {};
+            if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
+            _socket.send(JSON.stringify(filter));
+        } else {
+            _pastes = JSON.parse(event.data);
+            AppStateStore.emitChange();
+        }
+    };
+}
 
 /**
  * Set search query
@@ -126,6 +139,7 @@ function _route(path, viewProps) {
         if (view.name == 'registration') _setView('registration');
         else _setView('login');
     } else {
+        _initWs();
         if (view.name == '/') return _setView('pastes');
         var props = false;
         if (view.name == 'paste') {
@@ -348,6 +362,7 @@ function _login(username, password) {
             return AppStateStore.emitChange();
         }
         if (response.statusCode == 201) {
+            _initWs();
             _saveLoggedInUser(response.body);
             _setView('pastes');
             _setLoading(false);

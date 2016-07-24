@@ -6,11 +6,12 @@
 
   module.exports = function(ws, msg) {
     var error, error1, q;
-    q = {};
+    q = null;
     try {
       q = JSON.parse(msg);
     } catch (error1) {
       error = error1;
+      return;
     }
     return Pastes.getPastes(q, function(err, res) {
       return ws.send(JSON.stringify(res));

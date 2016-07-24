@@ -1,8 +1,6 @@
 _ = require 'lodash'
 routes = require './routes'
 {healthCheck, index, register, login, newPaste, paste, pastes} = require '../../controllers'
-Server = require '../../lib/server'
-Pastes = require '../../models/pastes'
 {STATUS_CODES} = require '../../lib/constants'
 
 module.exports = class Singleton
@@ -28,7 +26,7 @@ module.exports = class Singleton
       app.get routes.paste, paste
       app.ws routes.pastes, (ws) ->
         ws.on 'message', (msg) ->
-          pastes(ws, msg)
+          pastes ws, msg
 
   @get: ->
     instance ?= new Router()
