@@ -45,6 +45,10 @@ var _pastes = [];
 var _filter = {};
 var _socket = null;
 
+function _getFilter() {
+    return _filter;
+}
+
 /**
  * Init ws
  * @private
@@ -53,7 +57,7 @@ function _initWs() {
     if (_socket) return;
     _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
     _socket.onopen = function () {
-        _socket.send(JSON.stringify(_filter));
+        _socket.send(JSON.stringify(_getFilter()));
     };
     _socket.onmessage = function (event) {
         var data;
@@ -64,9 +68,9 @@ function _initWs() {
         }
 
         if (data.action && data.action == 'update') {
-            if (typeof _filter == 'string') _filter = _setSearchQuery(_filter);
-            else _filter = {};
-            _socket.send(JSON.stringify(_filter));
+            var filter = {};
+            if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
+            _socket.send(JSON.stringify(filter));
         } else {
             _pastes = JSON.parse(event.data);
             AppStateStore.emitChange();
