@@ -32,7 +32,6 @@ module.exports = class Singleton
       catch e
         return done statusCode: STATUS_CODES.UNAUTHORIZED
 
-      console.log 'validat ews', obj
       token = obj.token
       return done statusCode: STATUS_CODES.UNAUTHORIZED unless token
       options =

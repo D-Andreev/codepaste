@@ -56,7 +56,6 @@
             statusCode: STATUS_CODES.UNAUTHORIZED
           });
         }
-        console.log('validat ews', obj);
         token = obj.token;
         if (!token) {
           return done({

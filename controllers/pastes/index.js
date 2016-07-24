@@ -5,8 +5,8 @@
   Pastes = require('../../models/pastes');
 
   module.exports = function(ws, msg) {
-    q;
     var error, error1, q;
+    q = null;
     try {
       q = JSON.parse(msg);
     } catch (error1) {
