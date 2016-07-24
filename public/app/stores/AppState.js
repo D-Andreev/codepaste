@@ -191,6 +191,7 @@ function _route(path, viewProps) {
             if (_viewedPaste) return _setView(view, props);
 
             ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
+                console.log('fff', err, response)
                 if (err) {
                     if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
                     if (err.status == 401) return _logout();

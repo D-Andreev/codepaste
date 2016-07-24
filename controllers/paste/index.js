@@ -17,30 +17,30 @@
   Tokens = require('../../services/tokens');
 
   module.exports = express.Router().get(routes.paste, function(req, res) {
-    return Tokens.get().validate(req, res, function(err, result) {
-      var id;
-      if (err || result.statusCode === 401) {
-        return res.status(STATUS_CODES.UNAUTHORIZED).json({});
+
+    /*Tokens.get().validate req, res, (err, result) ->
+      console.log 'err, res', err, res.statusCode
+      return res.status(STATUS_CODES.UNAUTHORIZED).json {} if err or result.statusCode == 401
+     */
+    var id;
+    id = _.last(req.url.split('/'));
+    if (!id) {
+      return res.status(STATUS_CODES.BAD_REQUEST).json({});
+    }
+    return Paste.findOne({
+      _id: id
+    }, function(err, paste) {
+      var body, ref, statusCode;
+      if (!paste || !paste.user) {
+        return res.status(STATUS_CODES.NOT_FOUND).json({});
       }
-      id = _.last(req.url.split('/'));
-      if (!id) {
-        return res.status(STATUS_CODES.BAD_REQUEST).json({});
-      }
-      return Paste.findOne({
-        _id: id
-      }, function(err, paste) {
-        var body, ref, statusCode;
-        if (!paste || !paste.user) {
-          return res.status(STATUS_CODES.NOT_FOUND).json({});
-        }
-        delete paste.user.refreshToken;
-        delete paste.user.token;
-        delete paste.user.user.email;
-        delete paste.value;
-        paste.user = paste.user.user;
-        ref = new Response(err, paste, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
-        return res.status(statusCode).json(body);
-      });
+      delete paste.user.refreshToken;
+      delete paste.user.token;
+      delete paste.user.user.email;
+      delete paste.value;
+      paste.user = paste.user.user;
+      ref = new Response(err, paste, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
+      return res.status(statusCode).json(body);
     });
   });
 
