@@ -5,15 +5,18 @@
   Paste = require('./paste');
 
   module.exports = {
-    getPastes: function(q, done) {
+    getPastes: function(q, sort, done) {
+      if (sort == null) {
+        sort = {
+          sort: {
+            created: -1
+          }
+        };
+      }
       return Paste.find(q, {
         'user.token': 0,
         'user.refreshToken': 0
-      }, {
-        sort: {
-          created: -1
-        }
-      }, done);
+      }, sort, done);
     }
   };
 

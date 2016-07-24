@@ -33,7 +33,9 @@ var Content = React.createClass({
         showToast: ReactPropTypes.func,
         onActionClick: ReactPropTypes.func,
         pastes: ReactPropTypes.array,
-        search: ReactPropTypes.func
+        search: ReactPropTypes.func,
+        sort: ReactPropTypes.func,
+        sortingOptions: ReactPropTypes.object
     },
 
 
@@ -200,6 +202,8 @@ var Content = React.createClass({
                     onActionClick={this.props.onActionClick}
                     pastes={this.props.pastes}
                     search={this.props.search}
+                    sort={this.props.sort}
+                    sortingOptions={this.props.sortingOptions}
                 />
             </span>
         )

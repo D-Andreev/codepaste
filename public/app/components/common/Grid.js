@@ -80,24 +80,80 @@ var Grid = React.createClass({
     _renderTitles: function () {
         var titles = [];
         for (var i = 0; i < this.props.columns.length; i++) {
+            var direction = this._getDirection(this.props.columns[i].text);
             titles.push(
                 <div
                     className="grid-header-title"
                     key={'header-row' + i}
+                    onClick={this._onSort.bind(this, this.props.columns[i].text, direction)}
                 >
                     <Icon
                         wrapperClassName="grid-header-title-icon"
                         icon={this.props.columns[i].icon}
                         className="vertical-align"
                     />
-                    <span className="vertical-align">
+                    <span className="vertical-align header-label">
                         {this.props.columns[i].text}
                     </span>
+                    {this._renderSortIcon(this.props.columns[i].text)}
                 </div>
             )
         }
 
         return titles;
+    },
+
+    /**
+     * On sort
+     * @param text
+     * @param direction
+     * @private
+     */
+    _onSort: function (text, direction) {
+        if (text == 'username') return;
+        this.props.sort(text, direction);
+    },
+
+    /**
+     * Get direction
+     * @param col
+     * @returns {number}
+     * @private
+     */
+    _getDirection: function (col) {
+        if (col != this.props.sortingOptions.col) return -1;
+        else {
+            if (this.props.sortingOptions.direction == -1) return 1;
+            else return -1;
+        }
+    },
+
+    /**
+     * Render Sort Icon
+     * @param col
+     * @returns {XML}
+     * @private
+     */
+    _renderSortIcon: function(col) {
+        if (col != this.props.sortingOptions.col || col == 'username') return;
+
+        return (
+            <Icon
+                wrapperClassName="grid-header-title-icon"
+                icon={this._getDirectionIcon()}
+                className="vertical-align sort-icon"
+            />
+        )
+    },
+
+    /**
+     * Get direction icon name
+     * @returns {*}
+     * @private
+     */
+    _getDirectionIcon: function() {
+        if (this.props.sortingOptions.direction == -1) return 'arrow_drop_down';
+        else return 'arrow_drop_up'
     },
 
     /**

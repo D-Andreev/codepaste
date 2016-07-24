@@ -27,7 +27,7 @@
     Tokens = (function() {
       function Tokens() {}
 
-      Tokens.prototype.validate = function(req, res, next) {
+      Tokens.prototype.validate = function(req, res, done) {
         var token;
         token = _getAuthHeader(req);
         if (!token) {

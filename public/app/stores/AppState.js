@@ -43,10 +43,28 @@ var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
 var _pastes = [];
 var _filter = {};
+var _sort = {col: 'created', direction: -1};
 var _socket = null;
 
+/**
+ * Get filter
+ * @returns {{}}
+ * @private
+ */
 function _getFilter() {
     return _filter;
+}
+
+/**
+ * Get sort
+ * @private
+ */
+function _getSort() {
+    var sort = {};
+    sort[_sort.col] = _sort.direction;
+    return {
+        sort: sort
+    }
 }
 
 /**
@@ -57,7 +75,7 @@ function _initWs() {
     if (_socket) return;
     _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
     _socket.onopen = function () {
-        _socket.send(JSON.stringify(_getFilter()));
+        _socket.send(JSON.stringify({query: _getFilter(), sort: _getSort()}));
     };
     _socket.onmessage = function (event) {
         var data;
@@ -68,14 +86,33 @@ function _initWs() {
         }
 
         if (data.action && data.action == 'update') {
-            var filter = {};
-            if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
-            _socket.send(JSON.stringify(filter));
+            _filterAndSort();
         } else {
             _pastes = JSON.parse(event.data);
             AppStateStore.emitChange();
         }
     };
+}
+
+/**
+ * Filter and sort
+ * @private
+ */
+function _filterAndSort() {
+    var filter = {};
+    if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
+    _socket.send(JSON.stringify({query: filter, sort: _getSort()}));
+}
+
+/**
+ * Sort
+ * @param col
+ * @param direction
+ * @private
+ */
+function _sortGrid(col, direction) {
+    _sort = {col: col, direction: direction};
+    _filterAndSort();
 }
 
 /**
@@ -102,7 +139,7 @@ function _setSearchQuery(message) {
  */
 function _sendMessage(message) {
     _filter = message;
-    _socket.send(JSON.stringify(_setSearchQuery(_filter)));
+    _socket.send(JSON.stringify({query: _setSearchQuery(_filter), sort: _getSort()}));
 }
 
 /**
@@ -586,6 +623,14 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get sort
+     * @returns {{created: number}}
+     */
+    getSort: function() {
+        return _sort;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -727,6 +772,12 @@ AppDispatcher.register(function(action) {
         case Constants.SEARCH:
             var query = action.query;
             _sendMessage(query);
+            break;
+
+        case Constants.SORT:
+            var col = action.col;
+            var direction = action.direction;
+            _sortGrid(col, direction);
             break;
 
     default:
