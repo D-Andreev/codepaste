@@ -10,7 +10,6 @@ var Grid = React.createClass({
      * @return {object}
      */
     render: function() {
-        console.log(this.props)
         return (
             <div className="grid mdl-shadow--2dp">
                 {this._renderSearch()}
