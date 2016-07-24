@@ -17,15 +17,9 @@ module.exports = class Singleton
       token = _getAuthHeader req
       return res.status(STATUS_CODES.UNAUTHORIZED).json {} unless token
 
-      options =
-        method: 'POST'
-        uri: "#{USERS_API_URL}/validate"
-        json: {token}
-        headers:
-          'Authorization': "Bearer #{token}"
+      @_validate token, done
 
-      request options, next
-
+      
     validateWs: (req, done) ->
       try
         obj = JSON.parse req
@@ -34,6 +28,11 @@ module.exports = class Singleton
 
       token = obj.token
       return done statusCode: STATUS_CODES.UNAUTHORIZED unless token
+
+      @_validate token, done
+
+
+    _validate: (token, done) ->
       options =
         method: 'POST'
         uri: "#{USERS_API_URL}/validate"
@@ -42,8 +41,6 @@ module.exports = class Singleton
           'Authorization': "Bearer #{new Buffer(token).toString('base64')}"
 
       request options, done
-
-
 
   @get: ->
     instance ?= new Tokens()

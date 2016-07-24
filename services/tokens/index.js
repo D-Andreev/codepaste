@@ -28,26 +28,16 @@
       function Tokens() {}
 
       Tokens.prototype.validate = function(req, res, next) {
-        var options, token;
+        var token;
         token = _getAuthHeader(req);
         if (!token) {
           return res.status(STATUS_CODES.UNAUTHORIZED).json({});
         }
-        options = {
-          method: 'POST',
-          uri: USERS_API_URL + "/validate",
-          json: {
-            token: token
-          },
-          headers: {
-            'Authorization': "Bearer " + token
-          }
-        };
-        return request(options, next);
+        return this._validate(token, done);
       };
 
       Tokens.prototype.validateWs = function(req, done) {
-        var e, error, obj, options, token;
+        var e, error, obj, token;
         try {
           obj = JSON.parse(req);
         } catch (error) {
@@ -62,6 +52,11 @@
             statusCode: STATUS_CODES.UNAUTHORIZED
           });
         }
+        return this._validate(token, done);
+      };
+
+      Tokens.prototype._validate = function(token, done) {
+        var options;
         options = {
           method: 'POST',
           uri: USERS_API_URL + "/validate",
