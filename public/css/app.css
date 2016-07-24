@@ -19,15 +19,42 @@
 }
 
 .app .view-title-wrapper {
-    background-image: url("/img/card-background.jpg");
-    background-size: cover;
-    background-repeat:   no-repeat;
-    background-position: center center;
-    color: white;
+    background-color: rgb(139,195,74);
+    color: rgb(66,66,66);
 }
 
 .app .app-view {
     background-color: white;
+}
+
+.app .mdl-layout__drawer .drawer-nav-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.app .mdl-layout__drawer  .drawer-nav-item .drawer-nav-item-icon{
+    flex-grow: 1;
+    flex-basis: 0;
+    display: flex;
+    position: relative;
+    top: 1.1rem;
+    padding-left: 0.5rem;
+}
+
+.app .mdl-layout__drawer  .drawer-nav-item .mdl-navigation__link{
+    flex-grow: 1;
+    flex-basis: 0;
+    padding-left: 3rem;
+}
+
+.app .mdl-layout--large-screen-only .drawer-nav-item-icon {
+    position: relative;
+    top: 3.5rem;
+    right: 0.5rem;
+}
+
+.app .mdl-layout--large-screen-only .mdl-navigation__link:hover {
+    text-decoration: underline;
 }
 
 .app .login-form {
@@ -43,12 +70,14 @@
     display: none;
 }
 
+.app .no-border {
+    border: none !important;
+}
+
 .app .login-form .mdl-card__title {
     min-height: 5rem;
-    background-image: url("/img/card-background.jpg");
-    background-size: cover;
-    background-repeat:   no-repeat;
-    background-position: center center;
+    background-color: rgb(139,195,74);
+    color: rgb(66,66,66);
 }
 
 
@@ -81,20 +110,122 @@
 }
 
 .app .drawer-title {
-    background-color: rgb(63,81,181);
+    background-color: #424242;
     color: white;
+}
+
+.app .mdl-layout__drawer .mdl-navigation {
+    background-color: #37474f !important;
+    height: 100%;
+}
+
+.app .mdl-layout__drawer  .drawer-nav-item .mdl-navigation__link {
+    color: #eceff1 !important;
+}
+
+.app .mdl-layout__drawer  .drawer-nav-item .mdl-navigation__link:hover {
+    background-color: #00BCD4;
+    color: #37474F;
 }
 
 .app .copy-button {
     float: right;
 }
 
+.app .vertical-align {
+    vertical-align: text-bottom;
+}
+
 .app .mdl-radio {
     margin-right: 1rem;
 }
 
+.app .grid-wrapper {
+    margin: 0;
+    width: 100%;
+}
+
 .app .view-title {
     text-transform: uppercase;
+}
+
+.app .grid  {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,.12);
+    margin-bottom: 1rem;
+}
+
+.app .grid .grid-header {
+    display: flex;
+    border-color: inherit;
+    color: rgba(0,0,0,.54);
+    border-bottom: 1px solid rgba(0,0,0,.12);
+    border-top: 1px solid rgba(0,0,0,.12);
+}
+
+.app .grid .grid-header .grid-header-title{
+    text-transform: uppercase;
+    flex-grow: 1;
+    flex-basis: 0;
+    padding: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    border-right: 1px solid rgba(0,0,0,.12);
+}
+
+.app .grid .grid-header .grid-header-title-icon {
+    margin-right: 0.5rem;
+}
+
+.app .grid .grid-header .grid-header-title:last-child {
+    border: none;
+}
+
+.app .grid .grid-row {
+    display: flex;
+    border-bottom: 1px solid rgba(0,0,0,.12);
+}
+
+.app .grid .grid-row:nth-child(odd) {
+    background-color: #eee;
+}
+
+.app .grid .grid-row:hover {
+    cursor: pointer;
+    background-color: #b3d4fc;
+}
+
+.app .grid .grid-row .grid-cell {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-height: 2rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0.5rem;
+    line-height: 24px;
+    border-right: 1px solid rgba(0,0,0,.12);
+}
+
+.app .grid .grid-row .grid-cell:last-child {
+    border: none;
+}
+
+.app .grid .grid-row .grid-cell.action i:hover {
+    cursor: pointer;
+}
+
+.app .grid .grid-row .grid-cell.username{
+    line-height: 24px;
+    vertical-align: top;
+    padding-left: 0.5rem;
+}
+
+.app .grid-search {
+    margin-left: 0.5rem;
 }
 
 footer {

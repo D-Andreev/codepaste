@@ -41,6 +41,15 @@ var _pasteId = 0;
 var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
+var _pastes = [];
+var _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
+_socket.onopen = function (event) {
+    _socket.send({});
+};
+_socket.onmessage = function (event) {
+    _pastes = JSON.parse(event.data);
+    AppStateStore.emitChange();
+};
 
 
 /**
@@ -62,14 +71,16 @@ function _userIsLoggedIn() {
 }
 
 /**
- * Route
+ * View props
  * @param path
+ * @param viewProps
  * @private
  */
-function _route(path) {
+function _route(path, viewProps) {
     var view;
     if (!path) view = Router.getViewFromUrl();
     else view ={name: path};
+
     var userIsLoggedIn = _userIsLoggedIn();
     if (!userIsLoggedIn) {
         if (view.name == 'registration') _setView('registration');
@@ -78,20 +89,25 @@ function _route(path) {
         if (view.name == '/') return _setView('pastes');
         var props = false;
         if (view.name == 'paste') {
-            props = {id: view.props.id};
+            var pasteId;
+            if (view.props && view.props.id) pasteId = view.props.id;
+            else if (viewProps && viewProps.id) {
+                pasteId = viewProps.id;
+                _viewedPaste = null;
+            }
+            props = {id: pasteId};
             _cmOptions.readOnly = true;
             if (_viewedPaste) return _setView(view, props);
-            
-            ApiUtils.getPaste(_user.token, _url, view.props.id, function(err, response) {
+
+            ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
                 if (err) {
                     if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
                     if (err.status == 401) return _logout();
                     else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
                 }
-
                 _viewedPaste = response;
                 _title = response.title;
-                _setView('paste', view.props);
+                _setView('paste', props);
             });
         } else if (view.name == 'new') {
             _viewedPaste = null;
@@ -507,6 +523,14 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get pastes
+     * @returns {Array}
+     */
+    getPastes: function() {
+        return _pastes;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -575,8 +599,9 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_VIEW:
             view = action.view;
+            var viewProps = action.viewProps;
             if (view) {
-                _setView(view);
+                _setView(view, viewProps);
                 AppStateStore.emitChange();
             }
             break;
@@ -606,7 +631,8 @@ AppDispatcher.register(function(action) {
 
         case Constants.NAVIGATE:
             var path = action.path;
-            _route(path);
+            var props = action.props;
+            _route(path, props);
             AppStateStore.emitChange();
             break;
 

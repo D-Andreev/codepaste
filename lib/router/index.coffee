@@ -1,7 +1,8 @@
+_ = require 'lodash'
 routes = require './routes'
 {healthCheck, index, register, login, newPaste, paste, pastes} = require '../../controllers'
-{STATUS_CODES} = require '../constants'
-{Tokens} = require '../../services'
+Server = require '../../lib/server'
+Pastes = require '../../models/pastes'
 {STATUS_CODES} = require '../../lib/constants'
 
 module.exports = class Singleton
@@ -24,8 +25,15 @@ module.exports = class Singleton
       app.put routes.register, register
       app.post routes.login, login
       app.put routes.newPaste, newPaste
-      app.ws routes.pastes, (ws) ->
-        ws.on 'message', (msg) -> pastes(ws, msg)
+      app.get routes.paste, paste
+      app.ws routes.pastes, (ws, req) ->
+        clients = Server.get().ws.getWss().clients
+        setInterval (->
+          Pastes.getPastes {}, (err, docs) ->
+            _.forEach Server.get().ws.getWss().clients, (client) -> client.send JSON.stringify(docs)
+        ), 1000
+        ws.on 'message', (msg) ->
+          pastes(ws, msg)
 
 
   @get: ->
