@@ -27,7 +27,7 @@
     Tokens = (function() {
       function Tokens() {}
 
-      Tokens.prototype.validate = function(req, res, done) {
+      Tokens.prototype.validateToken = function(req, res, done) {
         var token;
         token = _getAuthHeader(req);
         if (!token) {
@@ -60,11 +60,8 @@
         options = {
           method: 'POST',
           uri: USERS_API_URL + "/validate",
-          json: {
-            token: token
-          },
           headers: {
-            'Authorization': "Bearer " + (new Buffer(token).toString('base64'))
+            'Authorization': "Bearer " + token
           }
         };
         return request(options, done);

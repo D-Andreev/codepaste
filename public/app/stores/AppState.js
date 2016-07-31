@@ -186,12 +186,20 @@ function _init(props) {
 }
 
 /**
- * User is logged in
- * @returns {*}
+ * Validate user token
+ * @param done
+ * @returns {boolean}
  * @private
  */
-function _userIsLoggedIn() {
-    return _user.token && _user.refreshToken;
+function _userIsLoggedIn(done) {
+    if (!_user.token || !_user.refreshToken) return done(false);
+    ApiUtils.validateToken(_url, _user.token, function(err, res) {
+        console.log('err', err, res);
+
+        if (err) return _setToastNotification('Service error!', 'error');
+        if (!res || res.statusCode == 401) return done(false);
+        done(true);
+    });
 }
 
 /**
@@ -205,48 +213,49 @@ function _route(path, viewProps) {
     if (!path) view = Router.getViewFromUrl();
     else view ={name: path};
 
-    var userIsLoggedIn = _userIsLoggedIn();
-    if (!userIsLoggedIn) {
-        if (view.name == 'registration') _setView('registration');
-        else _setView('login');
-    } else {
-        _initWs();
-        if (view.name == '/') return _setView('pastes');
-        var props = false;
-        if (view.name == 'paste') {
-            var pasteId;
-            if (view.props && view.props.id) pasteId = view.props.id;
-            else if (viewProps && viewProps.id) {
-                pasteId = viewProps.id;
-                _viewedPaste = null;
-            }
-            props = {id: pasteId};
-            _cmOptions.readOnly = true;
-            if (_viewedPaste) return _setView(view, props);
-
-            ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
-                if (err) {
-                    if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
-                    if (err.status == 401) return _logout();
-                    else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
+    _userIsLoggedIn(function(userIsLoggedIn) {
+        if (!userIsLoggedIn) {
+            if (view.name == 'registration') _setView('registration');
+            else _setView('login');
+        } else {
+            _initWs();
+            if (view.name == '/') return _setView('pastes');
+            var props = false;
+            if (view.name == 'paste') {
+                var pasteId;
+                if (view.props && view.props.id) pasteId = view.props.id;
+                else if (viewProps && viewProps.id) {
+                    pasteId = viewProps.id;
+                    _viewedPaste = null;
                 }
-                _viewedPaste = response;
-                _title = response.title;
-                _setView('paste', props);
-            });
-        } else if (view.name == 'new') {
-            _viewedPaste = null;
-            _title = '';
-            _cmOptions.readOnly = false;
-            _cmOptions.mode = 'javascript';
-            _pasteId = 0;
-            _setView('new');
-        } else if (view.name == 'pastes') {
-            _setView('pastes');
-        } else if (view.name == 'contacts') {
-            _setView('contacts');
+                props = {id: pasteId};
+                _cmOptions.readOnly = true;
+                if (_viewedPaste) return _setView(view, props);
+
+                ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
+                    if (err) {
+                        if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
+                        if (err.status == 401) return _logout();
+                        else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
+                    }
+                    _viewedPaste = response;
+                    _title = response.title;
+                    _setView('paste', props);
+                });
+            } else if (view.name == 'new') {
+                _viewedPaste = null;
+                _title = '';
+                _cmOptions.readOnly = false;
+                _cmOptions.mode = 'javascript';
+                _pasteId = 0;
+                _setView('new');
+            } else if (view.name == 'pastes') {
+                _setView('pastes');
+            } else if (view.name == 'contacts') {
+                _setView('contacts');
+            }
         }
-    }
+    });
 }
 
 /**
@@ -515,7 +524,6 @@ function _saveLoggedInUser(user) {
  * @private
  */
 function _logout() {
-    _user = DEFAULT_USER;
     LocalStorage.clearUser();
     location.reload();
 }

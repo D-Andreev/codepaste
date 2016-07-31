@@ -4,13 +4,8 @@ routes = require '../../lib/router/routes'
 Paste = require '../../models/paste'
 Response = require '../../lib/response/index'
 {STATUS_CODES} = require '../../lib/constants'
-Tokens = require '../../services/tokens'
 
 module.exports = express.Router().get routes.paste, (req, res) ->
-  ###Tokens.get().validate req, res, (err, result) ->
-    console.log 'err, res', err, res.statusCode
-    return res.status(STATUS_CODES.UNAUTHORIZED).json {} if err or result.statusCode == 401###
-
   id = _.last req.url.split '/'
   return res.status(STATUS_CODES.BAD_REQUEST).json {} unless id
 

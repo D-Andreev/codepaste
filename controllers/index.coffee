@@ -6,3 +6,4 @@ module.exports =
   newPaste: require './newpaste'
   paste: require './paste'
   pastes: require './pastes'
+  validate: require './validate'

@@ -39,7 +39,7 @@ var UserAuth = React.createClass({
             view = this._renderRegisterFields();
         }
 
-        return (view)
+        return (view);
     },
 
     /**
@@ -49,7 +49,7 @@ var UserAuth = React.createClass({
      */
     _getTitle: function() {
         if (this.props.view == 'login') {
-            return 'Welcome to Code paste'
+            return 'Welcome to Code Paste'
         } else if (this.props.view == 'registration') {
             return 'Register'
         }

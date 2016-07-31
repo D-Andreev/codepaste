@@ -177,7 +177,8 @@ var Editor = React.createClass({
                     onChange={this._onTitleChange}
                     floatingLabel={true}
                     type="text"
-                    pattern="\w{0,20}"
+                    pattern="(.)+"
+                    maxLength="20"
                     label="Title"
                 />
                 <List
