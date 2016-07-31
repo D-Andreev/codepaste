@@ -2,7 +2,6 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var classnames = require('classnames');
 var Icon = require('./Icon');
-var Button = require('./Button');
 var moment = require('moment');
 
 var Grid = React.createClass({
