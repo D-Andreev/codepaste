@@ -4,7 +4,6 @@ var classnames = require('classnames');
 var Icon = require('./Icon');
 var moment = require('moment');
 
-
 var Grid = React.createClass({
 
     /**
@@ -55,9 +54,98 @@ var Grid = React.createClass({
      * @private
      */
     _renderPagination: function () {
+        if (this.props.rows.length) {
+            var i, c = 0, pages = [], markup = [], pagesLength = 0, rightPagesExist, leftPagesExist;
+            var totalRows = this.props.totalPastes;
+            var skip = this.props.pagination.skip;
+            var rowsPerPage = this.props.pagination.limit;
+            var pagesCount = Math.floor(totalRows / rowsPerPage) + 1;
+            var currentPage = skip > 0 ? parseInt(skip / rowsPerPage) + 1 : 1;
+
+            if (skip > 0) {
+                for (i = currentPage - 1; i > 0; i--) {
+                    if (pages.length >= 3) break;
+                    leftPagesExist = true;
+                    pages.push(i);
+                }
+
+                pages.reverse();
+            }
+            markup.push(
+                this._renderPaginationButton(false, 1, 'pagination' + 1, '', 'first_page')
+            );
+
+            if (leftPagesExist) {
+                markup.push(
+                    this._renderPaginationButton(false, currentPage - 1, 'pagination' + 2, '', 'keyboard_arrow_left')
+                );
+            }
+            pages.push(currentPage);
+
+            for (i = currentPage + 1; i <= pagesCount; i++) {
+                if (c >= 3) break;
+                rightPagesExist = true;
+                pages.push(i);
+                c++;
+            }
+            pagesLength = pages.length;
+            for (i = 0; i < pagesLength; i++) {
+                var isCurrentPage = pages[i] == currentPage;
+                markup.push(
+                    this._renderPaginationButton(isCurrentPage, pages[i], 'pagination' + i + 2, pages[i].toString(), false)
+                )
+            }
+
+            if (rightPagesExist) {
+                markup.push(
+                    this._renderPaginationButton(false, currentPage + 1, 'pagination' + pagesLength + 2, '', 'keyboard_arrow_right')
+                );
+            }
+
+            markup.push(
+                this._renderPaginationButton(false, pagesCount, 'pagination' + pagesLength + 3, '', 'last_page')
+            );
+
+            return (
+                <div className="pagination">
+                    {markup}
+                </div>
+            )
+        }
+    },
+
+    /**
+     * Render pagination button
+     * @param isCurrentPage
+     * @param index
+     * @param key
+     * @param label
+     * @param icon
+     * @param primary
+     * @param disabled
+     * @returns {XML}
+     * @private
+     */
+    _renderPaginationButton: function (isCurrentPage, index, key, label, icon) {
+        var className = 'pagination-button';
+        if (icon) label = <i className="material-icons">{icon}</i>;
+        else className += ' page';
+
+        if (isCurrentPage) className += ' selected';
+
+
         return (
-            <h2>Pagination</h2>
+            <div key={key} className={className} onClick={this._paginate.bind(this, index)}>{label}</div>
         )
+    },
+
+    /**
+     * Paginate
+     * @param page
+     * @private
+     */
+    _paginate: function (page) {
+        this.props.paginate(page);
     },
 
     /**

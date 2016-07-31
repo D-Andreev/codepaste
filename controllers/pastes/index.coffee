@@ -7,5 +7,5 @@ module.exports = (ws, msg) ->
   catch error
     return
 
-  Pastes.getPastes q.query, q.sort, (err, res) ->
-    ws.send JSON.stringify res
+  Pastes.getPastes q.query, q.sort, q.pagination, (err, res, totalDocsCount) ->
+    ws.send JSON.stringify {res: res, total: totalDocsCount}

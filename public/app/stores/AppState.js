@@ -43,8 +43,10 @@ var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
 var _pastes = [];
 var _filter = {};
+var _pagination = {skip: 0, limit: 10};
 var _sort = {col: 'created', direction: -1};
 var _socket = null;
+var _totalPastes = 0;
 
 /**
  * Get filter
@@ -53,6 +55,15 @@ var _socket = null;
  */
 function _getFilter() {
     return _filter;
+}
+
+/**
+ * Get pagination
+ * @returns {{skip: number}}
+ * @private
+ */
+function _getPagination() {
+    return _pagination;
 }
 
 /**
@@ -68,6 +79,17 @@ function _getSort() {
 }
 
 /**
+ * Paginate
+ * @param skip
+ * @private
+ */
+function _paginate(skip) {
+    if (skip) _pagination.skip = (skip * _pagination.limit) - _pagination.limit;
+    else _pagination.skip = 0;
+    _sendMessage();
+}
+
+/**
  * Init ws
  * @private
  */
@@ -75,7 +97,11 @@ function _initWs() {
     if (_socket) return;
     _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
     _socket.onopen = function () {
-        _socket.send(JSON.stringify({query: _getFilter(), sort: _getSort()}));
+        _socket.send(JSON.stringify({
+            query: _getFilter(),
+            pagination: _getPagination(),
+            sort: _getSort()
+        }));
     };
     _socket.onmessage = function (event) {
         var data;
@@ -84,11 +110,11 @@ function _initWs() {
         } catch (e) {
             return;
         }
-
-        if (data.action && data.action == 'update') {
+        if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
-            _pastes = JSON.parse(event.data);
+            _pastes = data.res;
+            _totalPastes = data.total;
             AppStateStore.emitChange();
         }
     };
@@ -101,7 +127,11 @@ function _initWs() {
 function _filterAndSort() {
     var filter = {};
     if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
-    _socket.send(JSON.stringify({query: filter, sort: _getSort()}));
+    _socket.send(JSON.stringify({
+        query: filter,
+        pagination: _getPagination(),
+        sort: _getSort()
+    }));
 }
 
 /**
@@ -138,8 +168,12 @@ function _setSearchQuery(message) {
  * @private
  */
 function _sendMessage(message) {
-    _filter = message;
-    _socket.send(JSON.stringify({query: _setSearchQuery(_filter), sort: _getSort()}));
+    _filter = message ? message : '';
+    _socket.send(JSON.stringify({
+        query: _setSearchQuery(_filter),
+        pagination: _getPagination(),
+        sort: _getSort()
+    }));
 }
 
 /**
@@ -631,6 +665,22 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get pagination
+     * @returns {{skip: number}}
+     */
+    getPagination: function () {
+        return _pagination;
+    },
+
+    /**
+     * Get total pastes
+     * @returns {number}
+     */
+    getTotalPastes: function () {
+        return _totalPastes;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -731,7 +781,7 @@ AppDispatcher.register(function(action) {
 
         case Constants.NAVIGATE:
             var path = action.path;
-            var props = action.props;
+            props = action.props;
             _route(path, props);
             AppStateStore.emitChange();
             break;
@@ -778,6 +828,11 @@ AppDispatcher.register(function(action) {
             var col = action.col;
             var direction = action.direction;
             _sortGrid(col, direction);
+            break;
+
+        case Constants.PAGINATE:
+            var skip = action.skip;
+            _paginate(skip);
             break;
 
     default:

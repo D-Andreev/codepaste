@@ -10,7 +10,10 @@ var Grid = React.createClass({
         pastes: ReactPropTypes.array,
         search: ReactPropTypes.func,
         sort: ReactPropTypes.func,
-        sortingOptions: ReactPropTypes.object
+        sortingOptions: ReactPropTypes.object,
+        pagination: ReactPropTypes.object,
+        paginate: ReactPropTypes.func,
+        totalPastes: ReactPropTypes.number
     },
 
 
@@ -40,6 +43,9 @@ var Grid = React.createClass({
                             search={this.props.search}
                             sort={this.props.sort}
                             sortingOptions={this.props.sortingOptions}
+                            pagination={this.props.pagination}
+                            paginate={this.props.paginate}
+                            totalPastes={this.props.totalPastes}
                         />
                     </div>
                 </div>

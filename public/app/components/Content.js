@@ -35,7 +35,10 @@ var Content = React.createClass({
         pastes: ReactPropTypes.array,
         search: ReactPropTypes.func,
         sort: ReactPropTypes.func,
-        sortingOptions: ReactPropTypes.object
+        sortingOptions: ReactPropTypes.object,
+        pagination: ReactPropTypes.object,
+        paginate: ReactPropTypes.func,
+        totalPastes: ReactPropTypes.number
     },
 
 
@@ -89,7 +92,7 @@ var Content = React.createClass({
                         icon="add_circle"
                     />
                     <a
-                        className="mdl-navigation__link"
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'new'})}
                         href="#paste"
                         key="new"
                         onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
@@ -101,7 +104,7 @@ var Content = React.createClass({
                         icon="code"
                     />
                     <a
-                        className="mdl-navigation__link"
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'pastes'})}
                         href="#pastes"
                         key="latest"
                         onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
@@ -113,7 +116,7 @@ var Content = React.createClass({
                         icon="contact_mail"
                     />
                     <a
-                        className="mdl-navigation__link"
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'contacts'})}
                         href="#contacts"
                         key="contacts"
                         onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
@@ -204,6 +207,9 @@ var Content = React.createClass({
                     search={this.props.search}
                     sort={this.props.sort}
                     sortingOptions={this.props.sortingOptions}
+                    pagination={this.props.pagination}
+                    paginate={this.props.paginate}
+                    totalPastes={this.props.totalPastes}
                 />
             </span>
         )

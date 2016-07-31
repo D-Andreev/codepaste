@@ -13,8 +13,11 @@
       error = error1;
       return;
     }
-    return Pastes.getPastes(q.query, q.sort, function(err, res) {
-      return ws.send(JSON.stringify(res));
+    return Pastes.getPastes(q.query, q.sort, q.pagination, function(err, res, totalDocsCount) {
+      return ws.send(JSON.stringify({
+        res: res,
+        total: totalDocsCount
+      }));
     });
   };
 
