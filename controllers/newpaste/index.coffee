@@ -16,5 +16,5 @@ module.exports = express.Router().put routes.newPaste, (req, response) ->
     {statusCode, body} = new Response err, paste, STATUS_CODES.CREATED
     body.user = username: body.user.username
     _.forEach Server.get().ws.getWss().clients, (client) ->
-      client.send JSON.stringify({action: 'update'})
+      client.send JSON.stringify({res: action: 'update'})
     return response.status(statusCode).json body

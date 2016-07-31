@@ -23,7 +23,7 @@ var UserAuth = React.createClass({
                 </div>
                 <div className="mdl-cell mdl-cell--4-col"></div>
             </div>
-        );
+        )
     },
 
     /**
@@ -39,7 +39,7 @@ var UserAuth = React.createClass({
             view = this._renderRegisterFields();
         }
 
-        return (view);
+        return (view)
     },
 
     /**

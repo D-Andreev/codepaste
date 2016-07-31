@@ -24,18 +24,17 @@ var Button = React.createClass({
      * @return {object}
      */
     render: function() {
-        var $this = this;
-        var className = classnames($this.props.className, {
+        var className = classnames(this.props.className, {
             'mdl-button': true,
             'mdl-js-button': true,
-            'mdl-button--raised': $this.props.raised,
-            'mdl-button--fab': $this.props.fab,
-            'mdl-button--mini-fab': $this.props.miniFab,
-            'mdl-button--icon': $this.props.icon,
-            'mdl-button--colored': $this.props.colored,
-            'mdl-button--primary': $this.props.primary,
-            'mdl-button--accent': $this.props.accent,
-            'mdl-js-ripple-effect': $this.props.rippleEffect
+            'mdl-button--raised': this.props.raised,
+            'mdl-button--fab': this.props.fab,
+            'mdl-button--mini-fab': this.props.miniFab,
+            'mdl-button--icon': this.props.icon,
+            'mdl-button--colored': this.props.colored,
+            'mdl-button--primary': this.props.primary,
+            'mdl-button--accent': this.props.accent,
+            'mdl-js-ripple-effect': this.props.rippleEffect
         });
         var label = this.props.label;
         if (this.props.icon) label = <i className="material-icons">{this.props.icon}</i>;
@@ -43,8 +42,8 @@ var Button = React.createClass({
             <button
                 id={this.props.id}
                 className={className}
-                disabled={$this.props.disabled}
-                onClick={$this.props.onClick}>
+                disabled={this.props.disabled}
+                onClick={this.props.onClick}>
                 {label}
             </button>
         );

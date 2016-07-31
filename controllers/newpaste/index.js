@@ -30,7 +30,9 @@
       };
       _.forEach(Server.get().ws.getWss().clients, function(client) {
         return client.send(JSON.stringify({
-          action: 'update'
+          res: {
+            action: 'update'
+          }
         }));
       });
       return response.status(statusCode).json(body);

@@ -225,6 +225,17 @@ var AppStateActions = {
             col: col,
             direction: direction
         });
+    },
+
+    /**
+     * Paginate
+     * @param skip
+     */
+    paginate: function (skip) {
+        AppDispatcher.dispatch({
+            actionType: Constants.PAGINATE,
+            skip: skip
+        });
     }
 };
 

@@ -25,7 +25,9 @@ function getAppState() {
         title: AppStateStore.getTitle(),
         loading: AppStateStore.getLoading(),
         pastes: AppStateStore.getPastes(),
-        sort: AppStateStore.getSort()
+        sort: AppStateStore.getSort(),
+        pagination: AppStateStore.getPagination(),
+        totalPastes: AppStateStore.getTotalPastes()
     };
 }
 
@@ -78,9 +80,9 @@ module.exports = React.createClass({
             <div className={className}>
                 <Spinner loading={this.state.loading} />
                 {this._renderActiveView()}
-                <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>;
+                <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>
             </div>
-        );
+        )
     },
 
     /**
@@ -89,6 +91,7 @@ module.exports = React.createClass({
      * @private
      */
     _renderActiveView: function() {
+        console.log('app', this.state);
         return (
             <span>
                 <Content
@@ -120,9 +123,21 @@ module.exports = React.createClass({
                     search={this._search}
                     sort={this._sort}
                     sortingOptions={this.state.sort}
+                    pagination={this.state.pagination}
+                    paginate={this._paginate}
+                    totalPastes={this.state.totalPastes}
                 />
             </span>
         )
+    },
+
+    /**
+     * Paginate
+     * @param page
+     * @private
+     */
+    _paginate: function (page) {
+        AppStateActions.paginate(page);
     },
 
     /**

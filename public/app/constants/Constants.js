@@ -20,5 +20,6 @@ module.exports = keyMirror({
     SHOW_TOAST: null,
     SET_LOADING: null,
     SEARCH: null,
-    SORT: null
+    SORT: null,
+    PAGINATE: null
 });
