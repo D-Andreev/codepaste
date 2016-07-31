@@ -13,7 +13,7 @@ module.exports = class Singleton
 
   class Tokens
 
-    validate: (req, res, done) ->
+    validateToken: (req, res, done) ->
       token = _getAuthHeader req
       return res.status(STATUS_CODES.UNAUTHORIZED).json {} unless token
 
@@ -36,9 +36,8 @@ module.exports = class Singleton
       options =
         method: 'POST'
         uri: "#{USERS_API_URL}/validate"
-        json: {token}
         headers:
-          'Authorization': "Bearer #{new Buffer(token).toString('base64')}"
+          'Authorization': "Bearer #{token}"
 
       request options, done
 

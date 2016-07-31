@@ -1,6 +1,6 @@
 _ = require 'lodash'
 routes = require './routes'
-{healthCheck, index, register, login, newPaste, paste, pastes} = require '../../controllers'
+{healthCheck, index, register, login, newPaste, paste, pastes, validate} = require '../../controllers'
 {STATUS_CODES} = require '../../lib/constants'
 
 module.exports = class Singleton
@@ -23,6 +23,7 @@ module.exports = class Singleton
       app.put routes.register, register
       app.post routes.login, login
       app.put routes.newPaste, newPaste
+      app.post routes.validate, validate
       app.get routes.paste, paste
       app.ws routes.pastes, (ws) ->
         ws.on 'message', (msg) ->

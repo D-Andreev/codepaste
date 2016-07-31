@@ -6,4 +6,5 @@ module.exports =
   login: new RegExp /\/login$/
   newPaste: new RegExp /\/new$/
   paste: new RegExp /\/paste/
+  validate: new RegExp /\/validate/
   pastes: '/echo'

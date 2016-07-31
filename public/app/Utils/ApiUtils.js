@@ -60,6 +60,16 @@ module.exports = {
     },
 
     /**
+     * Validate token
+     * @param url
+     * @param token
+     * @param done
+     */
+    validateToken: function (url, token, done) {
+        this.request('POST', url + '/validate', false, token, done);
+    },
+
+    /**
      * Request
      * @param method
      * @param url
