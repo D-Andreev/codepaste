@@ -3,10 +3,7 @@ var ReactPropTypes = React.PropTypes;
 var classnames = require('classnames');
 var Icon = require('./Icon');
 var Button = require('./Button');
-
 var moment = require('moment');
-var _ = require('lodash');
-
 
 var Grid = React.createClass({
 
@@ -131,8 +128,6 @@ var Grid = React.createClass({
      * @private
      */
     _renderPaginationButton: function (isCurrentPage, index, key, label, icon) {
-        console.log('a', isCurrentPage, index, key, label, icon)
-
         var className = 'pagination-button';
         if (icon) label = <i className="material-icons">{icon}</i>;
         else className += ' page';

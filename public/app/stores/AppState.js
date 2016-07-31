@@ -98,10 +98,10 @@ function _initWs() {
     _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
     _socket.onopen = function () {
         _socket.send(JSON.stringify({
-                query: _getFilter(),
-                pagination: _getPagination(),
-                sort: _getSort()
-            }));
+            query: _getFilter(),
+            pagination: _getPagination(),
+            sort: _getSort()
+        }));
     };
     _socket.onmessage = function (event) {
         var data;
@@ -110,7 +110,6 @@ function _initWs() {
         } catch (e) {
             return;
         }
-        console.log('onmessage', data);
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {

@@ -91,7 +91,6 @@ module.exports = React.createClass({
      * @private
      */
     _renderActiveView: function() {
-        console.log('app', this.state);
         return (
             <span>
                 <Content
