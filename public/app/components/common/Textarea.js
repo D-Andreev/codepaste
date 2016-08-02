@@ -34,6 +34,7 @@ var Textarea = React.createClass({
                     id={this.props.id}
                     className={textareaClassName}
                     onClick={this.props.onClick}
+                    onChange={this.props.onChange}
                     disabled={this.props.disabled}
                     rows={this.props.rows}
                 >

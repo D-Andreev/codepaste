@@ -27,8 +27,8 @@ var Content = React.createClass({
         viewedPaste: ReactPropTypes.object,
         cmOptions: ReactPropTypes.object,
         onTypeChecked: ReactPropTypes.func,
-        onTitleChange: ReactPropTypes.func,
-        onContentChange: ReactPropTypes.func,
+        onMessageTitleChange: ReactPropTypes.func,
+        onMessageContentChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
         showToast: ReactPropTypes.func
     },
@@ -168,8 +168,8 @@ var Content = React.createClass({
                 <Contacts
                     sendBtnDisabled={this.props.sendBtnDisabled}
                     sendMessage={this.props.sendMessage}
-                    onTitleChange={this.props.onTitleChange}
-                    onContentChange={this.props.onContentChange}
+                    onTitleChange={this.props.onMessageTitleChange}
+                    onContentChange={this.props.onMessageContentChange}
                     user={this.props.user}
                     view={this.props.view}
                     fieldsDisabled={this.props.fieldsDisabled}

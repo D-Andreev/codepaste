@@ -23,7 +23,9 @@ function getAppState() {
         viewedPaste: AppStateStore.getViewedPaste(),
         cmOptions: AppStateStore.getCmOptions(),
         title: AppStateStore.getTitle(),
-        loading: AppStateStore.getLoading()
+        loading: AppStateStore.getLoading(),
+        messageTitle: AppStateStore.getMessageTitle(),
+        messageContent: AppStateStore.getMessageContent()
     };
 }
 
@@ -105,6 +107,8 @@ module.exports = React.createClass({
                     onEmailChange={this._onEmailChange}
                     onFirstNameChange={this._onFirstNameChange}
                     onLastNameChange={this._onLastNameChange}
+                    onMessageTitleChange={this._onMessageTitleChange}
+                    onMessageContentChange={this._onMessageContentChange}
                     register={this._register}
                     login={this._login}
                     changeView={this._changeView}
@@ -120,6 +124,9 @@ module.exports = React.createClass({
                     onTitleChange={this._onTitleChange}
                     title={this.state.title}
                     showToast={this._showToast}
+                    messageTitle={this.state.messageTitle}
+                    messageContent={this.state.messageContent}
+                    sendMessage={this._sendMessage}
                 />
             </span>
         )
@@ -195,6 +202,34 @@ module.exports = React.createClass({
      */
     _onLastNameChange: function(lastName) {
         AppStateActions.setLastName(lastName);
+    },
+
+    /**
+     * On message title change
+     * @param messageTitle
+     * @private
+     */
+    _onMessageTitleChange: function(messageTitle) {
+        AppStateActions.setMessageTitle(messageTitle);
+    },
+
+    /**
+     * On message content change
+     * @param messageContent
+     * @private
+     */
+    _onMessageContentChange: function(messageContent) {
+        AppStateActions.setMessageContent(messageContent);
+    },
+
+    /**
+     * Send message
+     * @param messageTitle
+     * @param messageContent
+     * @private
+     */
+    _sendMessage: function(messageTitle, messageContent) {
+        AppStateActions.sendMessage(messageTitle,messageContent);
     },
 
     /**

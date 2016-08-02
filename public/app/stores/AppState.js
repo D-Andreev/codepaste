@@ -35,13 +35,14 @@ var _toast = '';
 var _toastType = 'notification';
 var _registerBtnDisabled = false;
 var _loginBtnDisabled = false;
-var _sendBtnDisabled = false;
 var _fieldsDisabled = false;
 var _createNewBtnDisabled = false;
 var _pasteId = 0;
 var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
+var _messageTitle='';
+var _messageContent='';
 
 
 /**
@@ -399,30 +400,35 @@ function _setToastNotification(message, type) {
 function _setTitle(title) {
     _title = title;
 }
-function _setSendButtonTimeout() {
-    _sendBtnDisabled = true;
-    _fieldsDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _sendBtnDisabled = false;
-        _fieldsDisabled = false;
-        AppStateStore.emitChange();
-    }, DISABLE_TIMEOUT);
+
+/**
+ * Set message title
+ * @param messageTitle
+ * @private
+ */
+function _setMessageTitle(messageTitle) {
+    _messageTitle = messageTitle;
+}
+
+/**
+ * Set message content
+ * @param messageContent
+ * @private
+ */
+function _setMessageContent(messageContent) {
+    _messageContent = messageContent;
 }
 
 /**
  * Send message
  * @private
  */
-function _sendMessage(title,content) {
-    //_setLoginButtonTimeout();
-    //_setLoading(true);
-    _setSendButtonTimeout();
-    _setLoading(true);
-    console.log(_user);
-    console.log(title);
-    console.log(content);
-    _setLoading(false);
+function _sendMessage(messageTitle,messageContent) {
+    console.log(_user.user.email);
+    console.log(messageTitle);
+    console.log(messageContent);
+    console.log(_messageTitle);
+    console.log(_messageContent);
 }
 
 /**
@@ -508,6 +514,22 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
      */
     getViewedPaste: function () {
         return _viewedPaste;
+    },
+
+    /**
+     * Get viewed paste
+     * @returns {*}
+     */
+    getMessageTitle: function () {
+        return _messageTitle;
+    },
+
+    /**
+     * Get viewed paste
+     * @returns {*}
+     */
+    getMessageContent: function () {
+        return _messageContent;
     },
 
     /**
@@ -671,9 +693,21 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SEND_CONTACT:
-            var title = action.title;
-            var content = action.content;
-            _sendMessage(title,content);
+            var messageTitle = action.messageTitle;
+            var messageContent = action.messageContent;
+            _sendMessage(messageTitle,messageContent);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_MESSAGE_TITLE:
+            messageTitle = action.messageTitle;
+            _setMessageTitle(messageTitle);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_MESSAGE_CONTENT:
+            messageContent = action.messageContent;
+            _setMessageContent(messageContent);
             AppStateStore.emitChange();
             break;
 

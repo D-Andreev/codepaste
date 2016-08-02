@@ -13,7 +13,8 @@ var Contacts = React.createClass({
         user: ReactPropTypes.object,
         fieldsDisabled: ReactPropTypes.bool,
         sendBtnDisabled: ReactPropTypes.bool,
-        onChange: ReactPropTypes.func
+        onContentChange: ReactPropTypes.func,
+        onTitleChange: ReactPropTypes.func
     },
 
     /**
@@ -74,7 +75,7 @@ var Contacts = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
-                onChange={this._onTitleChange()}
+                onChange={this._onTitleChange}
                 value={this.props.title}
                 disabled={this.props.fieldsDisabled}
                 type="text"
@@ -127,7 +128,7 @@ var Contacts = React.createClass({
      * @private
      */
     _onTitleChange: function (e) {
-        //this.props.onTitleChange(e.target.value);
+        this.props.onTitleChange(e.target.value);
     },
 
     /**

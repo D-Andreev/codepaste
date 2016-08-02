@@ -176,6 +176,28 @@ var AppStateActions = {
   },
 
   /**
+   * Set message content
+   * @param messageContent
+   */
+  setMessageContent: function(messageContent) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_MESSAGE_CONTENT,
+      messageContent: messageContent
+    });
+  },
+  
+  /**
+   * Set message title
+   * @param messageTitle
+   */
+  setMessageTitle: function(messageTitle) {
+    AppDispatcher.dispatch({
+      actionType: Constants.SET_MESSAGE_TITLE,
+      messageTitle: messageTitle
+    });
+  },
+
+  /**
    * Show toast
    * @param message
    * @param type
@@ -201,14 +223,14 @@ var AppStateActions = {
 
   /**
    * Send contact
-   * @param title
-   * @param content
+   * @param messageTitle
+   * @param messageContent
    */
-  sendMessage: function(title, content) {
+  sendMessage: function(messageTitle, messageContent) {
     AppDispatcher.dispatch({
       actionType: Constants.SEND_CONTACT,
-      title: title,
-      content: content
+      messageTitle: messageTitle,
+      messageContent: messageContent
     });
   }
 };
