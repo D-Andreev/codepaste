@@ -228,8 +228,8 @@ module.exports = React.createClass({
      * @param messageContent
      * @private
      */
-    _sendMessage: function(messageTitle, messageContent) {
-        AppStateActions.sendMessage(messageTitle,messageContent);
+    _sendMessage: function() {
+        AppStateActions.sendMessage();
     },
 
     /**

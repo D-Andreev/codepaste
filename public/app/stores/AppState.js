@@ -423,10 +423,8 @@ function _setMessageContent(messageContent) {
  * Send message
  * @private
  */
-function _sendMessage(messageTitle,messageContent) {
+function _sendMessage() {
     console.log(_user.user.email);
-    console.log(messageTitle);
-    console.log(messageContent);
     console.log(_messageTitle);
     console.log(_messageContent);
 }
@@ -693,20 +691,18 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SEND_CONTACT:
-            var messageTitle = action.messageTitle;
-            var messageContent = action.messageContent;
-            _sendMessage(messageTitle,messageContent);
+            _sendMessage();
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MESSAGE_TITLE:
-            messageTitle = action.messageTitle;
+            var messageTitle = action.messageTitle;
             _setMessageTitle(messageTitle);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MESSAGE_CONTENT:
-            messageContent = action.messageContent;
+            var messageContent = action.messageContent;
             _setMessageContent(messageContent);
             AppStateStore.emitChange();
             break;

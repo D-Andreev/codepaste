@@ -226,11 +226,9 @@ var AppStateActions = {
    * @param messageTitle
    * @param messageContent
    */
-  sendMessage: function(messageTitle, messageContent) {
+  sendMessage: function() {
     AppDispatcher.dispatch({
-      actionType: Constants.SEND_CONTACT,
-      messageTitle: messageTitle,
-      messageContent: messageContent
+      actionType: Constants.SEND_CONTACT
     });
   }
 };
