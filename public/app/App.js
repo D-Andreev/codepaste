@@ -224,8 +224,6 @@ module.exports = React.createClass({
 
     /**
      * Send message
-     * @param messageTitle
-     * @param messageContent
      * @private
      */
     _sendMessage: function() {

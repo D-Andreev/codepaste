@@ -223,8 +223,6 @@ var AppStateActions = {
 
   /**
    * Send contact
-   * @param messageTitle
-   * @param messageContent
    */
   sendMessage: function() {
     AppDispatcher.dispatch({
