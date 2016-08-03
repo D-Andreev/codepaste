@@ -40,7 +40,7 @@ var Contacts = React.createClass({
     },
 
     /**
-     * Render login fields
+     * Render contact us view
      * @returns {XML}
      * @private
      */
@@ -64,7 +64,7 @@ var Contacts = React.createClass({
     },
 
     /**
-     * Render email field
+     * Render title field
      * @returns {XML}
      * @private
      */
