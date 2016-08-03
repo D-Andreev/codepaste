@@ -132,7 +132,7 @@ var Contacts = React.createClass({
     },
 
     /**
-     * On title change
+     * On content change
      * @param e
      * @private
      */
