@@ -222,11 +222,11 @@ var AppStateActions = {
   },
 
   /**
-   * Send contact
+   * Send message
    */
   sendMessage: function() {
     AppDispatcher.dispatch({
-      actionType: Constants.SEND_CONTACT
+      actionType: Constants.SEND_MESSAGE
     });
   }
 };

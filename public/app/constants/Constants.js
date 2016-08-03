@@ -19,7 +19,7 @@ module.exports = keyMirror({
   CHANGE_TITLE: null,
   SHOW_TOAST: null,
   SET_LOADING: null,
-  SEND_CONTACT: null,
+  SEND_MESSAGE: null,
   SET_MESSAGE_TITLE: null,
   SET_MESSAGE_CONTENT: null
 });

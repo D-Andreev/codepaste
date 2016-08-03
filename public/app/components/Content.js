@@ -27,10 +27,14 @@ var Content = React.createClass({
         viewedPaste: ReactPropTypes.object,
         cmOptions: ReactPropTypes.object,
         onTypeChecked: ReactPropTypes.func,
+        title: ReactPropTypes.string,
+        showToast: ReactPropTypes.func,
         onMessageTitleChange: ReactPropTypes.func,
         onMessageContentChange: ReactPropTypes.func,
-        title: ReactPropTypes.string,
-        showToast: ReactPropTypes.func
+        messageTitle: ReactPropTypes.string,
+        messageContent: ReactPropTypes.string,
+        sendMessage: ReactPropTypes.func,
+        sendMessageBtnDisabled: ReactPropTypes.bool
     },
 
 
@@ -166,12 +170,10 @@ var Content = React.createClass({
                     hidden={userAuthHidden}
                 />
                 <Contacts
-                    sendBtnDisabled={this.props.sendBtnDisabled}
+                    sendBtnDisabled={this.props.sendMessageBtnDisabled}
                     sendMessage={this.props.sendMessage}
                     onTitleChange={this.props.onMessageTitleChange}
                     onContentChange={this.props.onMessageContentChange}
-                    user={this.props.user}
-                    view={this.props.view}
                     fieldsDisabled={this.props.fieldsDisabled}
                     hidden={contactsHidden}
                 />

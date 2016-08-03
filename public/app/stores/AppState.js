@@ -41,8 +41,8 @@ var _pasteId = 0;
 var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
-var _messageTitle='';
-var _messageContent='';
+var _message = {title: '', content: ''};
+var _sendMessageBtnDisabled= false;
 
 
 /**
@@ -220,6 +220,19 @@ function _setCreateNewButtonTimeout() {
     AppStateStore.emitChange();
     setTimeout(function() {
         _createNewBtnDisabled = false;
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
+
+/**
+ * Set send message timeout
+ * @private
+ */
+function _setSendMessageButtonTimeout() {
+    _sendMessageBtnDisabled = true;
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        _sendMessageBtnDisabled = false;
         AppStateStore.emitChange();
     }, DISABLE_TIMEOUT);
 }
@@ -407,7 +420,7 @@ function _setTitle(title) {
  * @private
  */
 function _setMessageTitle(messageTitle) {
-    _messageTitle = messageTitle;
+    _message.title = messageTitle;
 }
 
 /**
@@ -416,7 +429,7 @@ function _setMessageTitle(messageTitle) {
  * @private
  */
 function _setMessageContent(messageContent) {
-    _messageContent = messageContent;
+    _message.content = messageContent;
 }
 
 /**
@@ -424,9 +437,25 @@ function _setMessageContent(messageContent) {
  * @private
  */
 function _sendMessage() {
-    console.log(_user.user.email);
-    console.log(_messageTitle);
-    console.log(_messageContent);
+    _setSendMessageButtonTimeout();
+    _setLoading(true);
+
+    if (!_message.title|| !_message.content) {
+        _setToastNotification('Title and content are required.', 'warning');
+        return AppStateStore.emitChange();
+    }
+
+    ApiUtils.sendMessage(_url, _user, _message, function(err, res) {
+        if (err) {
+            _setLoading(false);
+            _setToastNotification('Service error!', 'error');
+            return AppStateStore.emitChange();
+        }
+
+        _setToastNotification('Message sent.', 'success');
+        _setLoading(false);
+        _setView('pastes');
+    });
 }
 
 /**
@@ -507,6 +536,14 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get send message button disabled
+     * @returns {*}
+     */
+    getSendMessageBtnDisabled: function () {
+        return _sendMessageBtnDisabled;
+    },
+
+    /**
      * Get viewed paste
      * @returns {*}
      */
@@ -515,19 +552,19 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
-     * Get viewed paste
+     * Get message title
      * @returns {*}
      */
     getMessageTitle: function () {
-        return _messageTitle;
+        return _message.title;
     },
 
     /**
-     * Get viewed paste
+     * Get message content
      * @returns {*}
      */
     getMessageContent: function () {
-        return _messageContent;
+        return _message.content;
     },
 
     /**
@@ -690,9 +727,8 @@ AppDispatcher.register(function(action) {
             AppStateStore.emitChange();
             break;
 
-        case Constants.SEND_CONTACT:
+        case Constants.SEND_MESSAGE:
             _sendMessage();
-            AppStateStore.emitChange();
             break;
 
         case Constants.SET_MESSAGE_TITLE:

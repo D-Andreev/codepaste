@@ -25,7 +25,8 @@ function getAppState() {
         title: AppStateStore.getTitle(),
         loading: AppStateStore.getLoading(),
         messageTitle: AppStateStore.getMessageTitle(),
-        messageContent: AppStateStore.getMessageContent()
+        messageContent: AppStateStore.getMessageContent(),
+        sendMessageBtnDisabled: AppStateStore.getSendMessageBtnDisabled()
     };
 }
 
@@ -127,6 +128,7 @@ module.exports = React.createClass({
                     messageTitle={this.state.messageTitle}
                     messageContent={this.state.messageContent}
                     sendMessage={this._sendMessage}
+                    sendMessageBtnDisabled={this.state.sendMessageBtnDisabled}
                 />
             </span>
         )

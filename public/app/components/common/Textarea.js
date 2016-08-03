@@ -11,7 +11,8 @@ var Textarea = React.createClass({
         onChange: ReactPropTypes.func,
         floatingLabel: ReactPropTypes.bool,
         disabled: ReactPropTypes.bool,
-        rows: ReactPropTypes.number
+        rows: ReactPropTypes.number,
+        label: ReactPropTypes.string
     },
 
     /**
@@ -33,6 +34,7 @@ var Textarea = React.createClass({
                 <textarea
                     id={this.props.id}
                     className={textareaClassName}
+                    label={this.props.label}
                     onClick={this.props.onClick}
                     onChange={this.props.onChange}
                     disabled={this.props.disabled}
