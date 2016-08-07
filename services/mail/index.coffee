@@ -9,6 +9,7 @@ module.exports = class Singleton
   class Mail
 
     send: (opts, done) ->
+      console.log 'send mail service', opts, process.env
       return done new Error() unless opts.user and opts.message and opts.title
 
       async.waterfall [

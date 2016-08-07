@@ -19,6 +19,7 @@
       function Mail() {}
 
       Mail.prototype.send = function(opts, done) {
+        console.log('send mail service', opts, process.env);
         if (!(opts.user && opts.message && opts.title)) {
           return done(new Error());
         }

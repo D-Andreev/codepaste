@@ -300,7 +300,9 @@ function _createNew(value, title, mode) {
 
     ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
         if (err) {
-            _setView
+            _setLoading(false);
+            _setToastNotification('Service error!', 'error');
+            AppStateStore.emitChange();
         }
         if (response) {
             _pasteId = response._id;
