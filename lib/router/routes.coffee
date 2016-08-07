@@ -8,3 +8,4 @@ module.exports =
   paste: new RegExp /\/paste/
   validate: new RegExp /\/validate/
   pastes: '/echo'
+  contacts: new RegExp /\/contacts/

@@ -236,7 +236,7 @@ function _route(path, viewProps) {
                     if (err) {
                         if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
                         if (err.status == 401) return _logout();
-                        else if (err.status == 404) return _setToastNotification('User does not exist!', 'error');
+                        else if (err.status == 404) return _setToastNotification('Paste does not exist!', 'error');
                     }
                     _viewedPaste = response;
                     _title = response.title;
@@ -300,8 +300,7 @@ function _createNew(value, title, mode) {
 
     ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
         if (err) {
-            _setLoading(false);
-            return _setToastNotification('Service error!', 'error');
+            _setView
         }
         if (response) {
             _pasteId = response._id;

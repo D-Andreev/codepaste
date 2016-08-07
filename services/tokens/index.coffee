@@ -1,6 +1,6 @@
 request = require 'request'
-{STATUS_CODES} = require '../../lib/constants'
-{USERS_API_URL} = require '../../lib/constants'
+{STATUS_CODES, USERS_API_URL} = require '../../lib/constants'
+
 
 _getAuthHeader = (req) ->
   header = req.get 'Authorization'

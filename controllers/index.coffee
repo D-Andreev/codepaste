@@ -7,3 +7,4 @@ module.exports =
   paste: require './paste'
   pastes: require './pastes'
   validate: require './validate'
+  contacts: require './contacts'
