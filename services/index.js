@@ -2,7 +2,8 @@
 (function() {
   module.exports = {
     Users: require('./users'),
-    Tokens: require('./tokens')
+    Tokens: require('./tokens'),
+    Mail: require('./mail')
   };
 
 }).call(this);
