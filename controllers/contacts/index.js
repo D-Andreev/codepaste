@@ -13,9 +13,8 @@
   Mail = require('../../services').Mail;
 
   module.exports = express.Router().post(routes.contacts, function(req, response) {
-    return Mail.sendMail(req.body, function(err, res) {
+    return Mail.get().send(req.body, function(err, res) {
       var body, ref, statusCode;
-      console.log('mail sent', err, res);
       ref = new Response(err, res, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
       return response.status(statusCode).send(body);
     });

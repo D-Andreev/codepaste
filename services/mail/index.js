@@ -6,7 +6,7 @@
 
   nodemailer = require('nodemailer');
 
-  transporter = nodemailer.createTransport("smtps://" + process.env.USER + ".com:" + process.env.PASS + "@smtp.gmail.com");
+  transporter = nodemailer.createTransport("smtps://" + process.env.USER + "%40gmail.com:" + process.env.PASS + "@smtp.gmail.com");
 
   module.exports = Singleton = (function() {
     var Mail, instance;
@@ -19,7 +19,6 @@
       function Mail() {}
 
       Mail.prototype.send = function(opts, done) {
-        console.log('send mail service', opts, process.env);
         if (!(opts.user && opts.message && opts.title)) {
           return done(new Error());
         }
@@ -29,24 +28,22 @@
               var mailOpts;
               mailOpts = {
                 from: process.env.USER,
-                to: process.env.USER,
+                to: process.env.USER + "@gmail.com",
                 subject: "Codepaste message: " + opts.title,
                 text: _this._getText(opts)
               };
               return transporter.sendMail(mailOpts, next);
             };
-          })(this), (function(_this) {
-            return function(next) {
-              var mailOpts;
-              mailOpts = {
-                from: process.env.USER,
-                to: opts.user.email,
-                subject: 'Codepaste',
-                text: 'Your message has been sent.'
-              };
-              return transporter.sendMail(mailOpts, next);
+          })(this), function(response, next) {
+            var mailOpts;
+            mailOpts = {
+              from: process.env.USER + "@gmail.com",
+              to: opts.user.email,
+              subject: 'Codepaste',
+              text: 'Your message has been sent.'
             };
-          })(this)
+            return transporter.sendMail(mailOpts, next);
+          }
         ], done);
       };
 
@@ -54,7 +51,7 @@
         var now, user;
         now = new Date();
         user = JSON.stringify(opts.user);
-        return now + "/n" + user + "/n/n" + opts.message;
+        return now + " " + user + " " + opts.message;
       };
 
       return Mail;

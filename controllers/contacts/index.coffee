@@ -6,7 +6,6 @@ Response = require '../../lib/response/index'
 
 
 module.exports = express.Router().post routes.contacts, (req, response) ->
-  Mail.sendMail req.body, (err, res) ->
-    console.log 'mail sent', err, res
+  Mail.get().send req.body, (err, res) ->
     {statusCode, body} = new Response err, res, STATUS_CODES.OK
     return response.status(statusCode).send body
