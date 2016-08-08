@@ -57,6 +57,20 @@ module.exports = {
     },
 
     /**
+     * Send message
+     * @param url
+     * @param user
+     * @param message
+     * @param done
+     */
+    sendMessage: function (url, user, message, done) {
+        var data = {user: user, title: message.title, content: message.content};
+        this.request('POST', url + '/login', data, function(err, res) {
+            done(err, res);
+        });
+    },
+
+    /**
      * Request
      * @param method
      * @param url
