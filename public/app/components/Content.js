@@ -201,6 +201,11 @@ var Content = React.createClass({
                     sendBtnDisabled={this.props.sendMessageBtnDisabled}
                     sendMessage={this.props.sendMessage}
                     onTitleChange={this.props.onMessageTitleChange}
+                    hidden={contactsHidden}
+
+                />
+                <Grid
+                    hidden={gridHidden}
                     onActionClick={this.props.onActionClick}
                     pastes={this.props.pastes}
                     search={this.props.search}
