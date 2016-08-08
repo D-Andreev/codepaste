@@ -78,7 +78,7 @@ module.exports = {
      */
     sendMessage: function (url, user, message, done) {
         var data = {user: user, title: message.title, message: message.content};
-        this.request('POST', url + '/contacts', data, function(err, res) {
+        this.request('POST', url + '/contacts', data, false, function(err, res) {
             done(err, res);
         });
     },

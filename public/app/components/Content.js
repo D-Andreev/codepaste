@@ -38,7 +38,9 @@ var Content = React.createClass({
         sortingOptions: ReactPropTypes.object,
         pagination: ReactPropTypes.object,
         paginate: ReactPropTypes.func,
-        totalPastes: ReactPropTypes.number
+        totalPastes: ReactPropTypes.number,
+        onMessageTitleChange: ReactPropTypes.func,
+        onMessageContentChange: ReactPropTypes.func
     },
 
 
@@ -201,6 +203,7 @@ var Content = React.createClass({
                     sendBtnDisabled={this.props.sendMessageBtnDisabled}
                     sendMessage={this.props.sendMessage}
                     onTitleChange={this.props.onMessageTitleChange}
+                    onContentChange={this.props.onMessageContentChange}
                     hidden={contactsHidden}
 
                 />

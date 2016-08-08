@@ -47,6 +47,8 @@ var _pagination = {skip: 0, limit: 10};
 var _sort = {col: 'created', direction: -1};
 var _socket = null;
 var _totalPastes = 0;
+var _message= {title:'',content:''};
+var _sendMessageBtnDisabled=false;
 
 /**
  * Get filter
