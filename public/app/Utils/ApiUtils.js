@@ -107,7 +107,7 @@ module.exports = {
                 error: function(error) {
                     done(error, false);
                 }
-            });
+        });
     },
 
     /**
