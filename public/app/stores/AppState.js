@@ -624,7 +624,7 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
      * @returns {string}
      */
     getView: function () {
-      return _view;
+        return _view;
     },
 
     /**
@@ -778,15 +778,15 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
-    * @param {function} callback
-    */
+     * @param {function} callback
+     */
     addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback);
     },
 
     /**
-    * @param {function} callback
-    */
+     * @param {function} callback
+     */
     removeChangeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback);
     }
@@ -926,23 +926,23 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SEND_MESSAGE:
-			_sendMessage();
-			break;
+            _sendMessage();
+            break;
 
-		case Constants.SET_MESSAGE_TITLE:
-			var messageTitle = action.messageTitle;
-			_setMessageTitle(messageTitle);
-			AppStateStore.emitChange();
-			break;
+        case Constants.SET_MESSAGE_TITLE:
+            var messageTitle = action.messageTitle;
+            _setMessageTitle(messageTitle);
+            AppStateStore.emitChange();
+            break;
 
-		case Constants.SET_MESSAGE_CONTENT:
-			var messageContent = action.messageContent;
-			_setMessageContent(messageContent);
-			AppStateStore.emitChange();
-			break;
+        case Constants.SET_MESSAGE_CONTENT:
+            var messageContent = action.messageContent;
+            _setMessageContent(messageContent);
+            AppStateStore.emitChange();
+            break;
 
-    default:
-      // no op
+        default:
+        // no op
     }
 });
 
