@@ -236,6 +236,37 @@ var AppStateActions = {
             actionType: Constants.PAGINATE,
             skip: skip
         });
+    },
+
+    /**
+     * Set message content
+     * @param messageContent
+     */
+    setMessageContent: function(messageContent) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_MESSAGE_CONTENT,
+            messageContent: messageContent
+        });
+    },
+
+    /**
+     * Set message title
+     * @param messageTitle
+     */
+    setMessageTitle: function(messageTitle) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_MESSAGE_TITLE,
+            messageTitle: messageTitle
+        });
+    },
+
+    /**
+     * Send message
+     */
+    sendMessage: function() {
+        AppDispatcher.dispatch({
+            actionType: Constants.SEND_MESSAGE
+        });
     }
 };
 

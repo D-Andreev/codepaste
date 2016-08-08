@@ -27,7 +27,10 @@ function getAppState() {
         pastes: AppStateStore.getPastes(),
         sort: AppStateStore.getSort(),
         pagination: AppStateStore.getPagination(),
-        totalPastes: AppStateStore.getTotalPastes()
+        totalPastes: AppStateStore.getTotalPastes(),
+        messageTitle: AppStateStore.getMessageTitle(),
+        messageContent: AppStateStore.getMessageContent(),
+        sendMessageBtnDisabled: AppStateStore.getSendMessageBtnDisabled()
     };
 }
 
@@ -125,6 +128,9 @@ module.exports = React.createClass({
                     pagination={this.state.pagination}
                     paginate={this._paginate}
                     totalPastes={this.state.totalPastes}
+                    onMessageContentChange={this._onMessageContentChange}
+                    onMessageTitleChange={this._onMessageTitleChange}
+                    sendMessage={this._sendMessage}
                 />
             </span>
         )
@@ -304,6 +310,34 @@ module.exports = React.createClass({
      */
     _onTitleChange: function(title) {
         AppStateActions.changeTitle(title);
+    },
+
+    /**
+     * On message title change
+     * @param messageTitle
+     * @private
+     */
+    _onMessageTitleChange: function(messageTitle) {
+        AppStateActions.setMessageTitle(messageTitle);
+    },
+
+    /**
+     * On message content change
+     * @param messageContent
+     * @private
+     */
+    _onMessageContentChange: function(messageContent) {
+        AppStateActions.setMessageContent(messageContent);
+    },
+
+    /**
+     * Send message
+     * @param messageTitle
+     * @param messageContent
+     * @private
+     */
+    _sendMessage: function(messageTitle, messageContent) {
+        AppStateActions.sendMessage(messageTitle,messageContent);
     },
 
     /**

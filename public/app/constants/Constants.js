@@ -21,5 +21,8 @@ module.exports = keyMirror({
     SET_LOADING: null,
     SEARCH: null,
     SORT: null,
-    PAGINATE: null
+    PAGINATE: null,
+    SEND_MESSAGE: null,
+    SET_MESSAGE_TITLE: null,
+    SET_MESSAGE_CONTENT: null
 });
