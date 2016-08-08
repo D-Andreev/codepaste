@@ -24,6 +24,10 @@ function getAppState() {
         cmOptions: AppStateStore.getCmOptions(),
         title: AppStateStore.getTitle(),
         loading: AppStateStore.getLoading(),
+        pastes: AppStateStore.getPastes(),
+        sort: AppStateStore.getSort(),
+        pagination: AppStateStore.getPagination(),
+        totalPastes: AppStateStore.getTotalPastes(),
         messageTitle: AppStateStore.getMessageTitle(),
         messageContent: AppStateStore.getMessageContent(),
         sendMessageBtnDisabled: AppStateStore.getSendMessageBtnDisabled()
@@ -41,14 +45,7 @@ module.exports = React.createClass({
      * @returns {{view: string, user: {username: string, password: string, email: string}}}
      */
     getInitialState: function() {
-        return {
-            view: 'login',
-            user: {
-                username: '',
-                password: '',
-                email: ''
-            }
-        }
+        return getAppState();
     },
 
     /**
@@ -86,9 +83,9 @@ module.exports = React.createClass({
             <div className={className}>
                 <Spinner loading={this.state.loading} />
                 {this._renderActiveView()}
-                <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>;
+                <Toast toast={toast} type={this.state.toastType} show={show} callback={this._onToastDone}/>
             </div>
-        );
+        )
     },
 
     /**
@@ -108,8 +105,6 @@ module.exports = React.createClass({
                     onEmailChange={this._onEmailChange}
                     onFirstNameChange={this._onFirstNameChange}
                     onLastNameChange={this._onLastNameChange}
-                    onMessageTitleChange={this._onMessageTitleChange}
-                    onMessageContentChange={this._onMessageContentChange}
                     register={this._register}
                     login={this._login}
                     changeView={this._changeView}
@@ -125,13 +120,54 @@ module.exports = React.createClass({
                     onTitleChange={this._onTitleChange}
                     title={this.state.title}
                     showToast={this._showToast}
-                    messageTitle={this.state.messageTitle}
-                    messageContent={this.state.messageContent}
-                    sendMessage={this._sendMessage}
-                    sendMessageBtnDisabled={this.state.sendMessageBtnDisabled}
+                    onActionClick={this._onActionClick}
+                    pastes={this.state.pastes}
+                    search={this._search}
+                    sort={this._sort}
+                    sortingOptions={this.state.sort}
+                    pagination={this.state.pagination}
+                    paginate={this._paginate}
+                    totalPastes={this.state.totalPastes}
                 />
             </span>
         )
+    },
+
+    /**
+     * Paginate
+     * @param page
+     * @private
+     */
+    _paginate: function (page) {
+        AppStateActions.paginate(page);
+    },
+
+    /**
+     * Sort
+     * @param col
+     * @param direction
+     * @private
+     */
+    _sort: function(col, direction) {
+        AppStateActions.sort(col, direction);
+    },
+
+    /**
+     * Search
+     * @param query
+     * @private
+     */
+    _search: function (query) {
+        AppStateActions.search(query);
+    },
+
+    /**
+     * On Action click
+     * @param row
+     * @private
+     */
+    _onActionClick: function (row) {
+        AppStateActions.navigate('paste', {id: row._id});
     },
 
     /**
@@ -204,32 +240,6 @@ module.exports = React.createClass({
      */
     _onLastNameChange: function(lastName) {
         AppStateActions.setLastName(lastName);
-    },
-
-    /**
-     * On message title change
-     * @param messageTitle
-     * @private
-     */
-    _onMessageTitleChange: function(messageTitle) {
-        AppStateActions.setMessageTitle(messageTitle);
-    },
-
-    /**
-     * On message content change
-     * @param messageContent
-     * @private
-     */
-    _onMessageContentChange: function(messageContent) {
-        AppStateActions.setMessageContent(messageContent);
-    },
-
-    /**
-     * Send message
-     * @private
-     */
-    _sendMessage: function() {
-        AppStateActions.sendMessage();
     },
 
     /**

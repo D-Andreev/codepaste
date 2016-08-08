@@ -4,7 +4,7 @@
 
   request = require('request');
 
-  USERS_API_URL = 'http://162.243.123.212';
+  USERS_API_URL = require('../../lib/constants').USERS_API_URL;
 
   module.exports = Singleton = (function() {
     var Users, instance;

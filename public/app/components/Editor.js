@@ -161,10 +161,11 @@ var Editor = React.createClass({
         if (this.props.view == 'paste') {
             inputHidden = true;
             listHidden = false;
+            var date = moment(this.props.viewedPaste.created).format('MMMM Do YYYY, h:mm:ss a');
             items = [
                 {label: this.props.viewedPaste.user.username, icon: 'account_circle'},
                 {label: this.props.viewedPaste.mode, icon: 'code'},
-                {label: moment(this.props.viewedPaste.created).format('MMMM Do YYYY, h:mm:ss a'), icon: 'schedule'}
+                {label: date, icon: 'schedule'}
             ]
         }
 
@@ -176,7 +177,8 @@ var Editor = React.createClass({
                     onChange={this._onTitleChange}
                     floatingLabel={true}
                     type="text"
-                    pattern="\w{0,20}"
+                    pattern="(.)+"
+                    maxLength="20"
                     label="Title"
                 />
                 <List
@@ -190,6 +192,7 @@ var Editor = React.createClass({
                     icon="content_copy"
                     text={this.state.copyValue}
                     hidden={listHidden}
+                    title="Copy"
                 />
             </span>
         )

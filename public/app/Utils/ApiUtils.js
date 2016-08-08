@@ -1,4 +1,6 @@
 var $ = require('jquery');
+var _ = require('lodash');
+var Base64 = require('js-base64').Base64;
 
 module.exports = {
     /**
@@ -11,7 +13,7 @@ module.exports = {
      */
     register: function(url, username, email, password, done) {
         var data = {username: username, email: email, password: password};
-        this.request('PUT', url + '/register', data, function(err, res) {
+        this.request('PUT', url + '/register', data, false, function(err, res) {
             done(err, res);
         });
     },

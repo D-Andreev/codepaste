@@ -23,7 +23,7 @@ var UserAuth = React.createClass({
                 </div>
                 <div className="mdl-cell mdl-cell--4-col"></div>
             </div>
-        );
+        )
     },
 
     /**
@@ -49,7 +49,7 @@ var UserAuth = React.createClass({
      */
     _getTitle: function() {
         if (this.props.view == 'login') {
-            return 'Welcome to Code paste'
+            return 'Welcome to Code Paste'
         } else if (this.props.view == 'registration') {
             return 'Register'
         }

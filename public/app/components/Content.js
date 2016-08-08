@@ -5,6 +5,7 @@ var Editor = require('../components/Editor');
 var Grid = require('../components/Grid');
 var UserAuth = require('../components/UserAuth');
 var Contacts = require('../components/Contacts');
+var Icon = require('../components/common/Icon');
 
 var Content = React.createClass({
 
@@ -27,14 +28,17 @@ var Content = React.createClass({
         viewedPaste: ReactPropTypes.object,
         cmOptions: ReactPropTypes.object,
         onTypeChecked: ReactPropTypes.func,
+        onTitleChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
         showToast: ReactPropTypes.func,
-        onMessageTitleChange: ReactPropTypes.func,
-        onMessageContentChange: ReactPropTypes.func,
-        messageTitle: ReactPropTypes.string,
-        messageContent: ReactPropTypes.string,
-        sendMessage: ReactPropTypes.func,
-        sendMessageBtnDisabled: ReactPropTypes.bool
+        onActionClick: ReactPropTypes.func,
+        pastes: ReactPropTypes.array,
+        search: ReactPropTypes.func,
+        sort: ReactPropTypes.func,
+        sortingOptions: ReactPropTypes.object,
+        pagination: ReactPropTypes.object,
+        paginate: ReactPropTypes.func,
+        totalPastes: ReactPropTypes.number
     },
 
 
@@ -47,25 +51,20 @@ var Content = React.createClass({
         });
         var username = '';
         if (this.props.user.user) username = this.props.user.user.username;
-        var items = this._getItems();
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <header className={className}>
                     <div className="mdl-layout__header-row">
                         <span className="mdl-layout-title">Code paste</span>
                         <div className="mdl-layout-spacer"></div>
-                        <nav className="mdl-navigation mdl-layout--large-screen-only">
-                            {items}
-                        </nav>
+                        {this._getItems(true)}
                     </div>
                 </header>
                 <div className="mdl-layout__drawer">
                         <span className="mdl-layout-title drawer-title">
                             {username}
                         </span>
-                    <nav className="mdl-navigation">
-                        {items}
-                    </nav>
+                    {this._getItems()}
                 </div>
                 <main className="mdl-layout__content">
                     <div className="page-content">
@@ -78,36 +77,65 @@ var Content = React.createClass({
 
     /**
      * Get items
-     * @returns {XML[]}
+     * @param largeScreenOnly
+     * @returns {XML}
      * @private
      */
-    _getItems: function() {
-        return [
-            <a
-                className="mdl-navigation__link"
-                href="#paste"
-                key="new"
-                onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#pastes"
-                key="latest"
-                onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#contacts"
-                key="contacts"
-                onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
-            </a>,
-            <a
-                className="mdl-navigation__link"
-                href="#logout"
-                key="logout"
-                onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
-            </a>
-        ];
+    _getItems: function(largeScreenOnly) {
+        var className = 'mdl-navigation';
+        if (largeScreenOnly) className += ' mdl-layout--large-screen-only';
+        return (
+            <nav className={className}>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="add_circle"
+                    />
+                    <a
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'new'})}
+                        href="#paste"
+                        key="new"
+                        onClick={this._onNavigationLinkClick.bind(this, 'New')}>{'New'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="code"
+                    />
+                    <a
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'pastes'})}
+                        href="#pastes"
+                        key="latest"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Pastes')}>{'Pastes'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="contact_mail"
+                    />
+                    <a
+                        className={classnames("mdl-navigation__link", {selected: this.props.view == 'contacts'})}
+                        href="#contacts"
+                        key="contacts"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Contacts')}>{'Contacts'}
+                    </a>
+                </span>
+                <span className="drawer-nav-item">
+                    <Icon
+                        wrapperClassName="drawer-nav-item-icon"
+                        icon="exit_to_app"
+                    />
+                    <a
+                        className="mdl-navigation__link"
+                        href="#logout"
+                        key="logout"
+                        onClick={this._onNavigationLinkClick.bind(this, 'Logout')}>{'Logout'}
+                    </a>
+                </span>
+            </nav>
+        )
     },
 
     /**
@@ -173,12 +201,14 @@ var Content = React.createClass({
                     sendBtnDisabled={this.props.sendMessageBtnDisabled}
                     sendMessage={this.props.sendMessage}
                     onTitleChange={this.props.onMessageTitleChange}
-                    onContentChange={this.props.onMessageContentChange}
-                    fieldsDisabled={this.props.fieldsDisabled}
-                    hidden={contactsHidden}
-                />
-                <Grid
-                    hidden={gridHidden}
+                    onActionClick={this.props.onActionClick}
+                    pastes={this.props.pastes}
+                    search={this.props.search}
+                    sort={this.props.sort}
+                    sortingOptions={this.props.sortingOptions}
+                    pagination={this.props.pagination}
+                    paginate={this.props.paginate}
+                    totalPastes={this.props.totalPastes}
                 />
             </span>
         )

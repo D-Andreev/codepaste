@@ -14,3 +14,5 @@ module.exports =
 
   VIEWS:
     INDEX: 'index'
+
+  USERS_API_URL: 'http://162.243.123.212'

@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactPropTypes = React.PropTypes;
 var Button = require('./common/Button');
 var Input = require('./common/Input');
 var Textarea = require('./common/Textarea');
@@ -40,7 +39,7 @@ var Contacts = React.createClass({
     },
 
     /**
-     * Render contact us view
+     * Render login fields
      * @returns {XML}
      * @private
      */
@@ -64,7 +63,7 @@ var Contacts = React.createClass({
     },
 
     /**
-     * Render title field
+     * Render email field
      * @returns {XML}
      * @private
      */
@@ -75,12 +74,19 @@ var Contacts = React.createClass({
                 className="title"
                 label="Title"
                 floatingLabel={true}
-                onChange={this._onTitleChange}
-                value={this.props.title}
-                disabled={this.props.fieldsDisabled}
                 type="text"
+                onChange={this._onChange}
             />
         )
+    },
+
+    /**
+     * On title change
+     * @param e
+     * @private
+     */
+    _onTitleChange: function (e) {
+
     },
 
     /**
@@ -94,13 +100,20 @@ var Contacts = React.createClass({
                 id="content"
                 className="content"
                 label="Content"
-                onChange={this._onContentChange}
-                value={this.props.content}
                 floatingLabel={true}
-                disabled={this.props.fieldsDisabled}
+                onChange={this._onTextareaChange}
                 rows={10}
             />
         )
+    },
+
+    /**
+     * On textarea change
+     * @param e
+     * @private
+     */
+    _onTextareaChange: function (e) {
+
     },
 
     /**
@@ -112,32 +125,13 @@ var Contacts = React.createClass({
         return (
             <Button
                 className="button"
-                label="Send message"
+                label="Send"
                 raised={true}
                 rippleEffect={true}
                 primary={true}
                 onClick={this._send}
-                disabled={this.props.sendBtnDisabled}
             />
         )
-    },
-
-    /**
-     * On title change
-     * @param e
-     * @private
-     */
-    _onTitleChange: function (e) {
-        this.props.onTitleChange(e.target.value);
-    },
-
-    /**
-     * On content change
-     * @param e
-     * @private
-     */
-    _onContentChange: function (e) {
-        this.props.onContentChange(e.target.value);
     },
 
     /**
@@ -145,7 +139,7 @@ var Contacts = React.createClass({
      * @private
      */
     _send: function () {
-        this.props.sendMessage();
+        //TODO: add send functionality
     }
 });
 

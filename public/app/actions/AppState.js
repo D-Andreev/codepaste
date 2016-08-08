@@ -3,223 +3,262 @@ var Constants = require('../constants/Constants');
 
 var AppStateActions = {
 
-  /**
-   * @param  {object} props
-   */
-  init: function(props) {
-    AppDispatcher.dispatch({
-      actionType: Constants.INIT,
-      props: props
-    });
-  },
-
-  /**
-   * Set username
-   * @param username
+    /**
+     * @param  {object} props
      */
-  setUsername: function(username) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_USERNAME,
-      username: username
-    });
-  },
+    init: function(props) {
+        AppDispatcher.dispatch({
+            actionType: Constants.INIT,
+            props: props
+        });
+    },
 
-  /**
-   * Set first name
-   * @param firstName
+    /**
+     * Set username
+     * @param username
      */
-  setFirstName: function(firstName) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_FIRST_NAME,
-      firstName: firstName
-    });
-  },
+    setUsername: function(username) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_USERNAME,
+            username: username
+        });
+    },
 
-  /**
-   * Set last name
-   * @param lastName
+    /**
+     * Set first name
+     * @param firstName
      */
-  setLastName: function(lastName) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_LAST_NAME,
-      lastName: lastName
-    });
-  },
+    setFirstName: function(firstName) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_FIRST_NAME,
+            firstName: firstName
+        });
+    },
 
-  /**
-   * set Password
-   * @param password
+    /**
+     * Set last name
+     * @param lastName
      */
-  setPassword: function(password) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_PASSWORD,
-      password: password
-    });
-  },
+    setLastName: function(lastName) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_LAST_NAME,
+            lastName: lastName
+        });
+    },
 
-  /**
-   * Set email
-   * @param email
+    /**
+     * set Password
+     * @param password
      */
-  setEmail: function(email) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_EMAIL,
-      email: email
-    });
-  },
+    setPassword: function(password) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_PASSWORD,
+            password: password
+        });
+    },
 
-  /**
-   * Set view
-   * @param view
+    /**
+     * Set email
+     * @param email
      */
-  setView: function(view) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_VIEW,
-      view: view
-    });
-  },
+    setEmail: function(email) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_EMAIL,
+            email: email
+        });
+    },
 
-  /**
-   * Set Toast
-   * @param toast
+    /**
+     * Set view
+     * @param view
+     * @param viewProps
      */
-  setToast: function(toast) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_TOAST,
-      toast: toast
-    });
-  },
+    setView: function(view, viewProps) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_VIEW,
+            view: view,
+            viewProps: viewProps
+        });
+    },
 
-  /**
-   * Register
-   * @param username
-   * @param email
-   * @param password
+    /**
+     * Set Toast
+     * @param toast
      */
-  register: function(username, email, password) {
-    AppDispatcher.dispatch({
-      actionType: Constants.REGISTER,
-      username: username,
-      email: email,
-      password: password
-    });
-  },
+    setToast: function(toast) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_TOAST,
+            toast: toast
+        });
+    },
 
-  /**
-   * Login
-   * @param username
-   * @param password
+    /**
+     * Register
+     * @param username
+     * @param email
+     * @param password
      */
-  login: function(username, password) {
-    AppDispatcher.dispatch({
-      actionType: Constants.LOGIN,
-      username: username,
-      password: password
-    });
-  },
+    register: function(username, email, password) {
+        AppDispatcher.dispatch({
+            actionType: Constants.REGISTER,
+            username: username,
+            email: email,
+            password: password
+        });
+    },
 
-  /**
-   * Logout
-   */
-  logout: function() {
-    AppDispatcher.dispatch({
-      actionType: Constants.LOGOUT
-    });
-  },
-
-  /**
-   * Navigate
-   * @param path
+    /**
+     * Login
+     * @param username
+     * @param password
      */
-  navigate: function(path) {
-    AppDispatcher.dispatch({
-      actionType: Constants.NAVIGATE,
-      path: path
-    });
-  },
+    login: function(username, password) {
+        AppDispatcher.dispatch({
+            actionType: Constants.LOGIN,
+            username: username,
+            password: password
+        });
+    },
 
-  /**
-   * Create new
-   * @param value
-   * @param title
-   * @param mode
+    /**
+     * Logout
      */
-  createNew: function(value, title, mode) {
-    AppDispatcher.dispatch({
-      actionType: Constants.CREATE_NEW,
-      value: value,
-      title: title,
-      mode: mode
-    });
-  },
+    logout: function() {
+        AppDispatcher.dispatch({
+            actionType: Constants.LOGOUT
+        });
+    },
 
-  /**
-   * Set mode
-   * @param mode
+    /**
+     * Navigate
+     * @param path
+     * @param props
      */
-  setMode: function(mode) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_MODE,
-      mode: mode
-    });
-  },
+    navigate: function(path, props) {
+        AppDispatcher.dispatch({
+            actionType: Constants.NAVIGATE,
+            path: path,
+            props: props
+        });
+    },
 
-  /**
-   * Change title
-   * @param title
+    /**
+     * Create new
+     * @param value
+     * @param title
+     * @param mode
      */
-  changeTitle: function(title) {
-    AppDispatcher.dispatch({
-      actionType: Constants.CHANGE_TITLE,
-      title: title
-    });
-  },
+    createNew: function(value, title, mode) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CREATE_NEW,
+            value: value,
+            title: title,
+            mode: mode
+        });
+    },
 
-  /**
-   * Set message content
-   * @param messageContent
-   */
-  setMessageContent: function(messageContent) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_MESSAGE_CONTENT,
-      messageContent: messageContent
-    });
-  },
+    /**
+     * Set mode
+     * @param mode
+     */
+    setMode: function(mode) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_MODE,
+            mode: mode
+        });
+    },
+
+    /**
+     * Change title
+     * @param title
+     */
+    changeTitle: function(title) {
+        AppDispatcher.dispatch({
+            actionType: Constants.CHANGE_TITLE,
+            title: title
+        });
+    },
+
+    /**
+     * Show toast
+     * @param message
+     * @param type
+     */
+    showToast: function(message, type) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SHOW_TOAST,
+            message: message,
+            type: type
+        });
+    },
+
+    /**
+     * Set loading
+     * @param loading
+     */
+    setLoading: function(loading) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_LOADING,
+            loading: loading
+        });
+    },
+
+    /**
+     * Search
+     * @param query
+     */
+    search: function(query) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SEARCH,
+            query: query
+        });
+    },
+
+    /**
+     * Sort
+     * @param col
+     * @param direction
+     */
+    sort: function(col, direction) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SORT,
+            col: col,
+            direction: direction
+        });
+    },
+
+    /**
+     * Paginate
+     * @param skip
+     */
+    paginate: function (skip) {
+        AppDispatcher.dispatch({
+            actionType: Constants.PAGINATE,
+            skip: skip
+        });
+    },
+
+    /**
+      * Set message content
+     * @param messageContent
+     */
+    setMessageContent: function(messageContent) {
+      AppDispatcher.dispatch({
+        actionType: Constants.SET_MESSAGE_CONTENT,
+        messageContent: messageContent
+      });
+    },
   
-  /**
-   * Set message title
-   * @param messageTitle
-   */
-  setMessageTitle: function(messageTitle) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_MESSAGE_TITLE,
-      messageTitle: messageTitle
-    });
-  },
-
-  /**
-   * Show toast
-   * @param message
-   * @param type
+    /**
+     * Set message title
+     * @param messageTitle
      */
-  showToast: function(message, type) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SHOW_TOAST,
-      message: message,
-      type: type
+    setMessageTitle: function(messageTitle) {
+      AppDispatcher.dispatch({
+        actionType: Constants.SET_MESSAGE_TITLE,
+        messageTitle: messageTitle
     });
-  },
-
-  /**
-   * Set loading
-   * @param loading
-     */
-  setLoading: function(loading) {
-    AppDispatcher.dispatch({
-      actionType: Constants.SET_LOADING,
-      loading: loading
-    });
-  },
+   },
 
   /**
    * Send message

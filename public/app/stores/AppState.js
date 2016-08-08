@@ -41,9 +41,140 @@ var _pasteId = 0;
 var _viewedPaste = null;
 var _cmOptions = DEFAULT_CM_OPTIONS;
 var _title = '';
-var _message = {title: '', content: ''};
-var _sendMessageBtnDisabled= false;
+var _pastes = [];
+var _filter = {};
+var _pagination = {skip: 0, limit: 10};
+var _sort = {col: 'created', direction: -1};
+var _socket = null;
+var _totalPastes = 0;
 
+/**
+ * Get filter
+ * @returns {{}}
+ * @private
+ */
+function _getFilter() {
+    return _filter;
+}
+
+/**
+ * Get pagination
+ * @returns {{skip: number}}
+ * @private
+ */
+function _getPagination() {
+    return _pagination;
+}
+
+/**
+ * Get sort
+ * @private
+ */
+function _getSort() {
+    var sort = {};
+    sort[_sort.col] = _sort.direction;
+    return {
+        sort: sort
+    }
+}
+
+/**
+ * Paginate
+ * @param skip
+ * @private
+ */
+function _paginate(skip) {
+    if (skip) _pagination.skip = (skip * _pagination.limit) - _pagination.limit;
+    else _pagination.skip = 0;
+    _sendMessage();
+}
+
+/**
+ * Init ws
+ * @private
+ */
+function _initWs() {
+    if (_socket) return;
+    _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
+    _socket.onopen = function () {
+        _socket.send(JSON.stringify({
+            query: _getFilter(),
+            pagination: _getPagination(),
+            sort: _getSort()
+        }));
+    };
+    _socket.onmessage = function (event) {
+        var data;
+        try {
+            data = JSON.parse(event.data);
+        } catch (e) {
+            return;
+        }
+        if (data.res.action && data.res.action == 'update') {
+            _filterAndSort();
+        } else {
+            _pastes = data.res;
+            _totalPastes = data.total;
+            AppStateStore.emitChange();
+        }
+    };
+}
+
+/**
+ * Filter and sort
+ * @private
+ */
+function _filterAndSort() {
+    var filter = {};
+    if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
+    _socket.send(JSON.stringify({
+        query: filter,
+        pagination: _getPagination(),
+        sort: _getSort()
+    }));
+}
+
+/**
+ * Sort
+ * @param col
+ * @param direction
+ * @private
+ */
+function _sortGrid(col, direction) {
+    _sort = {col: col, direction: direction};
+    _filterAndSort();
+}
+
+/**
+ * Set search query
+ * @param message
+ * @returns {{$or: *[]}}
+ * @private
+ */
+function _setSearchQuery(message) {
+    return {
+        $or: [
+            {'user.user.username': {$regex : message}},
+            {'title': {$regex : message}},
+            {'mode': {$regex : message}},
+            {'code': {$regex : message}}
+        ]
+    }
+}
+
+/**
+ * Send message
+ * @param message
+ * @private
+ */
+function _sendMessage(message) {
+    _filter = message ? message : '';
+    _socket.send(JSON.stringify({
+        query: _setSearchQuery(_filter),
+        pagination: _getPagination(),
+        sort: _getSort()
+    }));
+}
 
 /**
  * Init app
@@ -55,60 +186,76 @@ function _init(props) {
 }
 
 /**
- * User is logged in
- * @returns {*}
+ * Validate user token
+ * @param done
+ * @returns {boolean}
  * @private
  */
-function _userIsLoggedIn() {
-    return _user.token && _user.refreshToken;
+function _userIsLoggedIn(done) {
+    if (!_user.token || !_user.refreshToken) return done(false);
+    ApiUtils.validateToken(_url, _user.token, function(err, res) {
+        console.log('err', err, res);
+
+        if (err) return _setToastNotification('Service error!', 'error');
+        if (!res || res.statusCode == 401) return done(false);
+        done(true);
+    });
 }
 
 /**
- * Route
+ * View props
  * @param path
+ * @param viewProps
  * @private
  */
-function _route(path) {
+function _route(path, viewProps) {
     var view;
     if (!path) view = Router.getViewFromUrl();
     else view ={name: path};
-    var userIsLoggedIn = _userIsLoggedIn();
-    if (!userIsLoggedIn) {
-        if (view.name == 'registration') _setView('registration');
-        else _setView('login');
-    } else {
-        if (view.name == '/') return _setView('pastes');
-        var props = false;
-        if (view.name == 'paste') {
-            props = {id: view.props.id};
-            _cmOptions.readOnly = true;
-            if (_viewedPaste) return _setView(view, props);
-            
-            ApiUtils.getPaste(_url, view.props.id, function(err, response) {
-                if (err) return _setToastNotification('Error in service!', 'error');
-                if (response) {
+
+    _userIsLoggedIn(function(userIsLoggedIn) {
+        if (!userIsLoggedIn) {
+            if (view.name == 'registration') _setView('registration');
+            else _setView('login');
+        } else {
+            _initWs();
+            if (view.name == '/') return _setView('pastes');
+            var props = false;
+            if (view.name == 'paste') {
+                var pasteId;
+                if (view.props && view.props.id) pasteId = view.props.id;
+                else if (viewProps && viewProps.id) {
+                    pasteId = viewProps.id;
+                    _viewedPaste = null;
+                }
+                props = {id: pasteId};
+                _cmOptions.readOnly = true;
+                if (_viewedPaste) return _setView(view, props);
+
+                ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
+                    if (err) {
+                        if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
+                        if (err.status == 401) return _logout();
+                        else if (err.status == 404) return _setToastNotification('Paste does not exist!', 'error');
+                    }
                     _viewedPaste = response;
                     _title = response.title;
-                    _setView('paste', view.props);
-                } else {
-                    _viewedPaste = null;
-                    _setToast('Error getting paste!', 'error');
-                    _setView('pastes');
-                }
-            });
-        } else if (view.name == 'new') {
-            _viewedPaste = null;
-            _title = '';
-            _cmOptions.readOnly = false;
-            _cmOptions.mode = 'javascript';
-            _pasteId = 0;
-            _setView('new');
-        } else if (view.name == 'pastes') {
-            _setView('pastes');
-        } else if (view.name == 'contacts') {
-            _setView('contacts');
+                    _setView('paste', props);
+                });
+            } else if (view.name == 'new') {
+                _viewedPaste = null;
+                _title = '';
+                _cmOptions.readOnly = false;
+                _cmOptions.mode = 'javascript';
+                _pasteId = 0;
+                _setView('new');
+            } else if (view.name == 'pastes') {
+                _setView('pastes');
+            } else if (view.name == 'contacts') {
+                _setView('contacts');
+            }
         }
-    }
+    });
 }
 
 /**
@@ -154,7 +301,8 @@ function _createNew(value, title, mode) {
     ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
         if (err) {
             _setLoading(false);
-            return _setToastNotification('Service error!', 'error');
+            _setToastNotification('Service error!', 'error');
+            AppStateStore.emitChange();
         }
         if (response) {
             _pasteId = response._id;
@@ -248,7 +396,7 @@ function _register(username, email, password) {
     _setLoading(true);
     _setRegisterButtonTimeout();
     if (!username || !email || !password) {
-        _toast = 'All fields are required!';
+        _toast = 'Please enter all required fields!';
         _toastType = 'warning';
         _setLoading(false);
         AppStateStore.emitChange();
@@ -308,6 +456,7 @@ function _login(username, password) {
             return AppStateStore.emitChange();
         }
         if (response.statusCode == 201) {
+            _initWs();
             _saveLoggedInUser(response.body);
             _setView('pastes');
             _setLoading(false);
@@ -389,7 +538,6 @@ function _saveLoggedInUser(user) {
  * @private
  */
 function _logout() {
-    _user = DEFAULT_USER;
     LocalStorage.clearUser();
     location.reload();
 }
@@ -591,6 +739,38 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
     },
 
     /**
+     * Get pastes
+     * @returns {Array}
+     */
+    getPastes: function() {
+        return _pastes;
+    },
+
+    /**
+     * Get sort
+     * @returns {{created: number}}
+     */
+    getSort: function() {
+        return _sort;
+    },
+
+    /**
+     * Get pagination
+     * @returns {{skip: number}}
+     */
+    getPagination: function () {
+        return _pagination;
+    },
+
+    /**
+     * Get total pastes
+     * @returns {number}
+     */
+    getTotalPastes: function () {
+        return _totalPastes;
+    },
+
+    /**
      * Emit change
      */
     emitChange: function() {
@@ -659,8 +839,9 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_VIEW:
             view = action.view;
+            var viewProps = action.viewProps;
             if (view) {
-                _setView(view);
+                _setView(view, viewProps);
                 AppStateStore.emitChange();
             }
             break;
@@ -690,7 +871,8 @@ AppDispatcher.register(function(action) {
 
         case Constants.NAVIGATE:
             var path = action.path;
-            _route(path);
+            props = action.props;
+            _route(path, props);
             AppStateStore.emitChange();
             break;
 
@@ -727,21 +909,37 @@ AppDispatcher.register(function(action) {
             AppStateStore.emitChange();
             break;
 
+        case Constants.SEARCH:
+            var query = action.query;
+            _sendMessage(query);
+            break;
+
+        case Constants.SORT:
+            var col = action.col;
+            var direction = action.direction;
+            _sortGrid(col, direction);
+            break;
+
+        case Constants.PAGINATE:
+            var skip = action.skip;
+            _paginate(skip);
+            break;
+
         case Constants.SEND_MESSAGE:
-            _sendMessage();
-            break;
+			_sendMessage();
+			break;
 
-        case Constants.SET_MESSAGE_TITLE:
-            var messageTitle = action.messageTitle;
-            _setMessageTitle(messageTitle);
-            AppStateStore.emitChange();
-            break;
+		case Constants.SET_MESSAGE_TITLE:
+			var messageTitle = action.messageTitle;
+			_setMessageTitle(messageTitle);
+			AppStateStore.emitChange();
+			break;
 
-        case Constants.SET_MESSAGE_CONTENT:
-            var messageContent = action.messageContent;
-            _setMessageContent(messageContent);
-            AppStateStore.emitChange();
-            break;
+		case Constants.SET_MESSAGE_CONTENT:
+			var messageContent = action.messageContent;
+			_setMessageContent(messageContent);
+			AppStateStore.emitChange();
+			break;
 
     default:
       // no op
