@@ -586,7 +586,7 @@ function _setMessageContent(messageContent) {
  * Send message
  * @private
  */
-function _sendMessage() {
+function _sendContactMessage() {
     _setSendMessageButtonTimeout();
     _setLoading(true);
 
@@ -816,13 +816,13 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SET_FIRST_NAME:
-            firstName = action.firstName;
+            var firstName = action.firstName;
             _setFirstName(firstName);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_LAST_NAME:
-            lastName = action.lastName;
+            var lastName = action.lastName;
             _setLastName(lastName);
             AppStateStore.emitChange();
             break;
@@ -880,14 +880,14 @@ AppDispatcher.register(function(action) {
 
         case Constants.CREATE_NEW:
             var value = action.value;
-            var title = action.title;
+            title = action.title;
             var mode = action.mode;
             _createNew(value, title, mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MODE:
-            var mode = action.mode;
+            mode = action.mode;
             _setMode(mode);
             AppStateStore.emitChange();
             break;
@@ -928,7 +928,7 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SEND_MESSAGE:
-            _sendMessage();
+            _sendContactMessage();
             break;
 
         case Constants.SET_MESSAGE_TITLE:

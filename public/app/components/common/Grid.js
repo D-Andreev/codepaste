@@ -1,10 +1,21 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var classnames = require('classnames');
 var Icon = require('./Icon');
 var moment = require('moment');
 
 var Grid = React.createClass({
+    
+    propTypes: {
+        onActionClick: ReactPropTypes.func,
+        columns: ReactPropTypes.object,
+        rows: ReactPropTypes.array,
+        search: ReactPropTypes.func,
+        sort: ReactPropTypes.func,
+        sortingOptions: ReactPropTypes.object,
+        pagination: ReactPropTypes.object,
+        paginate: ReactPropTypes.func,
+        totalPastes: ReactPropTypes.number
+    },
 
     /**
      * @return {object}

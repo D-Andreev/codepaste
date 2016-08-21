@@ -1,8 +1,12 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var classnames = require('classnames');
 
 var List = React.createClass({
+    
+    propTypes: {
+        hidden: ReactPropTypes.bool,
+        items: ReactPropTypes.array
+    },
 
     /**
      * @return {object}
