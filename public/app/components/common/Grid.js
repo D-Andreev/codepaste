@@ -54,6 +54,7 @@ var Grid = React.createClass({
      * @private
      */
     _renderPagination: function () {
+        console.log('props', this.props);
         if (this.props.rows.length) {
             var i, c = 0, pages = [], markup = [], pagesLength = 0, rightPagesExist, leftPagesExist;
             var totalRows = this.props.totalPastes;

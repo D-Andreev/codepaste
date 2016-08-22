@@ -81,6 +81,127 @@ function _getSort() {
 }
 
 /**
+ * Set Loading
+ * @param loading
+ * @private
+ */
+function _setLoading(loading) {
+    _loading = loading;
+}
+
+/**
+ * Set Toast
+ * @param toast
+ * @private
+ */
+function _setToast(toast) {
+    _toast = toast;
+}
+
+/**
+ * Set mode
+ * @param mode
+ * @private
+ */
+function _setMode(mode) {
+    _cmOptions.mode = mode;
+    if (_viewedPaste) _viewedPaste.mode = mode;
+}
+
+/**
+ * Set username
+ * @param username
+ * @private
+ */
+function _setUsername(username) {
+    _user.username = username;
+}
+
+/**
+ * Set First Name
+ * @param firstName
+ * @private
+ */
+function _setFirstName(firstName) {
+    _user.firstName = firstName;
+}
+
+/**
+ * Set last name
+ * @param lastName
+ * @private
+ */
+function _setLastName(lastName) {
+    _user.lastName = lastName;
+}
+
+/**
+ * Set password
+ * @param password
+ * @private
+ */
+function _setPassword(password) {
+    _user.password = password;
+}
+
+/**
+ * Set email
+ * @param email
+ * @private
+ */
+function _setEmail(email) {
+    _user.email = email;
+}
+
+/**
+ * Save logged in user.
+ * @param user
+ * @private
+ */
+function _saveLoggedInUser(user) {
+    _user = user;
+    LocalStorage.setUser(_user);
+}
+
+/**
+ * Set toast
+ * @param message
+ * @param type
+ * @private
+ */
+function _setToastNotification(message, type) {
+    _toast = message;
+    _toastType = type;
+}
+
+/**
+ * Set title
+ * @param title
+ * @private
+ */
+function _setTitle(title) {
+    _title = title;
+}
+
+/**
+ * Set message title
+ * @param messageTitle
+ * @private
+ */
+function _setMessageTitle(messageTitle) {
+    _message.title = messageTitle;
+}
+
+/**
+ * Set message content
+ * @param messageContent
+ * @private
+ */
+function _setMessageContent(messageContent) {
+    _message.content = messageContent;
+}
+
+/**
  * Paginate
  * @param skip
  * @private
@@ -88,7 +209,7 @@ function _getSort() {
 function _paginate(skip) {
     if (skip) _pagination.skip = (skip * _pagination.limit) - _pagination.limit;
     else _pagination.skip = 0;
-    _sendMessage();
+    _sendMessage(_filter);
 }
 
 /**
@@ -97,7 +218,7 @@ function _paginate(skip) {
  */
 function _initWs() {
     if (_socket) return;
-    _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
+    _socket = new WebSocket("ws://localhost:3000/echo", "protocolOne");
     _socket.onopen = function () {
         _socket.send(JSON.stringify({
             query: _getFilter(),
@@ -112,14 +233,20 @@ function _initWs() {
         } catch (e) {
             return;
         }
+        console.log('data', data);
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
             _pastes = data.res;
-            _totalPastes = data.total;
+            _totalPastes = _filter ? _pastes.length : data.total;
             AppStateStore.emitChange();
         }
     };
+
+    _socket.onclose = function() {
+        _socket = null;
+        _initWs();
+    }
 }
 
 /**
@@ -170,7 +297,7 @@ function _setSearchQuery(message) {
  * @private
  */
 function _sendMessage(message) {
-    _filter = message ? message : '';
+    _filter = message;
     _socket.send(JSON.stringify({
         query: _setSearchQuery(_filter),
         pagination: _getPagination(),
@@ -321,16 +448,6 @@ function _createNew(value, title, mode) {
     });
 }
 
-
-/**
- * Set Toast
- * @param toast
- * @private
- */
-function _setToast(toast) {
-    _toast = toast;
-}
-
 /**
  * Set register button timeout
  * @private
@@ -428,15 +545,6 @@ function _register(username, email, password) {
 }
 
 /**
- * Set Loading
- * @param loading
- * @private
- */
-function _setLoading(loading) {
-    _loading = loading;
-}
-
-/**
  * Login
  * @param username
  * @param password
@@ -471,71 +579,6 @@ function _login(username, password) {
 }
 
 /**
- * Set mode
- * @param mode
- * @private
- */
-function _setMode(mode) {
-    _cmOptions.mode = mode;
-    if (_viewedPaste) _viewedPaste.mode = mode;
-}
-
-/**
- * Set username
- * @param username
- * @private
- */
-function _setUsername(username) {
-    _user.username = username;
-}
-
-/**
- * Set First Name
- * @param firstName
- * @private
- */
-function _setFirstName(firstName) {
-    _user.firstName = firstName;
-}
-
-/**
- * Set last name
- * @param lastName
- * @private
- */
-function _setLastName(lastName) {
-    _user.lastName = lastName;
-}
-
-/**
- * Set password
- * @param password
- * @private
- */
-function _setPassword(password) {
-    _user.password = password;
-}
-
-/**
- * Set email
- * @param email
- * @private
- */
-function _setEmail(email) {
-    _user.email = email;
-}
-
-/**
- * Save logged in user.
- * @param user
- * @private
- */
-function _saveLoggedInUser(user) {
-    _user = user;
-    LocalStorage.setUser(_user);
-}
-
-/**
  * Logout
  * @private
  */
@@ -545,48 +588,10 @@ function _logout() {
 }
 
 /**
- * Set toast
- * @param message
- * @param type
- * @private
- */
-function _setToastNotification(message, type) {
-    _toast = message;
-    _toastType = type;
-}
-
-/**
- * Set title
- * @param title
- * @private
- */
-function _setTitle(title) {
-    _title = title;
-}
-
-/**
- * Set message title
- * @param messageTitle
- * @private
- */
-function _setMessageTitle(messageTitle) {
-    _message.title = messageTitle;
-}
-
-/**
- * Set message content
- * @param messageContent
- * @private
- */
-function _setMessageContent(messageContent) {
-    _message.content = messageContent;
-}
-
-/**
  * Send message
  * @private
  */
-function _sendMessage() {
+function _sendContactsMessage() {
     _setSendMessageButtonTimeout();
     _setLoading(true);
 
@@ -798,7 +803,8 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
  * Register callback to handle all updates
  */
 AppDispatcher.register(function(action) {
-    var props, username, password, email, view;
+    var props, username, password, email, firstName, lastName, view, mode, title,
+        path, value, message, type, loading, query, col, direction, skip, messageContent, messageTitle;
 
     switch(action.actionType) {
         case Constants.INIT:
@@ -872,73 +878,73 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.NAVIGATE:
-            var path = action.path;
+            path = action.path;
             props = action.props;
             _route(path, props);
             AppStateStore.emitChange();
             break;
 
         case Constants.CREATE_NEW:
-            var value = action.value;
-            var title = action.title;
-            var mode = action.mode;
+            value = action.value;
+            title = action.title;
+            mode = action.mode;
             _createNew(value, title, mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MODE:
-            var mode = action.mode;
+            mode = action.mode;
             _setMode(mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.CHANGE_TITLE:
-            var title = action.title;
+            title = action.title;
             _setTitle(title);
             AppStateStore.emitChange();
             break;
 
         case Constants.SHOW_TOAST:
-            var message = action.message;
-            var type = action.type;
+            message = action.message;
+            type = action.type;
             _setToastNotification(message, type);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_LOADING:
-            var loading = action.loading;
+            loading = action.loading;
             _setLoading(loading);
             AppStateStore.emitChange();
             break;
 
         case Constants.SEARCH:
-            var query = action.query;
+            query = action.query;
             _sendMessage(query);
             break;
 
         case Constants.SORT:
-            var col = action.col;
-            var direction = action.direction;
+            col = action.col;
+            direction = action.direction;
             _sortGrid(col, direction);
             break;
 
         case Constants.PAGINATE:
-            var skip = action.skip;
+            skip = action.skip;
             _paginate(skip);
             break;
 
         case Constants.SEND_MESSAGE:
-            _sendMessage();
+            _sendContactsMessage();
             break;
 
         case Constants.SET_MESSAGE_TITLE:
-            var messageTitle = action.messageTitle;
+            messageTitle = action.messageTitle;
             _setMessageTitle(messageTitle);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MESSAGE_CONTENT:
-            var messageContent = action.messageContent;
+            messageContent = action.messageContent;
             _setMessageContent(messageContent);
             AppStateStore.emitChange();
             break;
