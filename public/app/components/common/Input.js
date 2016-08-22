@@ -101,7 +101,7 @@ var Input = React.createClass({
      * @param event
      * @private
      */
-    _onChange(event) {
+    _onChange: function(event) {
         this.props.onChange(event);
         this.setState({value: event.target.value});
     }

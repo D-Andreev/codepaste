@@ -94,10 +94,12 @@ var Editor = React.createClass({
      */
     componentDidMount: function() {
         var $this = this;
+        // eslint-disable-next-line no-undef
         this._cm = CodeMirror.fromTextArea(document.getElementById('code'), this.props.cmOptions);
         this._cm.on('change', function() {
             $this.setState({copyValue: $this._cm.getValue()})
         });
+        // eslint-disable-next-line no-undef
         this._client = new ZeroClipboard( document.getElementById("copy-button") );
 
 
