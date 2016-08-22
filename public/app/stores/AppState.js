@@ -233,11 +233,12 @@ function _initWs() {
         } catch (e) {
             return;
         }
+        console.log(data);
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
             _pastes = data.res;
-            _totalPastes = _filter ? _pastes.length : data.total;
+            _totalPastes = data.total;
             AppStateStore.emitChange();
         }
     };

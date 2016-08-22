@@ -5,7 +5,7 @@ server  = email.server.connect({
   password: process.env.PASS,
   host:    'smtp.gmail.com',
   ssl:     true
-});
+})
 
 module.exports = class Singleton
   instance = null
