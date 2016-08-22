@@ -9,7 +9,8 @@
     "start-test": "ENV=test PORT=1234 node ./node_modules/nodemon/bin/nodemon ./ localhost 1234",
     "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
     "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
-    "coffee-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json ."
+    "coffee-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json .",
+    "eslint": "eslint ./public/app/"
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",
@@ -44,7 +45,6 @@
     "cucumber": "^0.10.3",
     "envify": "^3.0.0",
     "eslint": "^3.3.1",
-    "eslint-plugin-node": "^2.0.0",
     "eslint-plugin-react": "^6.1.2",
     "jest-cli": "^0.4.3",
     "mocha": "^2.4.5",

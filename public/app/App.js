@@ -34,7 +34,7 @@ function getAppState() {
     };
 }
 
-module.exports = React.createClass({
+var App = React.createClass({
     propTypes: {
         url: ReactPropTypes.string.isRequired,
         view: ReactPropTypes.string
@@ -110,7 +110,6 @@ module.exports = React.createClass({
                     changeView={this._changeView}
                     loginBtnDisabled={this.state.loginBtnDisabled}
                     registerBtnDisabled={this.state.registerBtnDisabled}
-                    user={this.state.user}
                     fieldsDisabled={this.state.fieldsDisabled}
                     createNewPasteBtnDisabled={this.state.createNewPasteBtnDisabled}
                     createNew={this._createNew}
@@ -347,3 +346,5 @@ module.exports = React.createClass({
         this.setState(getAppState());
     }
 });
+
+module.exports = App;

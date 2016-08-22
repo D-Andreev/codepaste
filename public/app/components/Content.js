@@ -42,7 +42,8 @@ var Content = React.createClass({
         onMessageTitleChange: ReactPropTypes.func,
         onMessageContentChange: ReactPropTypes.func,
         sendMessageBtnDisabled: ReactPropTypes.bool,
-        sendMessage: ReactPropTypes.func
+        sendMessage: ReactPropTypes.func,
+        onNavigationLinkClick: ReactPropTypes.func
     },
 
 
