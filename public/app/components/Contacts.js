@@ -7,6 +7,7 @@ var Textarea = require('./common/Textarea');
 var Contacts = React.createClass({
 
     propTypes: {
+        hidden: ReactPropTypes.bool,
         sendMessage: ReactPropTypes.func,
         title: ReactPropTypes.string,
         content: ReactPropTypes.string,

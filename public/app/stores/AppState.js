@@ -196,7 +196,6 @@ function _init(props) {
 function _userIsLoggedIn(done) {
     if (!_user.token || !_user.refreshToken) return done(false);
     ApiUtils.validateToken(_url, _user.token, function(err, res) {
-        console.log('err', err, res);
 
         if (err) return _setToastNotification('Service error!', 'error');
         if (!res || res.statusCode == 401) return done(false);
@@ -586,7 +585,7 @@ function _setMessageContent(messageContent) {
  * Send message
  * @private
  */
-function _sendMessage() {
+function _sendContactMessage() {
     _setSendMessageButtonTimeout();
     _setLoading(true);
 
@@ -595,7 +594,7 @@ function _sendMessage() {
         return AppStateStore.emitChange();
     }
 
-    ApiUtils.sendMessage(_url, _user, _message, function(err, res) {
+    ApiUtils.sendMessage(_url, _user, _message, function(err) {
         if (err) {
             _setLoading(false);
             _setToastNotification('Service error!', 'error');
@@ -816,13 +815,13 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SET_FIRST_NAME:
-            firstName = action.firstName;
+            var firstName = action.firstName;
             _setFirstName(firstName);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_LAST_NAME:
-            lastName = action.lastName;
+            var lastName = action.lastName;
             _setLastName(lastName);
             AppStateStore.emitChange();
             break;
@@ -880,14 +879,14 @@ AppDispatcher.register(function(action) {
 
         case Constants.CREATE_NEW:
             var value = action.value;
-            var title = action.title;
+            title = action.title;
             var mode = action.mode;
             _createNew(value, title, mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MODE:
-            var mode = action.mode;
+            mode = action.mode;
             _setMode(mode);
             AppStateStore.emitChange();
             break;
@@ -928,7 +927,7 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SEND_MESSAGE:
-            _sendMessage();
+            _sendContactMessage();
             break;
 
         case Constants.SET_MESSAGE_TITLE:

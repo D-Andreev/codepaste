@@ -11,3 +11,4 @@ dependencies:
 test:
   override:
     - npm run coffee-lint
+    - npm run eslint

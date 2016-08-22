@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var classnames = require('classnames');
 
 var Input = React.createClass({
 

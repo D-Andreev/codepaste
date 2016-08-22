@@ -41,7 +41,7 @@ var Footer = React.createClass({
         </button>;
     }
 
-  	return (
+    return (
       <footer id="footer">
         <span id="todo-count">
           <strong>

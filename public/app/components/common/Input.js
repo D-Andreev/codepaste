@@ -19,7 +19,9 @@ var Input = React.createClass({
         placeholder: ReactPropTypes.string,
         hidden: ReactPropTypes.bool,
         autoFocus: ReactPropTypes.bool,
-        disabled: ReactPropTypes.bool
+        disabled: ReactPropTypes.bool,
+        value: ReactPropTypes.string,
+        label: ReactPropTypes.string
     },
 
     /**
@@ -99,7 +101,7 @@ var Input = React.createClass({
      * @param event
      * @private
      */
-    _onChange(event) {
+    _onChange: function(event) {
         this.props.onChange(event);
         this.setState({value: event.target.value});
     }

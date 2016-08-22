@@ -3,6 +3,23 @@ var Button = require('./common/Button');
 var Input = require('./common/Input');
 
 var UserAuth = React.createClass({
+    
+    propTypes:{
+        hidden: React.PropTypes.bool,
+        view: React.PropTypes.string,
+        onUsernameChange: React.PropTypes.func,
+        onPasswordChange: React.PropTypes.func,
+        onEmailChange: React.PropTypes.func,
+        onFirstNameChange: React.PropTypes.func,
+        onLastNameChange: React.PropTypes.func,
+        register: React.PropTypes.func,
+        login: React.PropTypes.func,
+        changeView: React.PropTypes.func,
+        loginBtnDisabled: React.PropTypes.bool,
+        registerBtnDisabled: React.PropTypes.bool,
+        user: React.PropTypes.object,
+        fieldsDisabled: React.PropTypes.bool
+    },
 
     /**
      * @return {object}
