@@ -24,6 +24,9 @@ error-log
 # coffee
 /services/*.js
 /services/*.js.map
+/services/*/*.js
+/services/*/*.js.map
+services/mail/index.js
 
 /models/*.js
 /models/*.js.map

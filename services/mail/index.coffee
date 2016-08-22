@@ -1,7 +1,11 @@
 async = require 'async'
-nodemailer = require 'nodemailer'
-transporter = nodemailer.createTransport "smtps://#{process.env.USER}%40gmail.com:#{process.env.PASS}@smtp.gmail.com"
-
+email = require 'emailjs'
+server  = email.server.connect({
+  user:    process.env.USER,
+  password: process.env.PASS,
+  host:    'smtp.gmail.com',
+  ssl:     true
+})
 
 module.exports = class Singleton
   instance = null
@@ -10,24 +14,23 @@ module.exports = class Singleton
 
     send: (opts, done) ->
       return done new Error() unless opts.user and opts.message and opts.title
-
       async.waterfall [
         (next) =>
           mailOpts =
             from: process.env.USER
             to: "#{process.env.USER}@gmail.com"
-            subject: "Codepaste message: #{opts.title}"
+            subject: "Codepaste: #{opts.title}"
             text: @_getText opts
 
-          transporter.sendMail mailOpts, next
+          server.send mailOpts, next
         (response, next) ->
           mailOpts =
             from: "#{process.env.USER}@gmail.com"
-            to: opts.user.email
+            to: opts.user.user.email
             subject: 'Codepaste'
             text: 'Your message has been sent.'
 
-          transporter.sendMail mailOpts, next
+          server.send mailOpts, next
       ], done
 
 

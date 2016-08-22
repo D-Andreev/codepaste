@@ -97,7 +97,7 @@ function _paginate(skip) {
  */
 function _initWs() {
     if (_socket) return;
-    _socket = new WebSocket("ws://localhost:666/echo", "protocolOne");
+    _socket = new WebSocket("ws://localhost:3000/echo", "protocolOne");
     _socket.onopen = function () {
         _socket.send(JSON.stringify({
             query: _getFilter(),
@@ -120,6 +120,11 @@ function _initWs() {
             AppStateStore.emitChange();
         }
     };
+
+    _socket.onclose = function() {
+        _socket = null;
+        _initWs();
+    }
 }
 
 /**
