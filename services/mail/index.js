@@ -27,6 +27,7 @@
         if (!(opts.user && opts.message && opts.title)) {
           return done(new Error());
         }
+        console.log(opts, process.env.USER, process.env.PASS);
         return async.waterfall([
           (function(_this) {
             return function(next) {

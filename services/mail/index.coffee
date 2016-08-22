@@ -14,7 +14,7 @@ module.exports = class Singleton
 
     send: (opts, done) ->
       return done new Error() unless opts.user and opts.message and opts.title
-
+      console.log opts, process.env.USER, process.env.PASS
       async.waterfall [
         (next) =>
           mailOpts =
