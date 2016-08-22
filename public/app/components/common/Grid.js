@@ -7,7 +7,7 @@ var Grid = React.createClass({
     
     propTypes: {
         onActionClick: ReactPropTypes.func,
-        columns: ReactPropTypes.object,
+        columns: ReactPropTypes.array,
         rows: ReactPropTypes.array,
         search: ReactPropTypes.func,
         sort: ReactPropTypes.func,

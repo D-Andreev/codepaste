@@ -97,7 +97,7 @@ var App = React.createClass({
         return (
             <span>
                 <Content
-                    user={this.state.user.user}
+                    user={this.state.user}
                     onNavigationLinkClick={this._onNavigationLinkClick}
                     view={this.state.view}
                     onUsernameChange={this._onUsernameChange}

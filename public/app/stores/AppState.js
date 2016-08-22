@@ -196,7 +196,6 @@ function _init(props) {
 function _userIsLoggedIn(done) {
     if (!_user.token || !_user.refreshToken) return done(false);
     ApiUtils.validateToken(_url, _user.token, function(err, res) {
-        console.log('err', err, res);
 
         if (err) return _setToastNotification('Service error!', 'error');
         if (!res || res.statusCode == 401) return done(false);
@@ -595,7 +594,7 @@ function _sendContactMessage() {
         return AppStateStore.emitChange();
     }
 
-    ApiUtils.sendMessage(_url, _user, _message, function(err, res) {
+    ApiUtils.sendMessage(_url, _user, _message, function(err) {
         if (err) {
             _setLoading(false);
             _setToastNotification('Service error!', 'error');
