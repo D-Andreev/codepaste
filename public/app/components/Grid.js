@@ -1,6 +1,5 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var classnames = require('classnames');
 var Table = require('./common/Grid');
 
 var Grid = React.createClass({
@@ -13,7 +12,8 @@ var Grid = React.createClass({
         sortingOptions: ReactPropTypes.object,
         pagination: ReactPropTypes.object,
         paginate: ReactPropTypes.func,
-        totalPastes: ReactPropTypes.number
+        totalPastes: ReactPropTypes.number,
+        onActionClick: ReactPropTypes.func
     },
 
 

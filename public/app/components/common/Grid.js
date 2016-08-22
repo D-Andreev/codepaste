@@ -1,10 +1,21 @@
 var React = require('react');
 var ReactPropTypes = React.PropTypes;
-var classnames = require('classnames');
 var Icon = require('./Icon');
 var moment = require('moment');
 
 var Grid = React.createClass({
+    
+    propTypes: {
+        onActionClick: ReactPropTypes.func,
+        columns: ReactPropTypes.array,
+        rows: ReactPropTypes.array,
+        search: ReactPropTypes.func,
+        sort: ReactPropTypes.func,
+        sortingOptions: ReactPropTypes.object,
+        pagination: ReactPropTypes.object,
+        paginate: ReactPropTypes.func,
+        totalPastes: ReactPropTypes.number
+    },
 
     /**
      * @return {object}
@@ -54,7 +65,6 @@ var Grid = React.createClass({
      * @private
      */
     _renderPagination: function () {
-        console.log('props', this.props);
         if (this.props.rows.length) {
             var i, c = 0, pages = [], markup = [], pagesLength = 0, rightPagesExist, leftPagesExist;
             var totalRows = this.props.totalPastes;

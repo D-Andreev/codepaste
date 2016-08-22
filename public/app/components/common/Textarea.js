@@ -12,7 +12,8 @@ var Textarea = React.createClass({
         floatingLabel: ReactPropTypes.bool,
         disabled: ReactPropTypes.bool,
         rows: ReactPropTypes.number,
-        label: ReactPropTypes.string
+        label: ReactPropTypes.string,
+        hidden: ReactPropTypes.bool
     },
 
     /**

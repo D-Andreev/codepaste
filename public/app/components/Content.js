@@ -40,7 +40,10 @@ var Content = React.createClass({
         paginate: ReactPropTypes.func,
         totalPastes: ReactPropTypes.number,
         onMessageTitleChange: ReactPropTypes.func,
-        onMessageContentChange: ReactPropTypes.func
+        onMessageContentChange: ReactPropTypes.func,
+        sendMessageBtnDisabled: ReactPropTypes.bool,
+        sendMessage: ReactPropTypes.func,
+        onNavigationLinkClick: ReactPropTypes.func
     },
 
 

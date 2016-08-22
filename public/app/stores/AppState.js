@@ -233,7 +233,6 @@ function _initWs() {
         } catch (e) {
             return;
         }
-        console.log('data', data);
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
@@ -323,7 +322,6 @@ function _init(props) {
 function _userIsLoggedIn(done) {
     if (!_user.token || !_user.refreshToken) return done(false);
     ApiUtils.validateToken(_url, _user.token, function(err, res) {
-        console.log('err', err, res);
 
         if (err) return _setToastNotification('Service error!', 'error');
         if (!res || res.statusCode == 401) return done(false);
@@ -600,7 +598,7 @@ function _sendContactsMessage() {
         return AppStateStore.emitChange();
     }
 
-    ApiUtils.sendMessage(_url, _user, _message, function(err, res) {
+    ApiUtils.sendMessage(_url, _user, _message, function(err) {
         if (err) {
             _setLoading(false);
             _setToastNotification('Service error!', 'error');
@@ -803,7 +801,7 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
  * Register callback to handle all updates
  */
 AppDispatcher.register(function(action) {
-    var props, username, password, email, firstName, lastName, view, mode, title,
+    var props, username, password, email, firstName, lastName, view, mode, title, viewProps,
         path, value, message, type, loading, query, col, direction, skip, messageContent, messageTitle;
 
     switch(action.actionType) {
@@ -847,7 +845,7 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_VIEW:
             view = action.view;
-            var viewProps = action.viewProps;
+            viewProps = action.viewProps;
             if (view) {
                 _setView(view, viewProps);
                 AppStateStore.emitChange();
