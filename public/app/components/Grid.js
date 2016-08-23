@@ -37,7 +37,8 @@ var Grid = React.createClass({
                                 {icon: 'title', text: 'title'},
                                 {icon: 'description', text: 'mode'},
                                 {icon: 'code', text: 'code'},
-                                {icon: 'date_range', text: 'created'}
+                                {icon: 'date_range', text: 'created'},
+                                {icon: 'stars', text: 'rating'}
                                 ]}
                             rows={this.props.pastes}
                             search={this.props.search}

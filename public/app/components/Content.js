@@ -43,7 +43,8 @@ var Content = React.createClass({
         onMessageContentChange: ReactPropTypes.func,
         sendMessageBtnDisabled: ReactPropTypes.bool,
         sendMessage: ReactPropTypes.func,
-        onNavigationLinkClick: ReactPropTypes.func
+        onNavigationLinkClick: ReactPropTypes.func,
+        onRatingClick: ReactPropTypes.func
     },
 
 
@@ -185,6 +186,7 @@ var Content = React.createClass({
                     title={this.props.title}
                     view={this.props.view}
                     showToast={this.props.showToast}
+                    onRatingClick={this.props.onRatingClick}
                 />
                 <UserAuth
                     onUsernameChange={this.props.onUsernameChange}

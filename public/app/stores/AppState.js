@@ -607,6 +607,10 @@ function _sendContactMessage() {
     });
 }
 
+function _setRating(rating) {
+    alert(rating)
+}
+
 /**
  * App Store
  */
@@ -939,6 +943,12 @@ AppDispatcher.register(function(action) {
         case Constants.SET_MESSAGE_CONTENT:
             var messageContent = action.messageContent;
             _setMessageContent(messageContent);
+            AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_RATING:
+            var rating = action.rating;
+            _setRating(rating);
             AppStateStore.emitChange();
             break;
 

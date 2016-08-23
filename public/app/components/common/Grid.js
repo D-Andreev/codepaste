@@ -2,6 +2,7 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var Icon = require('./Icon');
 var moment = require('moment');
+var Rating = require('react-rating');
 
 var Grid = React.createClass({
     
@@ -307,6 +308,17 @@ var Grid = React.createClass({
                 cols.push(
                     <div className="grid-cell" key={'col' + i} title={date}>
                         {date}
+                    </div>
+                )
+            } else if (keys[i] == 'rating') {
+                cols.push(
+                    <div className="grid-cell" key={'col' + i} title={2.5}>
+                        <Rating
+                            initialRate={2.5}
+                            readonly={true}
+                            empty={<Icon icon='star_border' />}
+                            full={<Icon icon='star' />}
+                        />
                     </div>
                 )
             } else {
