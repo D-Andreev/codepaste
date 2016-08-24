@@ -311,10 +311,11 @@ var Grid = React.createClass({
                     </div>
                 )
             } else if (keys[i] == 'rating') {
+                var rating = Math.floor(Math.random() * 5)+1;
                 cols.push(
-                    <div className="grid-cell" key={'col' + i} title={2.5}>
+                    <div className="grid-cell" key={'col' + i} title={rating}>
                         <Rating
-                            initialRate={2.5}
+                            initialRate={rating}
                             readonly={true}
                             empty={<Icon icon='star_border' />}
                             full={<Icon icon='star' />}

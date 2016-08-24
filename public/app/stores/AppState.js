@@ -949,7 +949,6 @@ AppDispatcher.register(function(action) {
         case Constants.SET_RATING:
             var rating = action.rating;
             _setRating(rating);
-            AppStateStore.emitChange();
             break;
 
         default:

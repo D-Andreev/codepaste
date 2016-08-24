@@ -172,9 +172,10 @@ var Editor = React.createClass({
                 {label: date, icon: 'schedule'},
                 {label: <Rating
                             empty={<Icon icon='star_border'/>}
-                            full={<Icon icon='star'/>}
+                            full={<Icon icon='star' className="star-orange"/>}
                             onChange={this._onRatingChange}
-
+                            placeholderRate={2.5}
+                            placeholder={<Icon icon='star'/>}
                         />, icon: 'stars'}
             ]
         }
