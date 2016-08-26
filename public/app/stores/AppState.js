@@ -608,7 +608,15 @@ function _sendContactMessage() {
 }
 
 function _setRating(rating) {
-    alert(rating)
+    ApiUtils.sendRate(_url, rating, _user, function(err, updatedStats) {
+        if (err) {
+            _setToastNotification('Service error!', 'error');
+            return AppStateStore.emitChange();
+        }
+
+        _setToastNotification('Thanks for rating!', 'success');
+        alert(updatedStats);
+    });
 }
 
 /**
