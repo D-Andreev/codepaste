@@ -20,8 +20,6 @@ function View () {
 View.prototype.initView = function(path) {
     if (!path) this._view = Router.getViewFromUrl();
     else this._view = {name: path};
-
-    console.log('init view', path, this._view);
 };
 
 /**

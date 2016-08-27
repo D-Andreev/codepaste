@@ -27,7 +27,7 @@ Grid.prototype.getPastes = function() {
  * @param filter
  */
 Grid.prototype.setFilter = function(filter) {
-    this._filter = filter;
+    this._filter = filter || '';
 };
 
 /**

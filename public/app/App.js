@@ -73,7 +73,6 @@ var App = React.createClass({
      * @returns {XML}
      */
     render: function() {
-        console.log(this.state);
         var show = false, toast = null;
         if (this.state.toast) {
             show = true;

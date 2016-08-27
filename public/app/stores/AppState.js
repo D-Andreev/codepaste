@@ -33,7 +33,7 @@ var DISABLE_TIMEOUT = 3000;
 function _initWs() {
     Ws.init();
     Ws.socket.onopen = function () {
-        Ws.socket.send(JSON.stringify({
+        this.send(JSON.stringify({
             query: Grid.getFilter(),
             pagination: Grid.getPagination(),
             sort: Grid.getSort()
@@ -46,15 +46,12 @@ function _initWs() {
         } catch (e) {
             return;
         }
-        console.log('data', data);
+
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
-            console.log('settings thepastes', data.res);
             Grid.setPastes(data.res);
-            console.log('settings total', data.total);
             Grid.setTotalPastes(data.total);
-            console.log('check123', Grid.getPastes(), Grid.getTotalPastes())
             AppStateStore.emitChange();
         }
     };
@@ -71,7 +68,7 @@ function _initWs() {
  * @private
  */
 function _sendMessage(message) {
-    Grid.setFilter(message ? message : '');
+    Grid.setFilter(message);
     Ws.send(JSON.stringify({
         query: _setSearchQuery(Grid.getFilter()),
         pagination: Grid.getPagination(),
