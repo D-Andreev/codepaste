@@ -19,10 +19,12 @@
         pagination = {};
       }
       _.merge(sort, pagination);
+      console.log('q', q, sort);
       return Paste.find(q, {
         'user.token': 0,
         'user.refreshToken': 0
       }, sort, function(err, res) {
+        console.log(err, res.length);
         return Paste.count({}, function(err, pastesCount) {
           return done(err, res, pastesCount);
         });

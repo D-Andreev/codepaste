@@ -1,6 +1,5 @@
 var routes = require('../constants/routes');
 
-
 module.exports = {
     /**
      * Set url
@@ -8,6 +7,7 @@ module.exports = {
      * @param props
      */
     setUrl: function(path, props) {
+        console.log('set url', path, props);
         var hash = '';
         if (props) {
             var parts = Object.keys(props);
@@ -26,8 +26,10 @@ module.exports = {
         var hash = '/' + location.hash;
         if (!location.hash) return {name: '/'};
         var views = Object.keys(routes);
+        var props = this._getPropsFromUrl(hash);
+        console.log('adsdsadasadsadsdas', hash, props);
         for (var i = 0; i < views.length; i++) {
-            if (routes[views[i]].test(hash)) return {name: views[i], props: this._getPropsFromUrl(hash)};
+            if (routes[views[i]].test(hash)) return {name: views[i], props: props};
         }
 
         return {name: views[0]};
@@ -40,6 +42,7 @@ module.exports = {
      */
     _getPropsFromUrl: function(url) {
         var parts = url.split('/');
+        console.log('parts', parts);
         var id = parts[parts.length - 1];
         if (id) return {id: id};
         else return false;

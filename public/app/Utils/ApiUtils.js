@@ -3,45 +3,64 @@ var _ = require('lodash');
 var Base64 = require('js-base64').Base64;
 
 module.exports = {
+
+    /**
+     * Url
+     */
+    _url: '',
+
+    /**
+     * Set url
+     * @param url
+     */
+    setUrl: function(url) {
+        this._url = url;
+    },
+
+    /**
+     * Get url
+     * @returns {string}
+     */
+    getUrl: function() {
+        return this._url;
+    },
+
     /**
      * Register
-     * @param url
      * @param username
      * @param email
      * @param password
      * @param done
      */
-    register: function(url, username, email, password, done) {
+    register: function(username, email, password, done) {
         var data = {username: username, email: email, password: password};
-        this.request('PUT', url + '/register', data, false, function(err, res) {
+        this.request('PUT', this._url + '/register', data, false, function(err, res) {
             done(err, res);
         });
     },
 
     /**
      * Login
-     * @param url
      * @param username
      * @param password
      * @param done
      */
-    login: function(url, username, password, done) {
+    login: function(username, password, done) {
         var data = {username: username, password: password};
-        this.request('POST', url + '/login', data, false, function(err, res) {
+        this.request('POST', this._url + '/login', data, false, function(err, res) {
             done(err, res);
         });
     },
 
     /**
      * Create new
-     * @param url
      * @param user
      * @param data
      * @param done
      */
-    createNew: function(url, user, data, done) {
+    createNew: function(user, data, done) {
         data.user = user;
-        this.request('PUT', url + '/new', data, false, function(err, res) {
+        this.request('PUT', this._url + '/new', data, false, function(err, res) {
             done(err, res);
         });
     },
@@ -49,36 +68,33 @@ module.exports = {
     /**
      * Get paste
      * @param token
-     * @param url
      * @param pasteId
      * @param done
      */
-    getPaste: function (token, url, pasteId, done) {
-        this.request('GET', url + '/paste/' + pasteId, false, token, function(err, res) {
+    getPaste: function (token, pasteId, done) {
+        this.request('GET', this._url + '/paste/' + pasteId, false, token, function(err, res) {
             done(err, res);
         });
     },
 
     /**
      * Validate token
-     * @param url
      * @param token
      * @param done
      */
-    validateToken: function (url, token, done) {
-        this.request('POST', url + '/validate', false, token, done);
+    validateToken: function (token, done) {
+        this.request('POST', this._url + '/validate', false, token, done);
     },
 
     /**
      * Send message
-     * @param url
      * @param user
      * @param message
      * @param done
      */
-    sendMessage: function (url, user, message, done) {
+    sendMessage: function (user, message, done) {
         var data = {user: user, title: message.title, message: message.content};
-        this.request('POST', url + '/contacts', data, false, function(err, res) {
+        this.request('POST', this._url + '/contacts', data, false, function(err, res) {
             done(err, res);
         });
     },

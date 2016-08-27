@@ -55,7 +55,8 @@ var Content = React.createClass({
             'hidden': (this.props.view == 'login' || this.props.view == 'registration')
         });
         var username = '';
-        if (this.props.user.user) username = this.props.user.user.username;
+        if (this.props.user) username = this.props.user.user.username;
+
         return (
             <div className="mdl-layout mdl-js-layout mdl-layout--fixed-header">
                 <header className={className}>
@@ -198,7 +199,7 @@ var Content = React.createClass({
                     changeView={this.props.changeView}
                     loginBtnDisabled={this.props.loginBtnDisabled}
                     registerBtnDisabled={this.props.registerBtnDisabled}
-                    user={this.props.user}
+                    user={this.props.user.user}
                     fieldsDisabled={this.props.fieldsDisabled}
                     hidden={userAuthHidden}
                 />
