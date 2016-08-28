@@ -14,7 +14,7 @@ module.exports = class Singleton
 
       paste.votes.push @_getVote paste, rating
       paste.votesSum += rating
-      paste.rating = @_getRating votesSum
+      paste.rating = @_getRating paste.votesSum
       paste
 
 

@@ -6,7 +6,7 @@ var Input = require('./common/Input');
 var Button = require('./common/Button');
 var List = require('./common/List');
 var Icon = require('./common/Icon');
-var Rating = require('react-rating');
+//var Rating = require('react-rating');
 
 var Editor = React.createClass({
 
@@ -170,15 +170,15 @@ var Editor = React.createClass({
             items = [
                 {label: this.props.viewedPaste.user.user.username, icon: 'account_circle'},
                 {label: this.props.viewedPaste.mode, icon: 'code'},
-                {label: date, icon: 'schedule'},
-                {label: <Rating
+                {label: date, icon: 'schedule'}
+                /*{label: <Rating
                     empty={<Icon icon='star_border' />}
                     full={<Icon icon='star' className="star-orange"/>}
                     onChange={this._onRatingChange}
                     placeholderRate={this.props.viewedPaste.rating}
                     readonly={this.props.viewedPaste.isMine}
                     placeholder={<Icon icon='star' />}
-                />, icon: 'stars'}
+                />, icon: 'stars'}*/
             ]
         }
 
