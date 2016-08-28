@@ -6,7 +6,7 @@ var Input = require('./common/Input');
 var Button = require('./common/Button');
 var List = require('./common/List');
 var Icon = require('./common/Icon');
-var Rating = require('react-rating');
+//var Rating = require('react-rating');
 
 var Editor = React.createClass({
 

@@ -2,7 +2,7 @@ var React = require('react');
 var ReactPropTypes = React.PropTypes;
 var Icon = require('./Icon');
 var moment = require('moment');
-var Rating = require('react-rating');
+//var Rating = require('react-rating');
 
 var Grid = React.createClass({
     
