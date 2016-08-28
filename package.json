@@ -5,10 +5,6 @@
     "watch": "watchify -o public/scripts/bundle.js -v -d public/index.js",
     "start-dev-win": "SET APP_ENV=development&&SET APP_PORT=3000&&SET USER=d.andreev90@gmail.com&&SET PASS=Secret&&node ./node_modules/nodemon/bin/nodemon ./ localhost 3000",
     "start-dev-unix": "APP_ENV=development&&APP_PORT=3000&&USER=d.andreev90@gmail.com&&PASS=Secret&&node ./node_modules/nodemon/bin/nodemon ./ localhost 3000",
-    "start-pro-unix": "./scripts/start",
-    "start-test": "ENV=test PORT=1234 node ./node_modules/nodemon/bin/nodemon ./ localhost 1234",
-    "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
-    "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
     "coffee-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json .",
     "eslint": "eslint ./public/app/",
     "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
