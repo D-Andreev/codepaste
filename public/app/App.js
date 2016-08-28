@@ -130,9 +130,14 @@ var App = React.createClass({
                     onMessageContentChange={this._onMessageContentChange}
                     onMessageTitleChange={this._onMessageTitleChange}
                     sendMessage={this._sendMessage}
+                    onRatingClick={this._onRatingClick}
                 />
             </span>
         )
+    },
+    
+    _onRatingClick: function (rate) {
+        AppStateActions.setRating(rate);
     },
 
     /**

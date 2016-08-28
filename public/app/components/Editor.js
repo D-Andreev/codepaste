@@ -6,6 +6,7 @@ var Input = require('./common/Input');
 var Button = require('./common/Button');
 var List = require('./common/List');
 var Icon = require('./common/Icon');
+var Rating = require('react-rating');
 
 var Editor = React.createClass({
 
@@ -20,7 +21,8 @@ var Editor = React.createClass({
         onTitleChange: ReactPropTypes.func,
         title: ReactPropTypes.string,
         view: ReactPropTypes.string,
-        showToast: ReactPropTypes.func
+        showToast: ReactPropTypes.func,
+        onRatingClick: ReactPropTypes.func
     },
 
     _cm: null,
@@ -168,7 +170,14 @@ var Editor = React.createClass({
             items = [
                 {label: this.props.viewedPaste.user.user.username, icon: 'account_circle'},
                 {label: this.props.viewedPaste.mode, icon: 'code'},
-                {label: date, icon: 'schedule'}
+                {label: date, icon: 'schedule'},
+                {label: <Rating
+                            empty={<Icon icon='star_border'/>}
+                            full={<Icon icon='star' className="star-orange"/>}
+                            onChange={this._onRatingChange}
+                            placeholderRate={2.5}
+                            placeholder={<Icon icon='star'/>}
+                        />, icon: 'stars'}
             ]
         }
 
@@ -199,6 +208,10 @@ var Editor = React.createClass({
                 />
             </span>
         )
+    },
+
+    _onRatingChange: function (rate){
+        this.props.onRatingClick(rate);
     },
 
     /**

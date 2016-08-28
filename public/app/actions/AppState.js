@@ -267,6 +267,13 @@ var AppStateActions = {
         AppDispatcher.dispatch({
             actionType: Constants.SEND_MESSAGE
         });
+    },
+    
+    setRating: function(rating) {
+        AppDispatcher.dispatch({
+            actionType: Constants.SET_RATING,
+            rating: rating
+        });
     }
 };
 

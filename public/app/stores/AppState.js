@@ -253,6 +253,18 @@ function _sendContactMessage() {
     });
 }
 
+function _setRating(rating) {
+    ApiUtils.sendRate(_url, rating, _user, function(err, updatedStats) {
+        if (err) {
+            _setToastNotification('Service error!', 'error');
+            return AppStateStore.emitChange();
+        }
+
+        _setToastNotification('Thanks for rating!', 'success');
+        alert(updatedStats);
+    });
+}
+
 /**
  * App Store
  */
@@ -512,6 +524,11 @@ AppDispatcher.register(function(action) {
         case Constants.SET_MESSAGE_CONTENT:
             Contacts.setContent(action.messageContent);
             AppStateStore.emitChange();
+            break;
+
+        case Constants.SET_RATING:
+            var rating = action.rating;
+            _setRating(rating);
             break;
 
         default:

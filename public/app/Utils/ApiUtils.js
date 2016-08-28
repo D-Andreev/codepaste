@@ -99,6 +99,13 @@ module.exports = {
         });
     },
 
+    sendRate: function (url, rate, user, done) {
+        var data = {user: user, rate: rate};
+        this.request('POST', url + '/rating', data, false, function(err, res) {
+            done(err, res);
+        });
+    },
+
     /**
      * Request
      * @param method
