@@ -18,6 +18,5 @@ module.exports = express.Router().get routes.paste, (req, res) ->
     delete paste.user.user.email
     delete paste.value
     paste.user = paste.user.user
-    paste.isMine = paste.user.email is
     {statusCode, body} = new Response err, paste, STATUS_CODES.OK
     return res.status(statusCode).json body

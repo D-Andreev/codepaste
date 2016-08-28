@@ -13,16 +13,16 @@
   STATUS_CODES = require('../../lib/constants').STATUS_CODES;
 
   module.exports = express.Router().post(routes.rating, function(req, res) {
-    if (!(req.body.user || req.body.paste || req.body.rating)) {
+    if (!(req.body.user || req.body.pasteId || req.body.rate)) {
       return res.status(STATUS_CODES.BAD_REQUEST).json({});
     }
     return Paste.findOne({
-      _id: req.body.paste._id
+      _id: req.body.pasteId
     }, function(err, paste) {
       if (!paste || !paste.user) {
         return res.status(STATUS_CODES.NOT_FOUND).json({});
       }
-      paste = Rating.get().vote(req.body.user.user.email, req.body.paste, req.body.rating);
+      paste = Rating.get().vote(req.body.user.user.email, req.body.paste, req.body.rate);
       return res.status(STATUS_CODES.OK).json({});
     });
   });
