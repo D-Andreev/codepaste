@@ -24,8 +24,7 @@ module.exports = class Singleton
 
     _getRating: (votesSum) ->
       parseFloat (votesSum / MAX_NUMBER_OF_VOTES).toFixed(2)
-      
+
 
   @get: ->
     instance ?= new Rating()
-
