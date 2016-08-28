@@ -528,12 +528,13 @@ AppDispatcher.register(function(action) {
 });
 
 function _setRating(rating) {
-    ApiUtils.sendRate(rating, User.getUser(), Paste.getPaste(), function(err, updatedRate) {
+    ApiUtils.sendRate(rating, User.getUser(), Paste.getPaste(), function(err, paste) {
         if (err) {
             _setNotification('Service error!', 'error');
         } else{
             _setNotification('Thanks for rating!', 'success');
-            alert(updatedRate);
+            Paste.setPaste(paste);
+            AppStateStore.emitChange();
         }
     });
 }

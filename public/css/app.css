@@ -41,6 +41,13 @@ ul {
     background-position: center center;
 }
 
+.app .mdl-layout__content {
+    background-image: url("/img/background.jpg");
+    background-size: cover;
+    background-repeat:   no-repeat;
+    background-position: center center;
+}
+
 .app .view-title-wrapper {
     background-color: rgb(139,195,74);
     color: rgb(66,66,66);
