@@ -514,10 +514,26 @@ AppDispatcher.register(function(action) {
             AppStateStore.emitChange();
             break;
 
+        case Constants.SET_RATING:
+            _setRating(action.rating);
+            AppStateStore.emitChange();
+            break;
+
         default:
         // no op
     }
 });
+
+function _setRating(rating) {
+    ApiUtils.sendRate(rating, User.getUser(), function(err, updatedRate) {
+        if (err) {
+            Toast.setNotification('Service error!', 'error');
+        } else{
+            Toast.setNotification('Thanks for rating!', 'success');
+            alert(updatedRate);
+        }
+    });
+}
 
 
 /**

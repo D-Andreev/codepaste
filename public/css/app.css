@@ -298,6 +298,10 @@ ul {
     color: white;
 }
 
+.material-icons.star-orange {
+    color: orange;
+}
+
 footer {
     position: absolute;
     bottom: 0;
