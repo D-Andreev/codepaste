@@ -43,7 +43,7 @@
             var mailOpts;
             mailOpts = {
               from: process.env.USER + "@gmail.com",
-              to: opts.user.user.email,
+              to: opts.user.email,
               subject: 'Codepaste',
               text: 'Your message has been sent.'
             };

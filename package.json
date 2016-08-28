@@ -10,7 +10,8 @@
     "test-unit": "node ./node_modules/mocha/bin/mocha ./specs/ --recursive",
     "test-feature": "node ./node_modules/cucumber/bin/cucumber.js --strict -r ./features",
     "coffee-lint": "node ./node_modules/coffeelint/bin/coffeelint -f coffeelint.json .",
-    "eslint": "eslint ./public/app/"
+    "eslint": "eslint ./public/app/",
+    "generate-docs": "node_modules/.bin/jsdoc --configure .jsdoc.json --verbose"
   },
   "dependencies": {
     "async": "^2.0.0-rc.4",

@@ -1,6 +1,5 @@
 var routes = require('../constants/routes');
 
-
 module.exports = {
     /**
      * Set url
@@ -26,8 +25,9 @@ module.exports = {
         var hash = '/' + location.hash;
         if (!location.hash) return {name: '/'};
         var views = Object.keys(routes);
+        var props = this._getPropsFromUrl(hash);
         for (var i = 0; i < views.length; i++) {
-            if (routes[views[i]].test(hash)) return {name: views[i], props: this._getPropsFromUrl(hash)};
+            if (routes[views[i]].test(hash)) return {name: views[i], props: props};
         }
 
         return {name: views[0]};

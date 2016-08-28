@@ -3,170 +3,63 @@ var EventEmitter = require('events').EventEmitter;
 var Constants = require('../constants/Constants');
 var ApiUtils = require('../Utils/ApiUtils');
 var LocalStorage = require('../Utils/LocalStorage');
-var Router = require('../Utils/Router');
 var assign = require('object-assign');
+
+var Contacts = require('./helpers/Contacts');
+var User = require('./helpers/User');
+var Ws = require('./helpers/Ws');
+var CodeMirror = require('./helpers/CodeMirror');
+var Toast = require('./helpers/Toast');
+var View = require('./helpers/View');
+var Paste = require('./helpers/Paste');
+var Grid = require('./helpers/Grid');
+
+Contacts = new Contacts();
+User = new User(LocalStorage.getUser());
+Ws = new Ws();
+CodeMirror = new CodeMirror();
+Toast = new Toast();
+View = new View();
+Paste = new Paste();
+Grid = new Grid();
 
 var CHANGE_EVENT = 'change';
 var DISABLE_TIMEOUT = 3000;
-var DEFAULT_USER = {username: '', password: '', email: '', firstName: '', lastName: ''};
-var DEFAULT_CM_OPTIONS = {
-    lineNumbers: true,
-    readOnly: false,
-    mode: {
-        name: 'javascript'
-    },
-    theme: 'pastel-on-dark',
-    extraKeys: {
-        'Ctrl-Space': 'autocomplete'
-    },
-    matchBrackets: true,
-    closeBrackets: true,
-    closeTag: true,
-    continueList: true,
-    indentWithTabs: true,
-    lineWrapping: true
-};
-
-var _loading = true;
-var _url = '';
-var _view = '';
-var _user = LocalStorage.getUser() || DEFAULT_USER;
-var _toast = '';
-var _toastType = 'notification';
-var _registerBtnDisabled = false;
-var _loginBtnDisabled = false;
-var _fieldsDisabled = false;
-var _createNewBtnDisabled = false;
-var _pasteId = 0;
-var _viewedPaste = null;
-var _cmOptions = DEFAULT_CM_OPTIONS;
-var _title = '';
-var _pastes = [];
-var _filter = {};
-var _pagination = {skip: 0, limit: 10};
-var _sort = {col: 'created', direction: -1};
-var _socket = null;
-var _totalPastes = 0;
-var _message= {title:'',content:''};
-var _sendMessageBtnDisabled=false;
-
-/**
- * Get filter
- * @returns {{}}
- * @private
- */
-function _getFilter() {
-    return _filter;
-}
-
-/**
- * Get pagination
- * @returns {{skip: number}}
- * @private
- */
-function _getPagination() {
-    return _pagination;
-}
-
-/**
- * Get sort
- * @private
- */
-function _getSort() {
-    var sort = {};
-    sort[_sort.col] = _sort.direction;
-    return {
-        sort: sort
-    }
-}
-
-/**
- * Paginate
- * @param skip
- * @private
- */
-function _paginate(skip) {
-    if (skip) _pagination.skip = (skip * _pagination.limit) - _pagination.limit;
-    else _pagination.skip = 0;
-    _sendMessage();
-}
 
 /**
  * Init ws
  * @private
  */
 function _initWs() {
-    if (_socket) return;
-    _socket = new WebSocket("ws://localhost:3000/echo", "protocolOne");
-    _socket.onopen = function () {
-        _socket.send(JSON.stringify({
-            query: _getFilter(),
-            pagination: _getPagination(),
-            sort: _getSort()
+    Ws.init();
+    Ws.socket.onopen = function () {
+        this.send(JSON.stringify({
+            query: Grid.getFilter(),
+            pagination: Grid.getPagination(),
+            sort: Grid.getSort()
         }));
     };
-    _socket.onmessage = function (event) {
+    Ws.socket.onmessage = function (event) {
         var data;
         try {
             data = JSON.parse(event.data);
         } catch (e) {
             return;
         }
+
         if (data.res.action && data.res.action == 'update') {
             _filterAndSort();
         } else {
-            _pastes = data.res;
-            _totalPastes = data.total;
+            Grid.setPastes(data.res);
+            Grid.setTotalPastes(data.total);
             AppStateStore.emitChange();
         }
     };
 
-    _socket.onclose = function() {
-        _socket = null;
+    Ws.socket.onclose = function() {
+        Ws.destroy();
         _initWs();
-    }
-}
-
-/**
- * Filter and sort
- * @private
- */
-function _filterAndSort() {
-    var filter = {};
-    if (typeof _getFilter() == 'string') filter = _setSearchQuery(_filter);
-    _socket.send(JSON.stringify({
-        query: filter,
-        pagination: _getPagination(),
-        sort: _getSort()
-    }));
-}
-
-/**
- * Sort
- * @param col
- * @param direction
- * @private
- */
-function _sortGrid(col, direction) {
-    _sort = {col: col, direction: direction};
-    _filterAndSort();
-}
-
-/**
- * Set search query
- * @param message
- * @returns {{$or: *[]}}
- * @private
- */
-function _setSearchQuery(message) {
-    return {
-        $or: [
-            {'user.user.username': {$regex : message}},
-            {'title': {$regex : message}},
-            {'mode': {$regex : message}},
-            {'code': {$regex : message}}
-        ]
-    }
+    };
 }
 
 /**
@@ -175,37 +68,12 @@ function _setSearchQuery(message) {
  * @private
  */
 function _sendMessage(message) {
-    _filter = message ? message : '';
-    _socket.send(JSON.stringify({
-        query: _setSearchQuery(_filter),
-        pagination: _getPagination(),
-        sort: _getSort()
+    Grid.setFilter(message);
+    Ws.send(JSON.stringify({
+        query: _setSearchQuery(Grid.getFilter()),
+        pagination: Grid.getPagination(),
+        sort: Grid.getSort()
     }));
-}
-
-/**
- * Init app
- * @param  {object} props
- */
-function _init(props) {
-    _url = props.url;
-    _route();
-}
-
-/**
- * Validate user token
- * @param done
- * @returns {boolean}
- * @private
- */
-function _userIsLoggedIn(done) {
-    if (!_user.token || !_user.refreshToken) return done(false);
-    ApiUtils.validateToken(_url, _user.token, function(err, res) {
-
-        if (err) return _setToastNotification('Service error!', 'error');
-        if (!res || res.statusCode == 401) return done(false);
-        done(true);
-    });
 }
 
 /**
@@ -215,51 +83,56 @@ function _userIsLoggedIn(done) {
  * @private
  */
 function _route(path, viewProps) {
-    var view;
-    if (!path) view = Router.getViewFromUrl();
-    else view ={name: path};
-
-    _userIsLoggedIn(function(userIsLoggedIn) {
-        if (!userIsLoggedIn) {
-            if (view.name == 'registration') _setView('registration');
-            else _setView('login');
-        } else {
-            _initWs();
-            if (view.name == '/') return _setView('pastes');
-            var props = false;
-            if (view.name == 'paste') {
-                var pasteId;
-                if (view.props && view.props.id) pasteId = view.props.id;
-                else if (viewProps && viewProps.id) {
-                    pasteId = viewProps.id;
-                    _viewedPaste = null;
-                }
-                props = {id: pasteId};
-                _cmOptions.readOnly = true;
-                if (_viewedPaste) return _setView(view, props);
-
-                ApiUtils.getPaste(_user.token, _url, pasteId, function(err, response) {
-                    if (err) {
-                        if (err.status >= 500 && err.status < 600) return _setToastNotification('Service error!', 'error');
-                        if (err.status == 401) return _logout();
-                        else if (err.status == 404) return _setToastNotification('Paste does not exist!', 'error');
-                    }
-                    _viewedPaste = response;
-                    _title = response.title;
-                    _setView('paste', props);
-                });
-            } else if (view.name == 'new') {
-                _viewedPaste = null;
-                _title = '';
-                _cmOptions.readOnly = false;
-                _cmOptions.mode = 'javascript';
-                _pasteId = 0;
-                _setView('new');
-            } else if (view.name == 'pastes') {
-                _setView('pastes');
-            } else if (view.name == 'contacts') {
-                _setView('contacts');
+    View.initView(path);
+    View.setLoading(true);
+    AppStateStore.emitChange();
+    User.isLoggedIn(function(err) {
+        if (err) {
+            if (err.status == 401) {
+                if (View.getView().name == 'registration') _setView('registration');
+                else _setView('login');
+                View.setLoading(false);
+                return AppStateStore.emitChange();
+            } else {
+                _setView('login');
+                _setNotification('Service error!', 'error');
             }
+        }
+        View.setLoading(false);
+        _initWs();
+        var view = View.getView();
+        if (view.name == '/' || view.name == 'login' || view.name == 'registration') return _setView('pastes');
+        var props = false;
+        if (view.name == 'paste') {
+            var pasteId;
+            if (view.props && view.props.id) pasteId = view.props.id;
+            else if (viewProps && viewProps.id) {
+                pasteId = viewProps.id;
+                Paste.destroy();
+            }
+            props = {id: pasteId};
+            CodeMirror.setOption('readOnly', true);
+            if (Paste.getPaste()) return _setView(View.getView(), props);
+
+            Paste.request(User.getToken(), pasteId, function(err, response) {
+                if (err) {
+                    if (err.status >= 500 && err.status < 600) return Toast.setNotification('Service error!', 'error');
+                    if (err.status == 401) return User.logout();
+                    else if (err.status == 404) return Toast.setNotification('Paste does not exist!', 'error');
+                }
+                Paste.setPaste(response);
+                Paste.setUser(User.getUser());
+                _setView('paste', props);
+            });
+        } else if (view.name == 'new') {
+            Paste.destroy();
+            CodeMirror.setOption('readOnly', false);
+            CodeMirror.setOption('mode', 'javascript');
+            _setView('new');
+        } else if (view.name == 'pastes') {
+            _setView('pastes');
+        } else if (view.name == 'contacts') {
+            _setView('contacts');
         }
     });
 }
@@ -271,18 +144,16 @@ function _route(path, viewProps) {
  * @private
  */
 function _setView(view, props) {
-    if (typeof view == 'string') view = {name: view};
-    _view = view.name;
-    if (_view == 'paste') {
-        _cmOptions.readOnly = true;
-    } else if (_view == 'new') {
-        _title = '';
-        _viewedPaste = null;
-        _pasteId = 0;
-        _cmOptions.readOnly = false;
-        _cmOptions.mode = 'javascript'
+    if (typeof view == 'string') View.setView({name: view});
+    else View.setView(view.name);
+    if (View.getView() == 'paste') {
+        CodeMirror.setOption('readOnly', true);
+    } else if (View.getView() == 'new') {
+        Paste.destroy();
+        CodeMirror.setOption('readOnly', false);
+        CodeMirror.setOption('mode', 'javascript');
     }
-    Router.setUrl('#' + view.name, props);
+    View.setUrl('#' + View.getViewName(), props);
     AppStateStore.emitChange();
 }
 
@@ -296,99 +167,22 @@ function _setView(view, props) {
  */
 function _createNew(value, title, mode) {
     _setCreateNewButtonTimeout();
-    _setLoading(true);
-    if (!value) {
-        _toast = 'Please paste code!';
-        _toastType = 'warning';
-        _setLoading(false);
-        return AppStateStore.emitChange();
-    }
-
-    ApiUtils.createNew(_url, _user, {value: value, title: title, mode: mode}, function(err, response) {
-        if (err) {
-            _setLoading(false);
-            _setToastNotification('Service error!', 'error');
-            AppStateStore.emitChange();
-        }
+    View.setLoading(true);
+    AppStateStore.emitChange();
+    if (!value) return _setNotification('Please paste code!', 'warning');
+    ApiUtils.createNew(User.getUser(), {value: value, title: title, mode: mode}, function(err, response) {
+        if (err) return _setNotification('Service error!', 'error');
         if (response) {
-            _pasteId = response._id;
-            _viewedPaste = response;
-            _viewedPaste.user = {username: _user.user.username};
-            _cmOptions.readOnly = false;
-            _setView('paste', {id: _pasteId});
-            _setLoading(false);
+            Paste.setPasteId(response._id);
+            Paste.setPaste(response);
+            Paste.setUser(User.getUser());
+            CodeMirror.setOption('readOnly', true);
+            _setView('paste', {id: response._id});
+            View.setLoading(false);
         } else {
-            _setLoading(false);
-            _setToastNotification('Error creating new paste!', 'error');
-            AppStateStore.emitChange();
+            _setNotification('Error creating new paste!', 'error');
         }
     });
-}
-
-
-/**
- * Set Toast
- * @param toast
- * @private
- */
-function _setToast(toast) {
-    _toast = toast;
-}
-
-/**
- * Set register button timeout
- * @private
- */
-function _setRegisterButtonTimeout() {
-    _registerBtnDisabled = true;
-    _fieldsDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _registerBtnDisabled = false;
-        _fieldsDisabled = false;
-        AppStateStore.emitChange();
-    }, DISABLE_TIMEOUT);
-}
-
-/**
- * Set login button timeout
- * @private
- */
-function _setLoginButtonTimeout() {
-    _loginBtnDisabled = true;
-    _fieldsDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _loginBtnDisabled = false;
-        _fieldsDisabled = false;
-        AppStateStore.emitChange();
-    }, DISABLE_TIMEOUT);
-}
-
-/**
- * Set create new timeout
- * @private
- */
-function _setCreateNewButtonTimeout() {
-    _createNewBtnDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _createNewBtnDisabled = false;
-        AppStateStore.emitChange();
-    }, DISABLE_TIMEOUT);
-}
-
-/**
- * Set send message timeout
- * @private
- */
-function _setSendMessageButtonTimeout() {
-    _sendMessageBtnDisabled = true;
-    AppStateStore.emitChange();
-    setTimeout(function() {
-        _sendMessageBtnDisabled = false;
-        AppStateStore.emitChange();
-    }, DISABLE_TIMEOUT);
 }
 
 /**
@@ -399,45 +193,19 @@ function _setSendMessageButtonTimeout() {
  * @private
  */
 function _register(username, email, password) {
-    _setLoading(true);
+    View.setLoading(true);
     _setRegisterButtonTimeout();
-    if (!username || !email || !password) {
-        _toast = 'Please enter all required fields!';
-        _toastType = 'warning';
-        _setLoading(false);
-        AppStateStore.emitChange();
-        return;
-    }
-
-    ApiUtils.register(_url, username, email, password, function(err, response) {
-        if (err) {
-            _setLoading(false);
-            _setToastNotification('Service error!', 'error');
-            return AppStateStore.emitChange();
-        }
+    if (!username || !email || !password) return _setNotification('Please enter all required fields!', 'warning');
+    ApiUtils.register(username, email, password, function(err, response) {
+        if (err) return _setNotification('Service error!', 'error');
         if (response.statusCode == 200) {
-            _user = {username: username, email: email, password: password};
-            _toast = 'User registered successfully!';
-            _toastType = 'success';
+            User.setUser({token: null, refreshToken: null, user: {username: username, email: email, password: password}});
             _setView('login');
-            _setLoading(false);
-            AppStateStore.emitChange();
+            _setNotification('User registered successfully!', 'success');
         } else {
-            _toast = response.body;
-            _toastType = 'error';
-            _setLoading(false);
-            AppStateStore.emitChange();
+            _setNotification(response.body, 'error');
         }
     });
-}
-
-/**
- * Set Loading
- * @param loading
- * @private
- */
-function _setLoading(loading) {
-    _loading = loading;
 }
 
 /**
@@ -448,142 +216,22 @@ function _setLoading(loading) {
  */
 function _login(username, password) {
     _setLoginButtonTimeout();
-    _setLoading(true);
-    if (!username || !password) {
-        _toast = 'All fields are required!';
-        _toastType = 'warning';
-        return AppStateStore.emitChange();
-    }
+    View.setLoading(true);
+    AppStateStore.emitChange();
+    if (!username || !password) return _setNotification('All fields are required!', 'warning');
 
-    ApiUtils.login(_url, username, password, function(err, response) {
-        if (err) {
-            _setLoading(false);
-            _setToastNotification('Service error!', 'error');
-            return AppStateStore.emitChange();
-        }
+    ApiUtils.login(username, password, function(err, response) {
+        if (err) return _setNotification('Service error!', 'error');
         if (response.statusCode == 201) {
             _initWs();
-            _saveLoggedInUser(response.body);
+            User.saveUser(response.body);
             _setView('pastes');
-            _setLoading(false);
-        } else {
-            _setLoading(false);
-            _setToastNotification(response.body, 'error');
+            View.setLoading(false);
             AppStateStore.emitChange();
+        } else {
+            _setNotification(response.body, 'error');
         }
     });
-}
-
-/**
- * Set mode
- * @param mode
- * @private
- */
-function _setMode(mode) {
-    _cmOptions.mode = mode;
-    if (_viewedPaste) _viewedPaste.mode = mode;
-}
-
-/**
- * Set username
- * @param username
- * @private
- */
-function _setUsername(username) {
-    _user.username = username;
-}
-
-/**
- * Set First Name
- * @param firstName
- * @private
- */
-function _setFirstName(firstName) {
-    _user.firstName = firstName;
-}
-
-/**
- * Set last name
- * @param lastName
- * @private
- */
-function _setLastName(lastName) {
-    _user.lastName = lastName;
-}
-
-/**
- * Set password
- * @param password
- * @private
- */
-function _setPassword(password) {
-    _user.password = password;
-}
-
-/**
- * Set email
- * @param email
- * @private
- */
-function _setEmail(email) {
-    _user.email = email;
-}
-
-/**
- * Save logged in user.
- * @param user
- * @private
- */
-function _saveLoggedInUser(user) {
-    _user = user;
-    LocalStorage.setUser(_user);
-}
-
-/**
- * Logout
- * @private
- */
-function _logout() {
-    LocalStorage.clearUser();
-    location.reload();
-}
-
-/**
- * Set toast
- * @param message
- * @param type
- * @private
- */
-function _setToastNotification(message, type) {
-    _toast = message;
-    _toastType = type;
-}
-
-/**
- * Set title
- * @param title
- * @private
- */
-function _setTitle(title) {
-    _title = title;
-}
-
-/**
- * Set message title
- * @param messageTitle
- * @private
- */
-function _setMessageTitle(messageTitle) {
-    _message.title = messageTitle;
-}
-
-/**
- * Set message content
- * @param messageContent
- * @private
- */
-function _setMessageContent(messageContent) {
-    _message.content = messageContent;
 }
 
 /**
@@ -592,22 +240,15 @@ function _setMessageContent(messageContent) {
  */
 function _sendContactMessage() {
     _setSendMessageButtonTimeout();
-    _setLoading(true);
-
-    if (!_message.title|| !_message.content) {
-        _setToastNotification('Title and content are required.', 'warning');
-        return AppStateStore.emitChange();
+    View.setLoading(true);
+    AppStateStore.emitChange();
+    if (!Contacts.getTitle() || !Contacts.getContent()) {
+        return _setNotification('Title and content are required.', 'warning');
     }
+    ApiUtils.sendMessage(User.getUser().user, Contacts.getMessage(), function(err) {
+        if (err && err.text != 'Your message has been sent.') return _setNotification('Service error!', 'error');
 
-    ApiUtils.sendMessage(_url, _user, _message, function(err) {
-        if (err) {
-            _setLoading(false);
-            _setToastNotification('Service error!', 'error');
-            return AppStateStore.emitChange();
-        }
-
-        _setToastNotification('Message sent.', 'success');
-        _setLoading(false);
+        _setNotification('Message sent.', 'success');
         _setView('pastes');
     });
 }
@@ -621,314 +262,242 @@ var AppStateStore = assign({}, EventEmitter.prototype, {
      * Get url
      * @returns {string}
      */
-    getUrl: function () {
-        return _url;
-    },
+    getUrl: function () { return ApiUtils.getUrl(); },
 
     /**
      * Get view
      * @returns {string}
      */
-    getView: function () {
-        return _view;
-    },
+    getView: function () { return View.getViewName(); },
 
     /**
      * Get login button disabled
      * @returns {boolean}
      */
-    getLoginBtnDisabled: function() {
-        return _loginBtnDisabled;
-    },
+    getLoginBtnDisabled: function() { return View.getLoginBtnDisabled(); },
 
     /**
      * Get register button disabled
      * @returns {boolean}
      */
-    getRegisterBtnDisabled: function() {
-        return _registerBtnDisabled;
-    },
+    getRegisterBtnDisabled: function() { return View.getRegisterBtnDisabled(); },
 
     /**
      * Get user
      * @returns {*|{username: string, password: string, email: string}}
      */
-    getUser: function() {
-        return _user;
-    },
+    getUser: function() { return User.getUser(); },
 
     /**
      * Get toast
      * @returns {string}
      */
-    getToast: function () {
-        return _toast;
-    },
+    getToast: function () { return Toast.getToast(); },
 
     /**
      * Get toast type.
      * @returns {string}
      */
-    getToastType: function () {
-        return _toastType;
-    },
+    getToastType: function () { return Toast.getType(); },
 
     /**
      * Get fields disabled
      * @returns {boolean}
      */
-    getFieldsDisabled: function () {
-        return _fieldsDisabled;
-    },
+    getFieldsDisabled: function () { return View.getFieldsDisabled(); },
 
     /**
      * Get create new paste button disabled
      * @returns {*}
      */
-    getCreateNewBtnDisabled: function () {
-        return _createNewBtnDisabled;
-    },
+    getCreateNewBtnDisabled: function () { return View.getCreateNewBtnDisabled(); },
 
     /**
      * Get send message button disabled
      * @returns {*}
      */
-    getSendMessageBtnDisabled: function () {
-        return _sendMessageBtnDisabled;
-    },
+    getSendMessageBtnDisabled: function() { return Contacts.getButtonDisabled(); },
 
     /**
      * Get viewed paste
      * @returns {*}
      */
-    getViewedPaste: function () {
-        return _viewedPaste;
-    },
+    getViewedPaste: function () { return Paste.getPaste(); },
 
     /**
      * Get message title
      * @returns {*}
      */
-    getMessageTitle: function () {
-        return _message.title;
-    },
+    getMessageTitle: function() { return Contacts.getTitle(); },
 
     /**
      * Get message content
      * @returns {*}
      */
-    getMessageContent: function () {
-        return _message.content;
-    },
+    getMessageContent: function() { return Contacts.getContent(); },
 
     /**
      * Get Code mirror options
      * @returns {{options: {readOnly: *, mode: {name: string}, theme: string, extraKeys: {Ctrl-Space: string}, matchBrackets: boolean, closeBrackets: boolean, closeTag: boolean, continueList: boolean}}}
      */
-    getCmOptions: function () {
-        return _cmOptions;
-    },
+    getCmOptions: function () { return CodeMirror.getOptions(); },
 
     /**
      * Get title
      * @returns {string}
      */
-    getTitle: function () {
-        return _title;
-    },
+    getTitle: function () { return Paste.getTitle(); },
 
     /**
      * Get Loading
      */
-    getLoading: function() {
-        return _loading;
-    },
+    getLoading: function() { return View.getLoading(); },
 
     /**
      * Get pastes
      * @returns {Array}
      */
-    getPastes: function() {
-        return _pastes;
-    },
+    getPastes: function() { return Grid.getPastes(); },
 
     /**
      * Get sort
-     * @returns {{created: number}}
+     * @returns {{sort}}
      */
-    getSort: function() {
-        return _sort;
-    },
+    getSort: function() { return Grid.getSortOptions(); },
 
     /**
      * Get pagination
      * @returns {{skip: number}}
      */
-    getPagination: function () {
-        return _pagination;
-    },
+    getPagination: function () { return Grid.getPagination(); },
 
     /**
      * Get total pastes
      * @returns {number}
      */
-    getTotalPastes: function () {
-        return _totalPastes;
-    },
+    getTotalPastes: function () { return Grid.getTotalPastes(); },
 
     /**
      * Emit change
      */
-    emitChange: function() {
-        this.emit(CHANGE_EVENT);
-    },
+    emitChange: function() { this.emit(CHANGE_EVENT); },
 
     /**
      * @param {function} callback
      */
-    addChangeListener: function(callback) {
-        this.on(CHANGE_EVENT, callback);
-    },
+    addChangeListener: function(callback) { this.on(CHANGE_EVENT, callback); },
 
     /**
      * @param {function} callback
      */
-    removeChangeListener: function(callback) {
-        this.removeListener(CHANGE_EVENT, callback);
-    }
+    removeChangeListener: function(callback) { this.removeListener(CHANGE_EVENT, callback); }
 });
 
 /**
  * Register callback to handle all updates
  */
 AppDispatcher.register(function(action) {
-    var props, username, password, email, view;
+    var props, view;
 
     switch(action.actionType) {
         case Constants.INIT:
             props = action.props;
             if (props) {
-                _init(props);
-                AppStateStore.emitChange();
+                ApiUtils.setUrl(props.url);
+                _route();
             }
             break;
 
         case Constants.SET_USERNAME:
-            username = action.username;
-            _setUsername(username);
+            User.setUsername(action.username);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_FIRST_NAME:
-            var firstName = action.firstName;
-            _setFirstName(firstName);
+            User.setFirstName(action.firstName);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_LAST_NAME:
-            var lastName = action.lastName;
-            _setLastName(lastName);
+            User.setLastName(action.lastName);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_PASSWORD:
-            password = action.password;
-            _setPassword(password);
+            User.setPassword(action.password);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_EMAIL:
-            email = action.email;
-            _setEmail(email);
+            User.setEmail(action.email);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_VIEW:
             view = action.view;
-            var viewProps = action.viewProps;
             if (view) {
-                _setView(view, viewProps);
+                _setView(view, action.viewProps);
                 AppStateStore.emitChange();
             }
             break;
 
         case Constants.REGISTER:
-            username = action.username;
-            email = action.email;
-            password = action.password;
-            _register(username, email, password);
+            _register(action.username, action.email, action.password);
             break;
 
         case Constants.LOGIN:
-            username = action.username;
-            password = action.password;
-            _login(username, password);
+            _login(action.username, action.password);
             break;
 
         case Constants.LOGOUT:
-            _logout();
-            AppStateStore.emitChange();
+            User.logout();
             break;
 
         case Constants.SET_TOAST:
-            _setToast();
+            Toast.setToast(action.toast);
             AppStateStore.emitChange();
             break;
 
         case Constants.NAVIGATE:
-            var path = action.path;
-            props = action.props;
-            _route(path, props);
+            _route(action.path, action.props);
             AppStateStore.emitChange();
             break;
 
         case Constants.CREATE_NEW:
-            var value = action.value;
-            title = action.title;
-            var mode = action.mode;
-            _createNew(value, title, mode);
+            _createNew(action.value, action.title, action.mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MODE:
-            mode = action.mode;
-            _setMode(mode);
+            CodeMirror.setOption('mode', action.mode);
             AppStateStore.emitChange();
             break;
 
         case Constants.CHANGE_TITLE:
-            var title = action.title;
-            _setTitle(title);
+            Paste.setTitle(action.title);
             AppStateStore.emitChange();
             break;
 
         case Constants.SHOW_TOAST:
-            var message = action.message;
-            var type = action.type;
-            _setToastNotification(message, type);
+            Toast.setNotification(action.message, action.type);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_LOADING:
-            var loading = action.loading;
-            _setLoading(loading);
+            View.setLoading(action.loading);
             AppStateStore.emitChange();
             break;
 
         case Constants.SEARCH:
-            var query = action.query;
-            _sendMessage(query);
+            _sendMessage(action.query);
             break;
 
         case Constants.SORT:
-            var col = action.col;
-            var direction = action.direction;
-            _sortGrid(col, direction);
+            _sortGrid(action.col, action.direction);
             break;
 
         case Constants.PAGINATE:
-            var skip = action.skip;
-            _paginate(skip);
+            _paginate(action.skip);
             break;
 
         case Constants.SEND_MESSAGE:
@@ -936,14 +505,12 @@ AppDispatcher.register(function(action) {
             break;
 
         case Constants.SET_MESSAGE_TITLE:
-            var messageTitle = action.messageTitle;
-            _setMessageTitle(messageTitle);
+            Contacts.setTitle(action.messageTitle);
             AppStateStore.emitChange();
             break;
 
         case Constants.SET_MESSAGE_CONTENT:
-            var messageContent = action.messageContent;
-            _setMessageContent(messageContent);
+            Contacts.setContent(action.messageContent);
             AppStateStore.emitChange();
             break;
 
@@ -951,5 +518,129 @@ AppDispatcher.register(function(action) {
         // no op
     }
 });
+
+
+/**
+ * Filter and sort
+ * @private
+ */
+function _filterAndSort() {
+    var filter = {};
+    if (typeof Grid.getFilter() == 'string') filter = _setSearchQuery(Grid.getFilter());
+    Ws.send(JSON.stringify({
+        query: filter,
+        pagination: Grid.getPagination(),
+        sort: Grid.getSort()
+    }));
+}
+
+/**
+ * Sort
+ * @param col
+ * @param direction
+ * @private
+ */
+function _sortGrid(col, direction) {
+    Grid.setSort({col: col, direction: direction});
+    _filterAndSort();
+}
+
+/**
+ * Set search query
+ * @param message
+ * @returns {{$or: *[]}}
+ * @private
+ */
+function _setSearchQuery(message) {
+    if (typeof message != 'string') return {};
+    return {
+        $or: [
+            {'user.user.username': {$regex : message, $options: '-i'}},
+            {'title': {$regex : message, $options: '-i'}},
+            {'mode': {$regex : message, $options: '-i'}}
+        ]
+    }
+}
+
+/**
+ * Paginate
+ * @param skip
+ * @private
+ */
+function _paginate(skip) {
+    var pagination = Grid.getPagination();
+    if (skip) pagination.skip = (skip * pagination.limit) - pagination.limit;
+    else pagination.skip = 0;
+    _sendMessage(Grid.getFilter());
+}
+
+/**
+ * Set register button timeout
+ * @private
+ */
+function _setRegisterButtonTimeout() {
+    View.setRegisterBtnDisabled(true);
+    View.setFieldsDisabled(true);
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        View.setRegisterBtnDisabled(false);
+        View.setFieldsDisabled(false);
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
+
+/**
+ * Set login button timeout
+ * @private
+ */
+function _setLoginButtonTimeout() {
+    View.setLoginBtnDisabled(true);
+    View.setFieldsDisabled(true);
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        View.setLoginBtnDisabled(false);
+        View.setFieldsDisabled(false);
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
+
+/**
+ * Set create new timeout
+ * @private
+ */
+function _setCreateNewButtonTimeout() {
+    View.setCreateNewBtnDisabled(true);
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        View.setCreateNewBtnDisabled(false);
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
+
+/**
+ * Set send message timeout
+ * @private
+ */
+function _setSendMessageButtonTimeout() {
+    Contacts.setButtonDisabled(true);
+    AppStateStore.emitChange();
+    setTimeout(function() {
+        Contacts.setButtonDisabled(false);
+        AppStateStore.emitChange();
+    }, DISABLE_TIMEOUT);
+}
+
+/**
+ * Set notification
+ * @param message
+ * @param type
+ * @returns {*}
+ * @private
+ */
+function _setNotification(message, type) {
+    View.setLoading(false);
+    Toast.setNotification(message, type);
+    return AppStateStore.emitChange();
+}
 
 module.exports = AppStateStore;

@@ -35,26 +35,6 @@ var Input = React.createClass({
     },
 
     /**
-     * Get Initial state
-     * @returns {{value: *}}
-     */
-    getInitialState: function() {
-        return {
-            value: this.props.value
-        }
-    },
-
-    /**
-     * Component will update
-     * @param nextProps
-     */
-    componentWillUpdate: function(nextProps) {
-        if (nextProps.value != this.state.value) {
-            this.setState({value: nextProps.value});
-        }
-    },
-
-    /**
      * @return {object}
      */
     render: function() {
@@ -84,7 +64,7 @@ var Input = React.createClass({
                     disabled={this.props.disabled}
                     pattern={this.props.pattern}
                     placeholder={this.props.placeholder}
-                    value={this.state.value}
+                    value={this.props.value}
                     onChange={this._onChange}
                 >
                 </input>

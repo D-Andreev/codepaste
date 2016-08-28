@@ -96,6 +96,7 @@ var Editor = React.createClass({
         var $this = this;
         // eslint-disable-next-line no-undef
         this._cm = CodeMirror.fromTextArea(document.getElementById('code'), this.props.cmOptions);
+        this._cm.setSize('100%', 800);
         this._cm.on('change', function() {
             $this.setState({copyValue: $this._cm.getValue()})
         });
@@ -160,12 +161,12 @@ var Editor = React.createClass({
         var inputHidden = false;
         var listHidden = true;
         var items = [];
-        if (this.props.view == 'paste') {
+        if (this.props.view == 'paste' && this.props.viewedPaste) {
             inputHidden = true;
             listHidden = false;
             var date = moment(this.props.viewedPaste.created).format('MMMM Do YYYY, h:mm:ss a');
             items = [
-                {label: this.props.viewedPaste.user.username, icon: 'account_circle'},
+                {label: this.props.viewedPaste.user.user.username, icon: 'account_circle'},
                 {label: this.props.viewedPaste.mode, icon: 'code'},
                 {label: date, icon: 'schedule'}
             ]
