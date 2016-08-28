@@ -100,6 +100,20 @@ module.exports = {
     },
 
     /**
+     * Send Rate
+     * @param rate
+     * @param user
+     * @param pasteId
+     * @param done
+     */
+    sendRate: function (rate, user, pasteId, done) {
+        var data = {user: user, rate: rate, pasteId: pasteId};
+        this.request('POST', this._url + '/rating', data, false, function(err, res) {
+            done(err, res);
+        });
+    },
+
+    /**
      * Request
      * @param method
      * @param url

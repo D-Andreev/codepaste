@@ -69,6 +69,17 @@ Paste.prototype.getTitle = function () {
 };
 
 /**
+ * Is Mine
+ * @param paste
+ * @param user
+ * @returns {boolean}
+ */
+Paste.prototype.isMine = function(paste, user) {
+    paste.isMine = paste.user.username === user.username;
+    return paste;
+};
+
+/**
  * Destroy
  */
 Paste.prototype.destroy = function() {

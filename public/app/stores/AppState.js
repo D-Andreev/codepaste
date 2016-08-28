@@ -120,6 +120,8 @@ function _route(path, viewProps) {
                     if (err.status == 401) return User.logout();
                     else if (err.status == 404) return Toast.setNotification('Paste does not exist!', 'error');
                 }
+                response = Paste.isMine(response, User.getUser().user);
+
                 Paste.setPaste(response);
                 Paste.setUser(User.getUser());
                 _setView('paste', props);
@@ -174,6 +176,8 @@ function _createNew(value, title, mode) {
         if (err) return _setNotification('Service error!', 'error');
         if (response) {
             Paste.setPasteId(response._id);
+            response.user = User.getUser().user;
+            response = Paste.isMine(response, User.getUser().user);
             Paste.setPaste(response);
             Paste.setUser(User.getUser());
             CodeMirror.setOption('readOnly', true);
@@ -514,10 +518,25 @@ AppDispatcher.register(function(action) {
             AppStateStore.emitChange();
             break;
 
+        case Constants.SET_RATING:
+            _setRating(action.rating);
+            break;
+
         default:
         // no op
     }
 });
+
+function _setRating(rating) {
+    ApiUtils.sendRate(rating, User.getUser(), Paste.getPaste(), function(err, updatedRate) {
+        if (err) {
+            _setNotification('Service error!', 'error');
+        } else{
+            _setNotification('Thanks for rating!', 'success');
+            alert(updatedRate);
+        }
+    });
+}
 
 
 /**

@@ -37,6 +37,7 @@
     "object-assign": "^1.0.0",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
+    "react-rating": "^0.4.0",
     "url": "^0.11.0"
   },
   "devDependencies": {
