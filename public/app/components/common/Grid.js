@@ -133,8 +133,6 @@ var Grid = React.createClass({
      * @param key
      * @param label
      * @param icon
-     * @param primary
-     * @param disabled
      * @returns {XML}
      * @private
      */
@@ -310,7 +308,7 @@ var Grid = React.createClass({
                         {date}
                     </div>
                 )
-            } else if (keys[i] == 'rating') {
+            }/* else if (keys[i] == 'rating') {
                 var rating = row.rating;
                 cols.push(
                     <div className="grid-cell" key={'col' + i} title={rating}>
@@ -322,7 +320,7 @@ var Grid = React.createClass({
                         />
                     </div>
                 )
-            } else {
+            }*/ else {
                 cols.push(
                     <div className="grid-cell" key={'col' + i} title={row[keys[i]]}>
                         {row[keys[i]]}
