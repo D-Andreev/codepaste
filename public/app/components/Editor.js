@@ -175,7 +175,7 @@ var Editor = React.createClass({
                     empty={<Icon icon='star_border' />}
                     full={<Icon icon='star' className="star-orange"/>}
                     onChange={this._onRatingChange}
-                    placeholderRate={this.props.viewedPaste.rate}
+                    placeholderRate={this.props.viewedPaste.rating}
                     readonly={this.props.viewedPaste.isMine}
                     placeholder={<Icon icon='star' />}
                 />, icon: 'stars'}
