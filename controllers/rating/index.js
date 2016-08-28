@@ -25,7 +25,6 @@
         return response.status(STATUS_CODES.NOT_FOUND).json({});
       }
       paste = Rating.get().vote(req.body.user.user.email, paste, req.body.rate);
-      console.log(paste);
       return paste.save(function(err, res) {
         var body, ref, statusCode;
         ref = new Response(err, res, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;

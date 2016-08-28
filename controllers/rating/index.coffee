@@ -14,7 +14,6 @@ module.exports = express.Router().post routes.rating, (req, response) ->
       return response.status(STATUS_CODES.NOT_FOUND).json {}
   
     paste = Rating.get().vote req.body.user.user.email, paste, req.body.rate
-    console.log paste
     paste.save (err, res) ->
       {statusCode, body} = new Response err, res, STATUS_CODES.OK
       response.status(statusCode).json body
