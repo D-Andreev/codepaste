@@ -9,7 +9,8 @@
     paste: require('./paste'),
     pastes: require('./pastes'),
     validate: require('./validate'),
-    contacts: require('./contacts')
+    contacts: require('./contacts'),
+    rating: require('./rating')
   };
 
 }).call(this);

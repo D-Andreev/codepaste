@@ -8,3 +8,4 @@ module.exports =
   pastes: require './pastes'
   validate: require './validate'
   contacts: require './contacts'
+  rating: require './rating'

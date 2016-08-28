@@ -9,3 +9,4 @@ module.exports =
   validate: new RegExp /\/validate/
   pastes: '/echo'
   contacts: new RegExp /\/contacts/
+  rating: new RegExp /\/rating/

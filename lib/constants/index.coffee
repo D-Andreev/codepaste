@@ -15,4 +15,6 @@ module.exports =
   VIEWS:
     INDEX: 'index'
 
+  MAX_NUMBER_OF_VOTES: 5
+
   USERS_API_URL: 'http://162.243.123.212'
