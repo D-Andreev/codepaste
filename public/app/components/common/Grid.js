@@ -311,7 +311,7 @@ var Grid = React.createClass({
                     </div>
                 )
             } else if (keys[i] == 'rating') {
-                var rating = Math.random() * 5 + 1;
+                var rating = row.rating;
                 cols.push(
                     <div className="grid-cell" key={'col' + i} title={rating}>
                         <Rating

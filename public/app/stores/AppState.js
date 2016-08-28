@@ -524,7 +524,7 @@ AppDispatcher.register(function(action) {
 });
 
 function _setRating(rating) {
-    ApiUtils.sendRate(rating, User.getUser(), function(err, updatedRate) {
+    ApiUtils.sendRate(rating, User.getUser(), Paste.getPaste(), function(err, updatedRate) {
         if (err) {
             _setNotification('Service error!', 'error');
         } else{

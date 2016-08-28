@@ -172,11 +172,12 @@ var Editor = React.createClass({
                 {label: this.props.viewedPaste.mode, icon: 'code'},
                 {label: date, icon: 'schedule'},
                 {label: <Rating
-                    empty={<Icon icon='star_border'/>}
+                    empty={<Icon icon='star_border' />}
                     full={<Icon icon='star' className="star-orange"/>}
                     onChange={this._onRatingChange}
-                    placeholderRate={2.5}
-                    placeholder={<Icon icon='star'/>}
+                    placeholderRate={this.props.viewedPaste.rate}
+                    readonly={this.props.viewedPaste.isMine}
+                    placeholder={<Icon icon='star' />}
                 />, icon: 'stars'}
             ]
         }
