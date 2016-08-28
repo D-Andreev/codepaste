@@ -516,7 +516,6 @@ AppDispatcher.register(function(action) {
 
         case Constants.SET_RATING:
             _setRating(action.rating);
-            AppStateStore.emitChange();
             break;
 
         default:
@@ -527,9 +526,9 @@ AppDispatcher.register(function(action) {
 function _setRating(rating) {
     ApiUtils.sendRate(rating, User.getUser(), function(err, updatedRate) {
         if (err) {
-            Toast.setNotification('Service error!', 'error');
+            _setNotification('Service error!', 'error');
         } else{
-            Toast.setNotification('Thanks for rating!', 'success');
+            _setNotification('Thanks for rating!', 'success');
             alert(updatedRate);
         }
     });
