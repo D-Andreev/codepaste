@@ -32,7 +32,7 @@
       delete paste.user.user.email;
       delete paste.value;
       paste.user = paste.user.user;
-      ref = new Response(err, paste, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body;
+      paste.isMine = paste.user.email === (ref = new Response(err, paste, STATUS_CODES.OK), statusCode = ref.statusCode, body = ref.body, ref);
       return res.status(statusCode).json(body);
     });
   });
