@@ -630,6 +630,13 @@ function _setSendMessageButtonTimeout() {
     }, DISABLE_TIMEOUT);
 }
 
+/**
+ * Set notification
+ * @param message
+ * @param type
+ * @returns {*}
+ * @private
+ */
 function _setNotification(message, type) {
     View.setLoading(false);
     Toast.setNotification(message, type);

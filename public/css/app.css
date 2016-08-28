@@ -8,10 +8,6 @@ ul {
     line-height: inherit;
 }
 
-textarea {
-    height: auto;
-}
-
 .app {
     position: absolute;
     height: 100%;

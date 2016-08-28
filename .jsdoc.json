@@ -1,0 +1,43 @@
+{
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc"]
+  },
+  "source": {
+    "include": ["public", "package.json", "README.md"],
+    "includePattern": ".js$",
+    "exclude": [
+      "node_modules",
+      "plugins",
+      "public/scripts/"
+    ]
+  },
+  "plugins": [
+    "plugins/markdown",
+    "./ub-jsdocs/plugins/sripPFromDescription"
+  ],
+  "templates": {
+    "cleverLinks": true,
+    "monospaceLinks": false,
+
+    "buildInURL": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/",
+    "buildins": ["array", "arraybuffer", "boolean", "date", "error", "function", "json", "number", "object", "regexp", "string", "null"],
+    "smallSourceLink": true,
+    "hideAuthor": true,
+    "stylesheet": "styles/ub-jsdoc.css",
+    "default": {
+      "outputSourceFiles": true,
+      "staticFiles": {
+        "include": [],
+        "excludePattern": "\\.md$"
+      }
+    }
+  },
+  "opts": {
+    "destination": "./docs/",
+    "encoding": "utf8",
+    "private": true,
+    "recurse": true,
+    "template": "./node_modules/ub-jsdoc"
+  }
+}

@@ -66,7 +66,7 @@ var UserAuth = React.createClass({
      */
     _getTitle: function() {
         if (this.props.view == 'login') {
-            return 'Welcome to Code Paste'
+            return 'Code Paste'
         } else if (this.props.view == 'registration') {
             return 'Register'
         }
