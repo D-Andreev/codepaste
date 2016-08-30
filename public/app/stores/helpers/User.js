@@ -92,7 +92,7 @@ User.prototype.getFirstName = function() {
  * @param lastName
  */
 User.prototype.setLastName = function(lastName) {
-    this._user.user.firstName = lastName;
+    this._user.user.lastName = lastName;
 };
 
 /**
